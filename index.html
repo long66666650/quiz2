@@ -64,7 +64,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   <div class="hero"><h1>☀️ 铁路刷题题库</h1><p>第一套继续无限变式练习；第二套保留原题，并给实作、简答、论述、计算题加入渐进挖空背诵。</p></div>
   <div class="card">
     <button class="setbtn" id="goFirst">第一套 · 无限变式刷题<small>可选单选 / 多选 / 判断 / 混合；可选简单 / 一般 / 困难。</small></button>
-    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持从少挖到全挖，逐步背下来。</small></button>
+    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持按关键词挖20% / 50% / 80% / 全挖，逐步背下来。</small></button>
   </div>
 </section>
 
@@ -89,10 +89,10 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 </section>
 
 <section id="secondHome" class="hidden">
-  <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题不改；大题新增渐进挖空背诵，先少挖几个字，再逐步增加，最后脱离提示完整复述。</p></div>
+  <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题不改；大题改成关键词渐进挖空：按标点分句，长句多挖、短句少挖，支持20% / 50% / 80% / 全挖。</p></div>
   <div class="card">
     <button class="setbtn sMode" data-mode="all">顺序练习<small>从上次位置继续。</small></button>
-    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；每题可逐步增加挖空。</small></button>
+    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；优先挖关键词，支持20% / 50% / 80% / 全挖。</small></button>
     <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
     <button class="secondary start" id="secondBackHome">返回两套题库</button>
@@ -178,7 +178,7 @@ function saveS(){localStorage.setItem(SKEY,JSON.stringify(ss))}
 let smode="all",squeue=[],sidx=0,slocked=false;
 
 const BIG_SOURCES=new Set(["实作题","简答题","论述题","计算题"]);
-const MEMKEY="rail_quiz_second_mem_cloze_v1";
+const MEMKEY="rail_quiz_second_mem_cloze_v2";
 let memoState=JSON.parse(localStorage.getItem(MEMKEY)||'{}');
 function saveMemo(){localStorage.setItem(MEMKEY,JSON.stringify(memoState))}
 
@@ -201,94 +201,144 @@ function sStart(mode){
 document.querySelectorAll(".sMode").forEach(b=>b.onclick=()=>sStart(b.dataset.mode));
 
 function maskable(ch){return /[A-Za-z0-9\u3400-\u9fff]/.test(ch)}
-function seededOrder(n,seed){
-  let a=Array.from({length:n},(_,i)=>i);
-  let x=(seed*2654435761)>>>0;
-  function rnd(){x=(x*1664525+1013904223)>>>0;return x/4294967296}
-  for(let i=a.length-1;i>0;i--){let j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
-  return a;
-}
-function answerMaskInfo(text){
-  let positions=[];
-  [...String(text||"")].forEach((ch,i)=>{if(maskable(ch))positions.push(i)});
-  return positions;
-}
-function clozeText(text,qid,hideCount){
-  const chars=[...String(text||"")];
-  const positions=answerMaskInfo(text);
-  const total=positions.length;
-  hideCount=Math.max(0,Math.min(total,Number(hideCount)||0));
-  if(total>0 && hideCount>=total)return "";
-  const order=seededOrder(total,Number(qid)||1);
-  const hidden=new Set(order.slice(0,hideCount).map(k=>positions[k]));
-  return chars.map((ch,i)=>hidden.has(i)?"＿":ch).join("");
-}
+const MEM_LEVELS=new Set([0,20,50,80,100]);
+const MEM_STOPWORDS=new Set([
+  "的","了","和","与","及","或","由","在","对","将","把","为","是","时","后","前","上","下","中","内","外","并","且","则","可","能","等","其","本","该","一个","一种","一般","有关","相应","以及","进行"
+]);
+const MEM_KEYWORDS=[
+  "必须","不得","不准","严禁","禁止","应当","应","不应","不小于","不大于","不超过","超过","大于","小于","至少","以上","以下","以内","以外","分别","同时","立即","及时","正确","错误",
+  "线路","钢轨","道岔","轨距","水平","高低","轨向","三角坑","曲线","超高","轨枕","扣件","道床","路基","路肩","辙叉","尖轨","护轨","接头","轨缝","天窗","施工","维修","作业","封锁","限速","防护","列车","信号","安全","检查","测量","整修","打磨","锚固","拨道","捣固","更换","设置","确认","登记","通知","处理","管理","标准","容许偏差","速度","距离","宽度","高度","长度","温度","轨温","时间","次数","范围","位置","条件","要求","原则","方法","步骤"
+];
 function memoDefault(q){
-  const total=answerMaskInfo(q.qa_answer||"").length;
-  let v=memoState[q.id];
-  if(v==null)v=0;
-  return Math.max(0,Math.min(total,Number(v)||0));
+  let v=Number(memoState[q.id]);
+  if(!MEM_LEVELS.has(v))v=0;
+  return v;
+}
+function splitMemoClauses(text){
+  const out=[];let buf="";
+  for(const ch of [...String(text||"")]){
+    if(/[，。；！？：、\n]/.test(ch)){
+      out.push({body:buf,punc:ch});buf="";
+    }else buf+=ch;
+  }
+  if(buf||!out.length)out.push({body:buf,punc:""});
+  return out;
+}
+function wordTokens(body){
+  const text=String(body||"");
+  const arr=[];
+  try{
+    if(typeof Intl!=="undefined"&&Intl.Segmenter){
+      const seg=new Intl.Segmenter("zh-CN",{granularity:"word"});
+      for(const x of seg.segment(text)){
+        const t=x.segment;if(!/[A-Za-z0-9\u3400-\u9fff]/.test(t))continue;
+        arr.push({start:x.index,end:x.index+[...t].length,text:t});
+      }
+    }
+  }catch(e){}
+  if(arr.length)return arr;
+  const chars=[...text];
+  let i=0;
+  while(i<chars.length){
+    if(!maskable(chars[i])){i++;continue}
+    let j=i+1;while(j<chars.length&&maskable(chars[j]))j++;
+    let run=chars.slice(i,j).join("");
+    if(/^[A-Za-z0-9.%-]+$/.test(run))arr.push({start:i,end:j,text:run});
+    else{
+      let k=i;while(k<j){let e=Math.min(j,k+2);arr.push({start:k,end:e,text:chars.slice(k,e).join("")});k=e}
+    }
+    i=j;
+  }
+  return arr;
+}
+function tokenScore(tok,body){
+  const t=tok.text.trim();
+  if(!t)return-999;
+  if(MEM_STOPWORDS.has(t))return-100;
+  let score=0;
+  if(/\d/.test(t))score+=120;
+  if(/(?:km\/h|km|mm|cm|m|℃|%|分钟|小时|分|秒|次|人|处|组|根|个|米|毫米|厘米|度)/i.test(t))score+=80;
+  for(const k of MEM_KEYWORDS){if(t===k||t.includes(k)){score+=70+Math.min(20,k.length*4);break}}
+  if(/^(必须|不得|不准|严禁|禁止|应当|不应|应|至少|以上|以下|以内|以外)$/.test(t))score+=100;
+  score+=Math.min(30,[...t].length*8);
+  const left=body.slice(Math.max(0,tok.start-3),tok.start);
+  const right=body.slice(tok.end,Math.min([...body].length,tok.end+3));
+  if(/[为是达至超低高大于小于不]/.test(left+right))score+=12;
+  return score;
+}
+function mergeSpans(spans){
+  if(!spans.length)return[];
+  spans.sort((a,b)=>a[0]-b[0]);
+  const out=[spans[0].slice()];
+  for(let i=1;i<spans.length;i++){
+    const cur=spans[i],last=out[out.length-1];
+    if(cur[0]<=last[1])last[1]=Math.max(last[1],cur[1]);
+    else out.push(cur.slice());
+  }
+  return out;
+}
+function maskClause(body,pct){
+  const chars=[...String(body||"")];
+  if(!chars.length)return"";
+  if(pct>=100){
+    return chars.some(maskable)?"【____】":body;
+  }
+  const total=chars.filter(maskable).length;
+  if(total===0||pct<=0)return body;
+  const target=Math.max(1,Math.round(total*pct/100));
+  let toks=wordTokens(body).map(t=>({...t,score:tokenScore(t,body)})).filter(t=>t.score>-50);
+  if(!toks.length)return body;
+  toks.sort((a,b)=>b.score-a.score||([...(b.text||"")].length-[...(a.text||"")].length)||a.start-b.start);
+  const chosen=[];let hidden=0;
+  for(const t of toks){
+    if(hidden>=target)break;
+    chosen.push([t.start,t.end]);
+    hidden+=Math.max(1,t.end-t.start);
+  }
+  const spans=mergeSpans(chosen);
+  let out="",i=0;
+  for(const [a,b] of spans){
+    out+=chars.slice(i,a).join("")+"【____】";i=b;
+  }
+  out+=chars.slice(i).join("");
+  return out;
+}
+function clozeText(text,pct){
+  return splitMemoClauses(text).map(({body,punc})=>maskClause(body,pct)+punc).join("");
 }
 function renderMemo(q){
   const box=$("#sOptions");
   const answer=q.qa_answer||"暂无答案";
-  const total=answerMaskInfo(answer).length;
-  let hidden=memoDefault(q);
+  let level=memoDefault(q);
 
   const panel=document.createElement("div");panel.className="memo-panel";
   const head=document.createElement("div");head.className="memo-head";
-  head.innerHTML='<b>📖 渐进挖空背诵</b><span>同一题挖空只会越来越多，方便逐级记忆</span>';
+  head.innerHTML='<b>📖 关键词渐进挖空</b><span>按标点分句；长句多挖、短句少挖，优先挖数字、专业术语、限定词和动作结论</span>';
   const view=document.createElement("div");view.className="memo-answer";
   const controls=document.createElement("div");controls.className="memo-controls";
   const presets=document.createElement("div");presets.className="memo-presets";
-  const sliderRow=document.createElement("div");sliderRow.className="memo-range-row";
-  const range=document.createElement("input");range.type="range";range.min="0";range.max=String(Math.max(total,1));range.step="1";
-  const count=document.createElement("div");count.className="memo-count";
-  sliderRow.append(range,count);
-  const steps=document.createElement("div");steps.className="memo-step";
-  const less=document.createElement("button");less.type="button";less.className="secondary";less.textContent="← 少挖 10 字";
-  const more=document.createElement("button");more.type="button";more.className="primary";more.textContent="多挖 10 字 →";
-  steps.append(less,more);
-  const tip=document.createElement("div");tip.className="memo-tip";tip.textContent="建议：先看完整答案 → 挖10字 → 挖20字 → 挖一半 → 只留少量 → 全挖。拖动滑杆也能精确控制本题挖掉多少字。";
+  const tip=document.createElement("div");tip.className="memo-tip";
+  tip.textContent="建议按 完整答案 → 20% → 50% → 80% → 全挖 逐级背。同一标点前的每个小句都会单独计算挖空量，不会把名额浪费在“的、了、和、是、在”这类词上。";
 
-  const presetDefs=[
-    ["完整答案",()=>0],
-    ["挖 10 字",()=>Math.min(total,10)],
-    ["挖 20 字",()=>Math.min(total,20)],
-    ["挖一半",()=>Math.round(total*.5)],
-    ["只留 20%",()=>Math.round(total*.8)],
-    ["全挖",()=>total]
-  ];
+  const presetDefs=[["完整答案",0],["挖 20%",20],["挖 50%",50],["挖 80%",80],["全挖",100]];
   const pButtons=[];
-  presetDefs.forEach(([label,getVal])=>{
+  presetDefs.forEach(([label,val])=>{
     const b=document.createElement("button");b.type="button";b.textContent=label;
-    b.onclick=()=>setHidden(getVal());presets.append(b);pButtons.push([b,getVal]);
+    b.onclick=()=>setLevel(val);presets.append(b);pButtons.push([b,val]);
   });
-
-  function setHidden(v){
-    hidden=Math.max(0,Math.min(total,Math.round(Number(v)||0)));
-    memoState[q.id]=hidden;saveMemo();update();
+  function setLevel(v){
+    level=MEM_LEVELS.has(Number(v))?Number(v):0;
+    memoState[q.id]=level;saveMemo();update();
   }
   function update(){
-    range.value=String(hidden);
-    count.textContent=`已挖 ${hidden} / ${total} 字`;
-    if(total===0){view.textContent=answer;count.textContent="本题无可挖字符";return}
-    if(hidden>=total){
-      view.innerHTML='<div class="memo-empty">已全部挖空。现在不要看答案，完整复述这一题。</div>';
-    }else{
-      view.textContent=clozeText(answer,q.id,hidden);
-    }
-    pButtons.forEach(([b,getVal])=>b.classList.toggle("active",hidden===getVal()));
-    less.disabled=hidden<=0;more.disabled=hidden>=total;
+    if(level===0)view.textContent=answer;
+    else if(level===100)view.textContent=clozeText(answer,100);
+    else view.textContent=clozeText(answer,level);
+    pButtons.forEach(([b,val])=>b.classList.toggle("active",level===val));
   }
-  range.oninput=()=>setHidden(range.value);
-  less.onclick=()=>setHidden(hidden-10);
-  more.onclick=()=>setHidden(hidden+10);
-
-  controls.append(presets,sliderRow,steps,tip);
+  controls.append(presets,tip);
   panel.append(head,view,controls);box.append(panel);update();
 }
-
 function sRender(){
   if(!squeue.length)return;
   let q=squeue[sidx];slocked=false;ss.progress[smode]=sidx;saveS();
