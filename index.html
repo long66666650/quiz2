@@ -49,6 +49,11 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .memo-step button{min-height:42px}
 .memo-tip{font-size:12px;color:#6f8190;line-height:1.6;padding-top:2px}
 .memo-empty{display:flex;align-items:center;justify-content:center;min-height:60px;color:#8093a3;font-weight:700;text-align:center}
+
+.memo-rhyme{margin-top:10px;padding:13px 14px;border-radius:15px;background:#eefaf4;border:1px solid #cfead9;line-height:1.8;color:#2f5f49}
+.memo-rhyme-title{font-size:14px;font-weight:900;color:#23835d;margin-bottom:5px}
+.memo-rhyme-text{font-size:16px;font-weight:800;letter-spacing:.02em;word-break:break-word}
+.memo-rhyme-note{font-size:12px;color:#648374;margin-top:5px;font-weight:500}
 @media(max-width:420px){.memo-presets{grid-template-columns:repeat(2,1fr)}.memo-answer{font-size:16px}.memo-count{min-width:82px}}
 
 </style>
@@ -64,7 +69,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   <div class="hero"><h1>☀️ 铁路刷题题库</h1><p>第一套继续无限变式练习；第二套保留原题，并给实作、简答、论述、计算题加入渐进挖空背诵。</p></div>
   <div class="card">
     <button class="setbtn" id="goFirst">第一套 · 无限变式刷题<small>可选单选 / 多选 / 判断 / 混合；可选简单 / 一般 / 困难。</small></button>
-    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持按关键词挖20% / 50% / 80% / 全挖，逐步背下来。</small></button>
+    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持关键词挖空，并在完整答案下提供速记口诀。</small></button>
   </div>
 </section>
 
@@ -92,7 +97,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题不改；大题改成关键词渐进挖空：按标点分句，长句多挖、短句少挖，支持20% / 50% / 80% / 全挖。</p></div>
   <div class="card">
     <button class="setbtn sMode" data-mode="all">顺序练习<small>从上次位置继续。</small></button>
-    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；优先挖关键词，支持20% / 50% / 80% / 全挖。</small></button>
+    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；完整答案下带速记口诀，再逐级挖空背诵。</small></button>
     <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
     <button class="secondary start" id="secondBackHome">返回两套题库</button>
@@ -306,6 +311,71 @@ function maskClause(body,pct){
 function clozeText(text,pct){
   return splitMemoClauses(text).map(({body,punc})=>maskClause(body,pct)+punc).join("");
 }
+
+function compactMnemonicText(text){
+  let t=String(text||"").replace(/\s+/g,"").replace(/（选择正确答案）/g,"");
+  const reps=[
+    [/允许速度/g,"V"],[/线路允许速度/g,"V"],[/不得超过/g,"≤"],[/不应大于/g,"≤"],[/不得大于/g,"≤"],[/不超过/g,"≤"],
+    [/不得小于/g,"≥"],[/不应小于/g,"≥"],[/不小于/g,"≥"],[/大于/g,">"],[/小于/g,"<"],
+    [/正线上/g,"正线"],[/到发线上/g,"到发"],[/其他站线上/g,"其他站"],[/其他正线上/g,"其他正线"],
+    [/一般情况下/g,"一般"],[/困难情况下/g,"困难"],[/应及时/g,"及时"],[/应立即/g,"立即"],[/必须立即/g,"立即"],
+    [/应进行/g,"要"],[/进行/g,""],[/的规定/g,""],[/的要求/g,""],[/技术标准/g,"标准"],
+    [/钢轨长度/g,"轨长"],[/钢轨温度/g,"轨温"],[/线路中心/g,"线中"],[/基本轨/g,"基轨"],[/可动心轨/g,"动心轨"],
+    [/辙叉心/g,"叉心"],[/轮缘槽/g,"缘槽"],[/垂直磨耗/g,"垂磨"],[/侧面磨耗/g,"侧磨"],[/容许偏差/g,"偏差"],
+    [/锁定轨温/g,"锁温"],[/轨道几何尺寸/g,"几何尺寸"],[/无缝线路/g,"无缝"],[/道床/g,"床"],
+    [/更换/g,"换"],[/整修/g,"修"],[/修理/g,"修"],[/处理/g,"处"],[/检查/g,"查"],[/测量/g,"量"],
+    [/不符合/g,"不合"],[/符合/g,"合"],[/保持/g,"保"],[/设置/g,"设"],[/加强/g,"强"],[/调整/g,"调"]
+  ];
+  reps.forEach(([a,b])=>t=t.replace(a,b));
+  return t.replace(/[。；：:]$/g,"");
+}
+function mnemonicChunks(answer){
+  const a=String(answer||"").replace(/\r/g,"");
+  let parts=[];
+  // 优先按编号拆，编号题的记忆顺序最重要
+  const marked=a.split(/(?=(?:（?\d+[）\.、]|[①②③④⑤⑥⑦⑧⑨⑩]))/).map(x=>x.trim()).filter(Boolean);
+  if(marked.length>=2) parts=marked;
+  else parts=a.split(/[。；;\n]+/).map(x=>x.trim()).filter(Boolean);
+  if(parts.length===1){
+    parts=a.split(/[，,]+/).map(x=>x.trim()).filter(Boolean);
+  }
+  return parts;
+}
+function mnemonicPiece(part){
+  let t=compactMnemonicText(part).replace(/^（?\d+[）\.、]?/,"").replace(/^[①②③④⑤⑥⑦⑧⑨⑩]/,"");
+  if(!t)return"";
+  if([...t].length<=18)return t;
+
+  const toks=wordTokens(t).map(x=>({...x,score:tokenScore(x,t)}));
+  const must=toks.filter(x=>/\d|[><≤≥±%=～~]/.test(x.text)||x.score>=70);
+  const pool=[...must,...toks.filter(x=>x.score>5)].filter((x,i,a)=>a.findIndex(y=>y.start===x.start&&y.end===x.end)===i);
+  pool.sort((a,b)=>b.score-a.score||a.start-b.start);
+  const chosen=pool.slice(0,5).sort((a,b)=>a.start-b.start);
+  let words=chosen.map(x=>x.text.replace(/\s+/g,"")).filter(Boolean);
+  // 太少时，从句首补一个短提示，避免口诀只剩数字
+  if(words.length<2){
+    const lead=[...t.replace(/[，,。；;：:（）()]/g,"")].slice(0,8).join("");
+    if(lead)words.unshift(lead);
+  }
+  let res=words.join("·");
+  if([...res].length>34)res=[...res].slice(0,34).join("")+"…";
+  return res;
+}
+function makeMnemonic(q){
+  const answer=q.qa_answer||"";
+  const parts=mnemonicChunks(answer);
+  let cues=parts.map(mnemonicPiece).filter(Boolean);
+  // 太多条时仍保留完整顺序，但每条再压短；论述题也不会变成一大段答案复制
+  if(cues.length>12)cues=cues.slice(0,12);
+  const nums=["一","二","三","四","五","六","七","八","九","十","十一","十二"];
+  if(cues.length>=2){
+    return cues.map((x,i)=>`${nums[i]||i+1}${x}`).join("；")+"。";
+  }
+  let one=cues[0]||compactMnemonicText(answer);
+  // 短答案做成真正的一口口诀
+  return one.replace(/[，,]+/g,"，").replace(/[。；;]+$/g,"")+"。";
+}
+
 function renderMemo(q){
   const box=$("#sOptions");
   const answer=q.qa_answer||"暂无答案";
@@ -315,6 +385,11 @@ function renderMemo(q){
   const head=document.createElement("div");head.className="memo-head";
   head.innerHTML='<b>📖 关键词渐进挖空</b><span>按标点分句；长句多挖、短句少挖，优先挖数字、专业术语、限定词和动作结论</span>';
   const view=document.createElement("div");view.className="memo-answer";
+  const rhyme=document.createElement("div");rhyme.className="memo-rhyme";
+  const rhymeTitle=document.createElement("div");rhymeTitle.className="memo-rhyme-title";rhymeTitle.textContent="⚡ 速记顺口溜";
+  const rhymeText=document.createElement("div");rhymeText.className="memo-rhyme-text";rhymeText.textContent=makeMnemonic(q);
+  const rhymeNote=document.createElement("div");rhymeNote.className="memo-rhyme-note";rhymeNote.textContent="先用口诀抓顺序和关键词，再回到标准答案补完整表述。";
+  rhyme.append(rhymeTitle,rhymeText,rhymeNote);
   const controls=document.createElement("div");controls.className="memo-controls";
   const presets=document.createElement("div");presets.className="memo-presets";
   const tip=document.createElement("div");tip.className="memo-tip";
@@ -334,10 +409,11 @@ function renderMemo(q){
     if(level===0)view.textContent=answer;
     else if(level===100)view.textContent=clozeText(answer,100);
     else view.textContent=clozeText(answer,level);
+    rhyme.style.display=level===0?"block":"none";
     pButtons.forEach(([b,val])=>b.classList.toggle("active",level===val));
   }
   controls.append(presets,tip);
-  panel.append(head,view,controls);box.append(panel);update();
+  panel.append(head,view,rhyme,controls);box.append(panel);update();
 }
 function sRender(){
   if(!squeue.length)return;
