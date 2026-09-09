@@ -56,9 +56,85 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .memo-rhyme-note{font-size:12px;color:#648374;margin-top:5px;font-weight:500}
 @media(max-width:420px){.memo-presets{grid-template-columns:repeat(2,1fr)}.memo-answer{font-size:16px}.memo-count{min-width:82px}}
 
+
+/* ===== 第二网站独立一次性激活锁 ===== */
+.license-lock-screen{
+  position:fixed;inset:0;z-index:999999;
+  display:flex;align-items:center;justify-content:center;
+  padding:22px;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(116,190,255,.22),transparent 32%),
+    radial-gradient(circle at 85% 80%,rgba(255,223,125,.22),transparent 32%),
+    linear-gradient(180deg,#eef8ff 0%,#f8fcff 48%,#fffaf2 100%);
+}
+.license-lock-screen.hidden{display:none!important}
+.license-lock-card{
+  width:min(92vw,420px);
+  background:rgba(255,255,255,.97);
+  border:1px solid #dfeaf3;
+  border-radius:24px;
+  padding:24px 20px;
+  box-shadow:0 18px 55px rgba(63,104,145,.16);
+}
+.license-lock-card h2{
+  margin:0 0 10px;
+  color:#2f65c8;
+  font-size:24px;
+}
+.license-lock-card p{
+  margin:0 0 16px;
+  color:#66798a;
+  line-height:1.7;
+  font-size:14px;
+}
+.license-lock-card input{
+  width:100%;
+  height:50px;
+  border:1px solid #dfeaf3;
+  border-radius:14px;
+  padding:0 13px;
+  font-size:16px;
+  background:#fff;
+  color:#24364a;
+  text-transform:uppercase;
+}
+.license-lock-card button{
+  width:100%;
+  margin-top:12px;
+  min-height:48px;
+  border:0;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(135deg,#5aa7ff,#7b7cff);
+  box-shadow:0 7px 16px rgba(79,140,255,.22);
+}
+.license-lock-card button:disabled{opacity:.65}
+.license-lock-msg{
+  min-height:23px;
+  margin-top:11px;
+  font-size:14px;
+  line-height:1.55;
+}
+.license-lock-msg.ok{color:#14805d}
+.license-lock-msg.bad{color:#bc4545}
+body.license-pending > .app{visibility:hidden}
+
 </style>
 </head>
-<body>
+<body class="license-pending">
+
+<div id="site2LockScreen" class="license-lock-screen">
+  <div class="license-lock-card">
+    <h2>🔐 一次性激活</h2>
+    <p>每个激活码只能使用一次。首次激活成功后，这台浏览器会保存专属凭证，以后更新网站也不需要重新激活。</p>
+    <input id="site2LicenseInput" type="text" autocomplete="off" autocapitalize="characters" placeholder="输入专属激活码">
+    <button id="site2LicenseBtn" type="button">激活本机</button>
+    <div id="site2LicenseMsg" class="license-lock-msg"></div>
+  </div>
+</div>
+
 </div>
 
 
@@ -69,7 +145,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   <div class="hero"><h1>☀️ 铁路刷题题库</h1><p>第一套继续无限变式练习；第二套保留原题，并给实作、简答、论述、计算题加入渐进挖空背诵。</p></div>
   <div class="card">
     <button class="setbtn" id="goFirst">第一套 · 无限变式刷题<small>可选单选 / 多选 / 判断 / 混合；可选简单 / 一般 / 困难。</small></button>
-    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持关键词挖空，并在完整答案下提供好背口诀/谐音记忆。</small></button>
+    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持关键词挖空，并在完整答案下提供速记口诀。</small></button>
   </div>
 </section>
 
@@ -97,7 +173,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题不改；大题改成关键词渐进挖空：按标点分句，长句多挖、短句少挖，支持20% / 50% / 80% / 全挖。</p></div>
   <div class="card">
     <button class="setbtn sMode" data-mode="all">顺序练习<small>从上次位置继续。</small></button>
-    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；完整答案下带好背口诀/谐音记忆，再逐级挖空背诵。</small></button>
+    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；完整答案下带速记口诀，再逐级挖空背诵。</small></button>
     <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
     <button class="secondary start" id="secondBackHome">返回两套题库</button>
@@ -116,6 +192,115 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 </div>
 
 <script>
+
+// ===== 第二网站独立一次性激活锁 =====
+const SITE2_SUPABASE_URL="https://blvutnapgehpqfeyfncf.supabase.co";
+const SITE2_SUPABASE_PUBLISHABLE_KEY="sb_publishable_4UCku-cI6nAW3r_FO4AROQ_5Owy8Vqs";
+const SITE2_ACTIVATION_TOKEN_KEY="rail_quiz_site2_activation_token_v1";
+const SITE2_DEVICE_ID_KEY="rail_quiz_site2_device_id_v1";
+
+function site2GetDeviceId(){
+  let id=localStorage.getItem(SITE2_DEVICE_ID_KEY);
+  if(!id){
+    id=(crypto.randomUUID
+      ? crypto.randomUUID()
+      : ("dev-"+Date.now()+"-"+Math.random().toString(36).slice(2)));
+    localStorage.setItem(SITE2_DEVICE_ID_KEY,id);
+  }
+  return id;
+}
+
+function site2NormalizeCode(v){
+  return String(v||"").trim().toUpperCase().replace(/\s+/g,"");
+}
+
+async function site2Rpc(name,body){
+  const r=await fetch(`${SITE2_SUPABASE_URL}/rest/v1/rpc/${name}`,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "apikey":SITE2_SUPABASE_PUBLISHABLE_KEY,
+      "Authorization":"Bearer "+SITE2_SUPABASE_PUBLISHABLE_KEY
+    },
+    body:JSON.stringify(body)
+  });
+  const txt=await r.text();
+  if(!r.ok) throw new Error(txt||("HTTP "+r.status));
+  return txt ? JSON.parse(txt) : null;
+}
+
+function site2Unlock(){
+  const screen=document.getElementById("site2LockScreen");
+  if(screen) screen.classList.add("hidden");
+  document.body.classList.remove("license-pending");
+}
+
+async function site2InitLicenseGate(){
+  const screen=document.getElementById("site2LockScreen");
+  const input=document.getElementById("site2LicenseInput");
+  const btn=document.getElementById("site2LicenseBtn");
+  const msg=document.getElementById("site2LicenseMsg");
+
+  // 和第一网站保持同一思路：
+  // 本浏览器只要已经保存过第二网站自己的激活凭证，就直接永久认可。
+  const oldToken=localStorage.getItem(SITE2_ACTIVATION_TOKEN_KEY);
+  if(oldToken){
+    site2Unlock();
+    return;
+  }
+
+  async function go(){
+    const code=site2NormalizeCode(input.value);
+    if(!code){
+      msg.className="license-lock-msg bad";
+      msg.textContent="请先输入激活码。";
+      return;
+    }
+
+    btn.disabled=true;
+    btn.textContent="正在激活…";
+    msg.className="license-lock-msg";
+    msg.textContent="";
+
+    try{
+      const res=await site2Rpc("site2_activate_license",{
+        p_code:code,
+        p_device_id:site2GetDeviceId()
+      });
+
+      if(res && res.ok===true && res.token){
+        localStorage.setItem(SITE2_ACTIVATION_TOKEN_KEY,res.token);
+        msg.className="license-lock-msg ok";
+        msg.textContent="激活成功，以后本机自动进入。";
+        setTimeout(site2Unlock,450);
+      }else{
+        msg.className="license-lock-msg bad";
+        msg.textContent=(res&&res.message)||"激活失败：激活码无效或已经被使用。";
+      }
+    }catch(e){
+      msg.className="license-lock-msg bad";
+      msg.textContent="连接激活服务器失败，请检查网络后重试。";
+    }finally{
+      btn.disabled=false;
+      btn.textContent="激活本机";
+    }
+  }
+
+  btn.addEventListener("click",go);
+  input.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      e.preventDefault();
+      go();
+    }
+  });
+
+  // 可选联网校验：失败也不会清除本地旧凭证。
+  // 新用户没有凭证时仍必须通过上面的激活流程。
+}
+
+window.addEventListener("DOMContentLoaded",site2InitLicenseGate);
+
+
 
 
 const ORIGINAL=[{"id": 1, "type": "single", "question": "行车设备管理单位在施工与行车关系上，应严格执行的规定是（ ）。", "options": [{"key": "A", "text": "边施工边行车"}, {"key": "B", "text": "行车不施工，施工不行车"}, {"key": "C", "text": "施工优先，行车避让"}, {"key": "D", "text": "行车优先，施工不停"}], "answer": ["B"]}, {"id": 2, "type": "single", "question": "各类行车设备的检修施工作业，原则上应安排在（ ）内进行。", "options": [{"key": "A", "text": "天窗点"}, {"key": "B", "text": "交接班时间"}, {"key": "C", "text": "午休时间"}, {"key": "D", "text": "夜间任意时段"}], "answer": ["A"]}, {"id": 3, "type": "multiple", "question": "在营业线内进行各类施工、维修、检查等作业时，按笔记要求必须做到（ ）。", "options": [{"key": "A", "text": "设置驻站联络员"}, {"key": "B", "text": "设置现场防护员"}, {"key": "C", "text": "佩戴相应防护备品及用具"}, {"key": "D", "text": "驻站联络员和现场防护员可以临时调换"}], "answer": ["A", "B", "C"]}, {"id": 4, "type": "single", "question": "驻站联络员和现场防护员在作业过程中（ ）。", "options": [{"key": "A", "text": "可以随时互换"}, {"key": "B", "text": "可以临时调换"}, {"key": "C", "text": "不得临时调换"}, {"key": "D", "text": "只需口头交接即可调换"}], "answer": ["C"]}, {"id": 5, "type": "multiple", "question": "遇到下列哪些恶劣天气影响瞭望时，应停止线上作业和上道检查（ ）。", "options": [{"key": "A", "text": "降雾"}, {"key": "B", "text": "暴风雨（雪）"}, {"key": "C", "text": "扬沙"}, {"key": "D", "text": "晴朗少云"}], "answer": ["A", "B", "C"]}, {"id": 6, "type": "single", "question": "恶劣天气下必须作业时，应采取特殊安全措施，并保证（ ）。", "options": [{"key": "A", "text": "来车后再下道"}, {"key": "B", "text": "来车之前按规定距离及时下道"}, {"key": "C", "text": "听到鸣笛后再撤离"}, {"key": "D", "text": "只要有人瞭望即可不下道"}], "answer": ["B"]}, {"id": 7, "type": "single", "question": "触电是指一定强度的电流通过人体所引起的（ ）。", "options": [{"key": "A", "text": "机械事故"}, {"key": "B", "text": "伤害事故"}, {"key": "C", "text": "火灾事故"}, {"key": "D", "text": "交通事故"}], "answer": ["B"]}, {"id": 8, "type": "single", "question": "触电通常是人体直接或间接接触到（ ）造成的。", "options": [{"key": "A", "text": "绝缘体"}, {"key": "B", "text": "带电体"}, {"key": "C", "text": "木制品"}, {"key": "D", "text": "非金属物体"}], "answer": ["B"]}, {"id": 9, "type": "single", "question": "触电时人体受到伤害，按形式可分为（ ）。", "options": [{"key": "A", "text": "电击和电伤"}, {"key": "B", "text": "烧伤和烫伤"}, {"key": "C", "text": "内伤和外伤"}, {"key": "D", "text": "轻伤和重伤"}], "answer": ["A"]}, {"id": 10, "type": "multiple", "question": "笔记中列出的触电事故致因包括（ ）。", "options": [{"key": "A", "text": "人的因素"}, {"key": "B", "text": "物的因素"}, {"key": "C", "text": "环境因素"}, {"key": "D", "text": "管理因素"}], "answer": ["A", "B", "C", "D"]}, {"id": 11, "type": "single", "question": "距离牵引供电设备带电部分不足4m的燃着物体，使用水或灭火器灭火时，牵引供电设备应（ ）。", "options": [{"key": "A", "text": "可不停电"}, {"key": "B", "text": "必须停电"}, {"key": "C", "text": "只需降压"}, {"key": "D", "text": "仅夜间停电"}], "answer": ["B"]}, {"id": 12, "type": "single", "question": "使用沙土灭火时，若牵引供电设备不停电，灭火机具及沙土等与带电部分的距离应保持在（ ）以上。", "options": [{"key": "A", "text": "0.5m"}, {"key": "B", "text": "1m"}, {"key": "C", "text": "2m"}, {"key": "D", "text": "4m"}], "answer": ["C"]}, {"id": 13, "type": "multiple", "question": "现场评估时，应关注的内容包括（ ）。", "options": [{"key": "A", "text": "事故、伤害及疾病的原因"}, {"key": "B", "text": "是否存在对救护者、伤员和周围人员的危险环境"}, {"key": "C", "text": "伤员意识、气道、呼吸、循环等情况"}, {"key": "D", "text": "事故责任最终认定"}], "answer": ["A", "B", "C"]}, {"id": 14, "type": "multiple", "question": "下列属于笔记所列伤亡事故类别的有（ ）。", "options": [{"key": "A", "text": "物体打击"}, {"key": "B", "text": "车辆伤害"}, {"key": "C", "text": "机械伤害"}, {"key": "D", "text": "起重伤害"}], "answer": ["A", "B", "C", "D"]}, {"id": 15, "type": "multiple", "question": "下列属于笔记所列伤亡事故类别的有（ ）。", "options": [{"key": "A", "text": "触电"}, {"key": "B", "text": "淹溺"}, {"key": "C", "text": "灼烫"}, {"key": "D", "text": "火灾"}], "answer": ["A", "B", "C", "D"]}, {"id": 16, "type": "multiple", "question": "下列属于笔记所列伤亡事故类别的有（ ）。", "options": [{"key": "A", "text": "高处坠落"}, {"key": "B", "text": "坍塌"}, {"key": "C", "text": "冒顶片帮"}, {"key": "D", "text": "透水"}], "answer": ["A", "B", "C", "D"]}, {"id": 17, "type": "multiple", "question": "下列属于笔记所列伤亡事故类别的有（ ）。", "options": [{"key": "A", "text": "放炮"}, {"key": "B", "text": "火药爆炸"}, {"key": "C", "text": "瓦斯爆炸"}, {"key": "D", "text": "锅炉爆炸"}], "answer": ["A", "B", "C", "D"]}, {"id": 18, "type": "multiple", "question": "下列属于笔记所列伤亡事故类别的有（ ）。", "options": [{"key": "A", "text": "容器爆炸"}, {"key": "B", "text": "其他爆炸"}, {"key": "C", "text": "中毒和窒息"}, {"key": "D", "text": "其他伤害"}], "answer": ["A", "B", "C", "D"]}, {"id": 19, "type": "single", "question": "高处作业是指在距坠落高度基准面（ ）及以上有可能坠落的高处进行的作业。", "options": [{"key": "A", "text": "1m"}, {"key": "B", "text": "2m"}, {"key": "C", "text": "3m"}, {"key": "D", "text": "5m"}], "answer": ["B"]}, {"id": 20, "type": "single", "question": "作业高度在2m至5m时，属于（ ）高处作业。", "options": [{"key": "A", "text": "一级"}, {"key": "B", "text": "二级"}, {"key": "C", "text": "三级"}, {"key": "D", "text": "四级"}], "answer": ["A"]}, {"id": 21, "type": "single", "question": "作业高度在5m以上至15m时，属于（ ）高处作业。", "options": [{"key": "A", "text": "一级"}, {"key": "B", "text": "二级"}, {"key": "C", "text": "三级"}, {"key": "D", "text": "四级"}], "answer": ["B"]}, {"id": 22, "type": "single", "question": "作业高度在15m以上至30m时，属于（ ）高处作业。", "options": [{"key": "A", "text": "一级"}, {"key": "B", "text": "二级"}, {"key": "C", "text": "三级"}, {"key": "D", "text": "四级"}], "answer": ["C"]}, {"id": 23, "type": "single", "question": "作业高度在30m以上时，属于（ ）高处作业。", "options": [{"key": "A", "text": "一级"}, {"key": "B", "text": "二级"}, {"key": "C", "text": "三级"}, {"key": "D", "text": "四级"}], "answer": ["D"]}, {"id": 24, "type": "multiple", "question": "笔记列出的常见垂直运输事故类型包括（ ）。", "options": [{"key": "A", "text": "打击伤害事故"}, {"key": "B", "text": "夹挤伤害事故"}, {"key": "C", "text": "坠落伤害事故"}, {"key": "D", "text": "触电伤害事故"}, {"key": "E", "text": "倾翻伤害事故"}], "answer": ["A", "B", "C", "D", "E"]}, {"id": 25, "type": "single", "question": "小型养路机械的操作人员必须（ ）后方可操作。", "options": [{"key": "A", "text": "经培训考试合格"}, {"key": "B", "text": "经同事同意"}, {"key": "C", "text": "工作满一年"}, {"key": "D", "text": "完成口头学习"}], "answer": ["A"]}, {"id": 26, "type": "single", "question": "小型养路机械作业前应做好（ ）。", "options": [{"key": "A", "text": "全面检查"}, {"key": "B", "text": "只检查油量"}, {"key": "C", "text": "只检查外观"}, {"key": "D", "text": "只检查电源"}], "answer": ["A"]}, {"id": 27, "type": "single", "question": "对小型养路机械的状态要求是（ ）。", "options": [{"key": "A", "text": "可以带病作业"}, {"key": "B", "text": "不得使机器带病作业"}, {"key": "C", "text": "只要能启动就可作业"}, {"key": "D", "text": "有防护员即可带病作业"}], "answer": ["B"]}, {"id": 28, "type": "single", "question": "笔记中规定，内燃机捣固连续作业约（ ）后应停机间歇，避免机器过热。", "options": [{"key": "A", "text": "0.5小时"}, {"key": "B", "text": "1小时"}, {"key": "C", "text": "1.5小时"}, {"key": "D", "text": "3小时"}], "answer": ["C"]}, {"id": 29, "type": "multiple", "question": "物体打击常见事故类型包括（ ）。", "options": [{"key": "A", "text": "坠落物伤人"}, {"key": "B", "text": "飞溅物伤人"}, {"key": "C", "text": "抛落物伤人"}, {"key": "D", "text": "惯性力伤人"}], "answer": ["A", "B", "C", "D"]}, {"id": 30, "type": "single", "question": "工具、零件等物体从高处坠落伤人，属于（ ）。", "options": [{"key": "A", "text": "坠落物伤人"}, {"key": "B", "text": "飞溅物伤人"}, {"key": "C", "text": "抛落物伤人"}, {"key": "D", "text": "惯性力伤人"}], "answer": ["A"]}, {"id": 31, "type": "single", "question": "打桩、锤击造成碎屑飞溅伤人，属于（ ）。", "options": [{"key": "A", "text": "坠落物伤人"}, {"key": "B", "text": "飞溅物伤人"}, {"key": "C", "text": "抛落物伤人"}, {"key": "D", "text": "惯性力伤人"}], "answer": ["B"]}, {"id": 32, "type": "single", "question": "撬棍、扳手滑脱等造成的伤害，属于（ ）。", "options": [{"key": "A", "text": "坠落物伤人"}, {"key": "B", "text": "飞溅物伤人"}, {"key": "C", "text": "抛落物伤人"}, {"key": "D", "text": "惯性力伤人"}], "answer": ["D"]}, {"id": 33, "type": "single", "question": "劳动防护用品是保护劳动者在劳动过程中免遭或减轻事故伤害及（ ）危害的个体防护装备和用品。", "options": [{"key": "A", "text": "职业病"}, {"key": "B", "text": "交通事故"}, {"key": "C", "text": "自然灾害"}, {"key": "D", "text": "设备故障"}], "answer": ["A"]}, {"id": 34, "type": "single", "question": "职业病是劳动者在职业活动中因接触粉尘、放射性物质和其他有毒、有害因素而引起的（ ）。", "options": [{"key": "A", "text": "疾病"}, {"key": "B", "text": "事故"}, {"key": "C", "text": "设备故障"}, {"key": "D", "text": "违章"}], "answer": ["A"]}, {"id": 35, "type": "multiple", "question": "工作场所中的职业病危害因素按来源可分为（ ）。", "options": [{"key": "A", "text": "生产过程中产生的有害因素"}, {"key": "B", "text": "劳动过程中产生的有害因素"}, {"key": "C", "text": "生产环境中的有害因素"}, {"key": "D", "text": "家庭生活中的有害因素"}], "answer": ["A", "B", "C"]}, {"id": 36, "type": "single", "question": "职业病预防遵循（ ）预防原则。", "options": [{"key": "A", "text": "一级"}, {"key": "B", "text": "二级"}, {"key": "C", "text": "三级"}, {"key": "D", "text": "四级"}], "answer": ["C"]}, {"id": 37, "type": "multiple", "question": "职业病“三级预防”包括（ ）。", "options": [{"key": "A", "text": "病因预防"}, {"key": "B", "text": "临床前期预防"}, {"key": "C", "text": "临床预防"}, {"key": "D", "text": "事故后追责"}], "answer": ["A", "B", "C"]}, {"id": 38, "type": "single", "question": "最高气温达到34℃及以上时，笔记中要求启动的防胀预警颜色为（ ）。", "options": [{"key": "A", "text": "蓝色"}, {"key": "B", "text": "黄色"}, {"key": "C", "text": "橙色"}, {"key": "D", "text": "红色"}], "answer": ["D"]}, {"id": 39, "type": "single", "question": "最高气温达到32℃（含）至34℃（不含）时，笔记中要求启动的防胀预警颜色为（ ）。", "options": [{"key": "A", "text": "蓝色"}, {"key": "B", "text": "黄色"}, {"key": "C", "text": "橙色"}, {"key": "D", "text": "红色"}], "answer": ["B"]}, {"id": 40, "type": "single", "question": "胀轨是由于钢轨温度升高，在钢轨内部产生（ ）并在其作用下发生变化的过程。", "options": [{"key": "A", "text": "拉力"}, {"key": "B", "text": "温度力（压力）"}, {"key": "C", "text": "重力"}, {"key": "D", "text": "离心力"}], "answer": ["B"]}, {"id": 41, "type": "single", "question": "跑道是钢轨在胀轨过程中失去外界约束，带动轨枕发生（ ）移动并造成线路平面状态破坏。", "options": [{"key": "A", "text": "纵向"}, {"key": "B", "text": "横向"}, {"key": "C", "text": "竖向"}, {"key": "D", "text": "旋转"}], "answer": ["B"]}, {"id": 42, "type": "multiple", "question": "胀轨跑道的应急处理包括（ ）。", "options": [{"key": "A", "text": "紧急处理"}, {"key": "B", "text": "临时处理"}, {"key": "C", "text": "永久处理"}, {"key": "D", "text": "观察处理"}], "answer": ["A", "B", "C"]}, {"id": 43, "type": "single", "question": "钢轨断缝不大于50mm时，应首先进行（ ）。", "options": [{"key": "A", "text": "永久处理"}, {"key": "B", "text": "紧急处理"}, {"key": "C", "text": "不处理"}, {"key": "D", "text": "更换整段线路"}], "answer": ["B"]}, {"id": 44, "type": "single", "question": "钢轨断缝不大于50mm，紧急处理后放行列车速度不超过（ ）。", "options": [{"key": "A", "text": "10km/h"}, {"key": "B", "text": "15km/h"}, {"key": "C", "text": "25km/h"}, {"key": "D", "text": "45km/h"}], "answer": ["B"]}, {"id": 45, "type": "single", "question": "钢轨断缝小于30mm时，笔记规定放行列车速度不超过（ ）。", "options": [{"key": "A", "text": "15km/h"}, {"key": "B", "text": "20km/h"}, {"key": "C", "text": "25km/h"}, {"key": "D", "text": "30km/h"}], "answer": ["C"]}, {"id": 46, "type": "multiple", "question": "防洪雨量警戒值分为（ ）。", "options": [{"key": "A", "text": "出巡警戒"}, {"key": "B", "text": "限速警戒"}, {"key": "C", "text": "封锁警戒"}, {"key": "D", "text": "解除警戒"}], "answer": ["A", "B", "C"]}, {"id": 47, "type": "multiple", "question": "下列属于防洪“七必封”的有（ ）。", "options": [{"key": "A", "text": "桥上晃车必封"}, {"key": "B", "text": "水淹梁底必封"}, {"key": "C", "text": "水上路肩必封"}, {"key": "D", "text": "路基管涌必封"}], "answer": ["A", "B", "C", "D"]}, {"id": 48, "type": "multiple", "question": "下列属于防洪“七必封”的有（ ）。", "options": [{"key": "A", "text": "崩塌落石必封"}, {"key": "B", "text": "折角冲毁必封"}, {"key": "C", "text": "边坡溜坍必封"}, {"key": "D", "text": "线路沉陷横移必封"}], "answer": ["A", "B", "C"]}, {"id": 49, "type": "multiple", "question": "下列属于防洪“七必拦”的有（ ）。", "options": [{"key": "A", "text": "线路沉陷、横移必拦"}, {"key": "B", "text": "道床、路基冲空必拦"}, {"key": "C", "text": "落石、倒树等异物侵限必拦"}, {"key": "D", "text": "泥石流埋没线路必拦"}], "answer": ["A", "B", "C", "D"]}, {"id": 50, "type": "multiple", "question": "下列属于防洪“七必拦”的有（ ）。", "options": [{"key": "A", "text": "路基坍塌必拦"}, {"key": "B", "text": "桥梁墩台倾斜必拦"}, {"key": "C", "text": "桥涵冲毁必拦"}, {"key": "D", "text": "水淹梁底必拦"}], "answer": ["A", "B", "C"]}, {"id": 51, "type": "single", "question": "汛期发生险情时，应贯彻的原则是（ ）。", "options": [{"key": "A", "text": "先处理后防护"}, {"key": "B", "text": "先防护而后处理"}, {"key": "C", "text": "边处理边放车"}, {"key": "D", "text": "先放车后观察"}], "answer": ["B"]}, {"id": 52, "type": "single", "question": "汛期发生险情时，对列车放行的要求是（ ）。", "options": [{"key": "A", "text": "严禁冒险放行列车"}, {"key": "B", "text": "可低速冒险放行"}, {"key": "C", "text": "有人看守即可放行"}, {"key": "D", "text": "只限制货车"}], "answer": ["A"]}, {"id": 53, "type": "single", "question": "笔记中的安全生产方针是（ ）。", "options": [{"key": "A", "text": "安全第一、预防为主、综合治理"}, {"key": "B", "text": "生产第一、效益优先"}, {"key": "C", "text": "预防第一、处罚为主"}, {"key": "D", "text": "安全优先、效率第一"}], "answer": ["A"]}, {"id": 54, "type": "single", "question": "造成30人以上死亡，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["D"]}, {"id": 55, "type": "single", "question": "造成100人以上重伤，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["D"]}, {"id": 56, "type": "single", "question": "造成1亿元以上直接经济损失，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["D"]}, {"id": 57, "type": "single", "question": "造成10人以上30人以下死亡，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["C"]}, {"id": 58, "type": "single", "question": "造成50人以上100人以下重伤，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["C"]}, {"id": 59, "type": "single", "question": "造成5000万元以上1亿元以下直接经济损失，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["C"]}, {"id": 60, "type": "single", "question": "造成3人以上10人以下死亡，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["B"]}, {"id": 61, "type": "single", "question": "造成10人以上50人以下重伤，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["B"]}, {"id": 62, "type": "single", "question": "造成1000万元以上5000万元以下直接经济损失，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["B"]}, {"id": 63, "type": "single", "question": "造成3人以下死亡或10人以下重伤或1000万元以下直接经济损失，属于（ ）。", "options": [{"key": "A", "text": "一般事故"}, {"key": "B", "text": "较大事故"}, {"key": "C", "text": "重大事故"}, {"key": "D", "text": "特别重大事故"}], "answer": ["A"]}, {"id": 64, "type": "single", "question": "一般事故分为一般A、B、C、D事故，共（ ）类。", "options": [{"key": "A", "text": "2"}, {"key": "B", "text": "3"}, {"key": "C", "text": "4"}, {"key": "D", "text": "5"}], "answer": ["C"]}, {"id": 65, "type": "single", "question": "铁路职工违反规章制度，致使发生铁路运营安全事故并造成严重后果的，笔记记载可处（ ）。", "options": [{"key": "A", "text": "3年以下有期徒刑或者拘役"}, {"key": "B", "text": "3年以上7年以下有期徒刑"}, {"key": "C", "text": "7年以上有期徒刑"}, {"key": "D", "text": "仅行政处分"}], "answer": ["A"]}, {"id": 66, "type": "single", "question": "造成特别严重后果的，笔记记载可处（ ）。", "options": [{"key": "A", "text": "1年以下有期徒刑"}, {"key": "B", "text": "3年以下有期徒刑"}, {"key": "C", "text": "3年以上7年以下有期徒刑"}, {"key": "D", "text": "10年以上有期徒刑"}], "answer": ["C"]}, {"id": 67, "type": "multiple", "question": "轻症中暑可能出现的表现包括（ ）。", "options": [{"key": "A", "text": "面色潮红、皮肤灼热"}, {"key": "B", "text": "心悸胸闷、体温升高"}, {"key": "C", "text": "大量出汗、脉搏加快"}, {"key": "D", "text": "体温明显降低且无汗"}], "answer": ["A", "B", "C"]}, {"id": 68, "type": "multiple", "question": "对轻症中暑人员，笔记中的处置方法包括（ ）。", "options": [{"key": "A", "text": "离开闷热环境"}, {"key": "B", "text": "采取冷却措施"}, {"key": "C", "text": "用电风扇吹风"}, {"key": "D", "text": "喝淡盐水"}], "answer": ["A", "B", "C", "D"]}, {"id": 69, "type": "multiple", "question": "冬季气候特点包括（ ）。", "options": [{"key": "A", "text": "天气寒冷、气温低"}, {"key": "B", "text": "风雪雾霜频繁"}, {"key": "C", "text": "夜间长、昼间短"}, {"key": "D", "text": "温差大"}], "answer": ["A", "B", "C", "D"]}, {"id": 70, "type": "single", "question": "材料、工具装载时应做到（ ）。", "options": [{"key": "A", "text": "稳固，不得偏载、超载和超限"}, {"key": "B", "text": "只要捆绑即可超载"}, {"key": "C", "text": "允许偏载但不得超限"}, {"key": "D", "text": "超限时无需措施"}], "answer": ["A"]}, {"id": 71, "type": "single", "question": "装载危险品时，应有（ ）。", "options": [{"key": "A", "text": "可靠的安全措施"}, {"key": "B", "text": "口头提醒即可"}, {"key": "C", "text": "专人记录即可"}, {"key": "D", "text": "不限装载方式"}], "answer": ["A"]}, {"id": 72, "type": "multiple", "question": "野外作业遇雷雨时，正确做法包括（ ）。", "options": [{"key": "A", "text": "放下手中的金属器具"}, {"key": "B", "text": "迅速到安全处所躲避"}, {"key": "C", "text": "严禁在大树下躲避"}, {"key": "D", "text": "严禁在电杆旁和涵洞内躲避"}], "answer": ["A", "B", "C", "D"]}, {"id": 73, "type": "multiple", "question": "酷暑、严寒季节应采取措施防止（ ）。", "options": [{"key": "A", "text": "中暑"}, {"key": "B", "text": "溺水"}, {"key": "C", "text": "冻伤"}, {"key": "D", "text": "煤气中毒"}], "answer": ["A", "B", "C", "D"]}, {"id": 74, "type": "single", "question": "木枕宽面在下，顶面与底面同宽时，应使（ ）。", "options": [{"key": "A", "text": "树心一面向下"}, {"key": "B", "text": "树心一面向上"}, {"key": "C", "text": "任意一面向下"}, {"key": "D", "text": "带编号面向下"}], "answer": ["A"]}, {"id": 75, "type": "single", "question": "接头处应使用（ ）的木枕。", "options": [{"key": "A", "text": "质量较好的"}, {"key": "B", "text": "质量较差的"}, {"key": "C", "text": "最短的"}, {"key": "D", "text": "最轻的"}], "answer": ["A"]}, {"id": 76, "type": "single", "question": "劈裂的木枕在铺设前应（ ）。", "options": [{"key": "A", "text": "捆扎或钉组钉板"}, {"key": "B", "text": "直接铺设"}, {"key": "C", "text": "浸水处理"}, {"key": "D", "text": "切除一半"}], "answer": ["A"]}, {"id": 77, "type": "single", "question": "使用新木枕时，应预先钻孔，笔记中的孔径为（ ）。", "options": [{"key": "A", "text": "8.5mm"}, {"key": "B", "text": "10mm"}, {"key": "C", "text": "12.5mm"}, {"key": "D", "text": "15mm"}], "answer": ["C"]}, {"id": 78, "type": "single", "question": "新木枕有铁垫板时，笔记中的道钉孔深为（ ）。", "options": [{"key": "A", "text": "90mm"}, {"key": "B", "text": "100mm"}, {"key": "C", "text": "110mm"}, {"key": "D", "text": "130mm"}], "answer": ["C"]}, {"id": 79, "type": "single", "question": "新木枕无铁垫板时，笔记中的道钉孔深为（ ）。", "options": [{"key": "A", "text": "90mm"}, {"key": "B", "text": "100mm"}, {"key": "C", "text": "110mm"}, {"key": "D", "text": "130mm"}], "answer": ["D"]}, {"id": 80, "type": "single", "question": "改道用道钉孔填塞用木栓，笔记记录的长度为（ ）。", "options": [{"key": "A", "text": "90mm"}, {"key": "B", "text": "100mm"}, {"key": "C", "text": "110mm"}, {"key": "D", "text": "130mm"}], "answer": ["C"]}, {"id": 81, "type": "single", "question": "改道用道钉孔填塞用木栓，笔记记录的宽度为（ ）。", "options": [{"key": "A", "text": "5mm"}, {"key": "B", "text": "10mm"}, {"key": "C", "text": "15mm"}, {"key": "D", "text": "20mm"}], "answer": ["C"]}, {"id": 82, "type": "single", "question": "改道用道钉孔填塞用木栓，笔记记录的厚度为（ ）。", "options": [{"key": "A", "text": "1～3mm"}, {"key": "B", "text": "5～10mm"}, {"key": "C", "text": "10～15mm"}, {"key": "D", "text": "15～20mm"}], "answer": ["B"]}, {"id": 83, "type": "single", "question": "改道用木栓在使用前应经过（ ）。", "options": [{"key": "A", "text": "防腐处理"}, {"key": "B", "text": "水洗处理"}, {"key": "C", "text": "高温处理"}, {"key": "D", "text": "喷漆处理"}], "answer": ["A"]}, {"id": 84, "type": "multiple", "question": "笔记所述“铁路交通事故”包括机车车辆运行中发生的（ ）。", "options": [{"key": "A", "text": "冲突"}, {"key": "B", "text": "脱轨"}, {"key": "C", "text": "火灾"}, {"key": "D", "text": "爆炸"}], "answer": ["A", "B", "C", "D"]}, {"id": 85, "type": "multiple", "question": "铁路机车车辆在运行过程中与下列对象相撞，也可构成铁路交通事故（ ）。", "options": [{"key": "A", "text": "行人"}, {"key": "B", "text": "机动车"}, {"key": "C", "text": "非机动车"}, {"key": "D", "text": "牲畜及其他障碍物"}], "answer": ["A", "B", "C", "D"]}, {"id": 86, "type": "single", "question": "铁路交通事故分为特别重大、重大、较大和（ ）四类。", "options": [{"key": "A", "text": "轻微事故"}, {"key": "B", "text": "一般事故"}, {"key": "C", "text": "常规事故"}, {"key": "D", "text": "责任事故"}], "answer": ["B"]}, {"id": 87, "type": "single", "question": "电气化铁路接触网支柱外侧（ ）范围，按笔记属于营业线设备安全限界。", "options": [{"key": "A", "text": "0.5m"}, {"key": "B", "text": "1m"}, {"key": "C", "text": "2m"}, {"key": "D", "text": "3m"}], "answer": ["C"]}, {"id": 88, "type": "single", "question": "非电气化铁路信号机立柱外侧（ ）范围，按笔记属于营业线设备安全限界。", "options": [{"key": "A", "text": "0.5m"}, {"key": "B", "text": "1m"}, {"key": "C", "text": "2m"}, {"key": "D", "text": "4m"}], "answer": ["B"]}, {"id": 89, "type": "single", "question": "营业线施工等级分为（ ）。", "options": [{"key": "A", "text": "Ⅰ级、Ⅱ级、Ⅲ级"}, {"key": "B", "text": "甲级、乙级、丙级"}, {"key": "C", "text": "A、B两级"}, {"key": "D", "text": "一级、二级、三级、四级"}], "answer": ["A"]}, {"id": 90, "type": "single", "question": "线路平面曲线通常分为（ ）。", "options": [{"key": "A", "text": "圆曲线和缓和曲线"}, {"key": "B", "text": "竖曲线和横曲线"}, {"key": "C", "text": "左曲线和右曲线"}, {"key": "D", "text": "正曲线和反曲线"}], "answer": ["A"]}, {"id": 91, "type": "single", "question": "线路在平面上由一个方向转向另一个方向，中间必须用（ ）连接。", "options": [{"key": "A", "text": "直线"}, {"key": "B", "text": "曲线"}, {"key": "C", "text": "坡道"}, {"key": "D", "text": "道岔"}], "answer": ["B"]}, {"id": 92, "type": "multiple", "question": "设置缓和曲线的目的包括（ ）。", "options": [{"key": "A", "text": "避免列车由直线进入圆曲线时离心加速度骤变"}, {"key": "B", "text": "减少旅客不适"}, {"key": "C", "text": "避免外轨超高突然增大引起剧烈震动"}, {"key": "D", "text": "使曲率逐渐变化"}], "answer": ["A", "B", "C", "D"]}, {"id": 93, "type": "single", "question": "直线与圆曲线之间应采用（ ）连接。", "options": [{"key": "A", "text": "缓和曲线"}, {"key": "B", "text": "竖曲线"}, {"key": "C", "text": "反向曲线"}, {"key": "D", "text": "折线"}], "answer": ["A"]}, {"id": 94, "type": "single", "question": "安全是指客观事物的危险程度能够为人们（ ）的状态。", "options": [{"key": "A", "text": "完全消除"}, {"key": "B", "text": "普遍接受"}, {"key": "C", "text": "无法识别"}, {"key": "D", "text": "完全忽略"}], "answer": ["B"]}, {"id": 95, "type": "multiple", "question": "笔记中的“安全”还包括没有引起（ ）的条件。", "options": [{"key": "A", "text": "死亡、伤害"}, {"key": "B", "text": "职业病"}, {"key": "C", "text": "财产或设备损坏"}, {"key": "D", "text": "环境危害"}], "answer": ["A", "B", "C", "D"]}, {"id": 96, "type": "single", "question": "铁路行车有关人员在任职、提职、改职前，必须进行（ ）。", "options": [{"key": "A", "text": "拟任岗位资格性培训"}, {"key": "B", "text": "自学即可"}, {"key": "C", "text": "只做体检"}, {"key": "D", "text": "只参加班组学习"}], "answer": ["A"]}, {"id": 97, "type": "multiple", "question": "铁路行车有关人员经培训后，还应取得（ ）。", "options": [{"key": "A", "text": "相应职业资格证书"}, {"key": "B", "text": "岗位培训合格证书"}, {"key": "C", "text": "驾驶证"}, {"key": "D", "text": "营业执照"}], "answer": ["A", "B"]}, {"id": 98, "type": "multiple", "question": "《劳动法》规定的劳动者义务包括（ ）。", "options": [{"key": "A", "text": "完成劳动任务"}, {"key": "B", "text": "提高职业技能"}, {"key": "C", "text": "执行劳动安全卫生规程"}, {"key": "D", "text": "遵守劳动纪律和职业道德"}], "answer": ["A", "B", "C", "D"]}, {"id": 99, "type": "single", "question": "安全标志分为（ ）种类型。", "options": [{"key": "A", "text": "2"}, {"key": "B", "text": "3"}, {"key": "C", "text": "4"}, {"key": "D", "text": "5"}], "answer": ["C"]}, {"id": 100, "type": "multiple", "question": "安全标志的四种类型包括（ ）。", "options": [{"key": "A", "text": "禁止标志"}, {"key": "B", "text": "警告标志"}, {"key": "C", "text": "指令标志"}, {"key": "D", "text": "提示标志"}], "answer": ["A", "B", "C", "D"]}, {"id": 101, "type": "single", "question": "安全生产红线是从业人员在运输安全生产过程中必须坚守的基本行为准则和安全工作（ ）。", "options": [{"key": "A", "text": "上线"}, {"key": "B", "text": "底线"}, {"key": "C", "text": "参考线"}, {"key": "D", "text": "警戒线"}], "answer": ["B"]}, {"id": 102, "type": "single", "question": "突破安全生产红线，可能导致（ ）。", "options": [{"key": "A", "text": "事故发生"}, {"key": "B", "text": "效率提高"}, {"key": "C", "text": "风险自动消失"}, {"key": "D", "text": "不产生任何影响"}], "answer": ["A"]}, {"id": 103, "type": "multiple", "question": "预防火灾应从限制燃烧的三个基本条件入手，即（ ）。", "options": [{"key": "A", "text": "控制可燃物"}, {"key": "B", "text": "隔绝助燃物"}, {"key": "C", "text": "控制引火源"}, {"key": "D", "text": "增加可燃物"}], "answer": ["A", "B", "C"]}, {"id": 104, "type": "multiple", "question": "笔记列出的灭火基本方法包括（ ）。", "options": [{"key": "A", "text": "冷却灭火"}, {"key": "B", "text": "隔离灭火"}, {"key": "C", "text": "窒息灭火"}, {"key": "D", "text": "化学抑制灭火"}, {"key": "E", "text": "报警法"}], "answer": ["A", "B", "C", "D", "E"]}, {"id": 105, "type": "multiple", "question": "笔记中的灭火器分类包括（ ）。", "options": [{"key": "A", "text": "干粉灭火器"}, {"key": "B", "text": "二氧化碳灭火器"}, {"key": "C", "text": "水基型灭火器"}, {"key": "D", "text": "汽油灭火器"}], "answer": ["A", "B", "C"]}, {"id": 106, "type": "single", "question": "牵引供电系统主要包括牵引变电所和（ ）。", "options": [{"key": "A", "text": "牵引网"}, {"key": "B", "text": "信号机"}, {"key": "C", "text": "道岔"}, {"key": "D", "text": "轨枕"}], "answer": ["A"]}, {"id": 107, "type": "multiple", "question": "牵引网包括（ ）。", "options": [{"key": "A", "text": "馈电线"}, {"key": "B", "text": "接触网"}, {"key": "C", "text": "轨道回路"}, {"key": "D", "text": "回流线"}], "answer": ["A", "B", "C", "D"]}, {"id": 108, "type": "single", "question": "电力机车利用钢轨作为牵引电流返回变电所的通路，称为（ ）。", "options": [{"key": "A", "text": "馈电线"}, {"key": "B", "text": "接触网"}, {"key": "C", "text": "轨道回路"}, {"key": "D", "text": "回流线"}], "answer": ["C"]}, {"id": 109, "type": "single", "question": "轨道回路与牵引变电所之间的连接线称为（ ）。", "options": [{"key": "A", "text": "馈电线"}, {"key": "B", "text": "接触网"}, {"key": "C", "text": "回流线"}, {"key": "D", "text": "保护线"}], "answer": ["C"]}, {"id": 110, "type": "single", "question": "液压传动是在密闭回路中，利用（ ）作为工作介质进行能量转换、传递、分配的一种传动形式。", "options": [{"key": "A", "text": "气体"}, {"key": "B", "text": "液体"}, {"key": "C", "text": "固体"}, {"key": "D", "text": "蒸汽"}], "answer": ["B"]}, {"id": 111, "type": "single", "question": "液压传动的能量转换过程为（ ）。", "options": [{"key": "A", "text": "液压能→机械能→电能"}, {"key": "B", "text": "机械能→液压能→机械能"}, {"key": "C", "text": "电能→机械能→热能"}, {"key": "D", "text": "机械能→电能→液压能"}], "answer": ["B"]}, {"id": 112, "type": "multiple", "question": "液压传动系统的组成包括（ ）。", "options": [{"key": "A", "text": "液压泵"}, {"key": "B", "text": "执行元件"}, {"key": "C", "text": "控制元件"}, {"key": "D", "text": "辅助元件"}], "answer": ["A", "B", "C", "D"]}, {"id": 113, "type": "multiple", "question": "溢流阀的作用包括（ ）。", "options": [{"key": "A", "text": "溢流和稳压"}, {"key": "B", "text": "限压保护"}, {"key": "C", "text": "提高车速"}, {"key": "D", "text": "改变轨距"}], "answer": ["A", "B"]}];
@@ -361,9 +546,7 @@ function mnemonicPiece(part){
   if([...res].length>34)res=[...res].slice(0,34).join("")+"…";
   return res;
 }
-const GOOD_MNEMONICS={"281":"顺二十五，横三厚下：顺垫最多2块、总厚15；横垫最多3块，厚板放下层。","282":"冻叉高强栓，扭矩一一到一四：1100～1400N·m。","283":"总磨＝垂磨＋半个侧磨。","284":"六十轨，侧伤十九：60kg/m钢轨侧磨19mm重伤。","285":"五十轨，侧伤十七：50kg/m钢轨侧磨17mm重伤。","286":"无缝三区：固—伸—缓（固定区、伸缩区、缓冲区）。","287":"基本轨三伤：弯、磨、伤；50轨“六八十”，60轨“六八十十一”。","288":"尖基最好一起换；单换尖轨“先校、后磨、再达标”。","289":"叉心40看垂磨：50轨六八十，60轨六八十十一；动心翼轨记个六。","290":"尖轨要方正，错十；限位要居中，偏一。","291":"侧渡都要锁：一般75，困难50；50米内有邻岔，邻岔也加强。","292":"护轨槽记“42、+3-1、65”：平直42，误差+3/-1；缓冲末端至少65，加宽就等量。","293":"断≤50先急救：夹板＋急救器，前后50拧；首限15，断<30可25；能焊就焊，不能就钻孔夹紧。","294":"断>50走临时：封、切、插6米、钻夹、10.9栓、前后50紧；可正常放，但不超160。","295":"查照“客九一、货八八”：客车1391，货车1388。","296":"夹板四换：折、孔中裂、裂到孔、绝缘坏；其他站线平异5、双鱼15。","297":"护背只记“1348封顶”。","298":"护轨侧磨“快10、慢12”：>120记10，≤120记12。","299":"缓冲接头“三个数”：10.9级栓、700～1100扭矩、绝缘缝≥6。","300":"胶绝四查：胶破、碰短、肥边、漏电。","301":"钻孔三条：中心线还要倒棱；孔净距≥2倍孔径；外部门先同意、工务现场盯。","302":"折断四条：全断、头贯、底贯、掉块；慢线掉块50×10，快线30×5。","303":"截轨三句话：垂直锯、禁剁冲、禁乙炔烧。","304":"轨缝看两样：轨长＋轨温。","305":"重伤折断及时换，换下钢轨做标记，坚决别再用。","306":"道口护轨喇叭口：300处向中弯，终端离工作边150～180。","307":"轮缘槽“直七一、曲九一、深四六”：直70～100，曲内90～100，深45～60。","308":"曲线加宽“295零、245五、195十、再小十五”。","309":"最大超高：有砟单125、双150；无砟一律150。","310":"欠超高：平常75、困难90；快线特殊90～110可暂留。","311":"过超高：平常30、困难50；>160特殊最多70。","312":"直线顺坡：160以下可延；120～160记“十分之一V、8毫米”；≤120记“九分之一V，有缓15、无缓25”。","313":"450到800，正矢就记“三六九”。","314":"尖轨动程先记“直142、曲152”；12弹弯160/180、提速160；18快160、慢160/180。","315":"铝焊离枕：160以内40，160以上100。","316":"焊接两温：开工≥0，放车<300；风雨雪来要防护。","317":"收工顺坡“慢二、中一、快零点八”。","318":"转辙先治弯尖；辙叉抓“查、护、翼、槽”，肥边磨、间隔铁垫。","319":"捣固车记“起50、拨80”；起超50要分次，曲线上下尽量齐，做完动力稳定。","320":"冻害回落“四字诀”：撤、调、顺、稳；木枕冬垫全撤，混枕总厚>10也撤。","321":"绳正法五步：先正直，十米点，三次均，算拨量，按桩拨。","322":"80～120混枕正线：轨距+6/-2，其余全是4。","323":"80～120道岔正线：轨距+3/-2；平高直三都4，支距2。","324":"故障危行四步：先停防、再通知、快抢修；修不了就封锁或限速。","325":"橡胶垫看“7对15、10对20”；复合垫一分家，也得换。","326":"人身安全“三不一五”：不跳钻扒传；休息不上轨枕坡；绕车至少5米，还要看动态。","327":"雷雨“放金属、躲安全，树杆洞都别钻”；暑寒记“中、溺、冻、煤”四防。","328":"胀轨四兆“轨高坏、起拨轻、枕端离”；一见苗头就停工防胀。","329":"跑道五步：先拦车、快恢复、首列15、专人看、慢慢提。","330":"胶绝分两种：拉开＝两端50复紧、≤160、做永久；失效＝先临时、温度合适再永久。","331":"菱岔口诀“锐角多看轨，钝角重查护”：前后都查轨距水平，叉心重点查轨距/查照/护背。","332":"曲线拨道三限：线中一次30、年120不侵限；桥年60，钢50圬70；无缝严禁超温。","333":"无缝起拨四句：砟要足、先拨正；机具避焊缝；起要顺坡拨要顺；扒床及时回填夯实。","334":"轨枕验收“方匀40、无失伤、宽枕30”。","335":"复式交分“六省一提”：省地、省钱、省咽喉、省站长、省运营、省维修；提效率。","336":"两条假定：两端方向不变、头尾拨零；一点拨动，邻点位置不跟着跑。","337":"跨区间道床一串数：一级砟，III肩400、II和岔450；坡1:1.75；肩高150；枕盒低20～30。","338":"道床验收三字：清、深、密。清到25以下颗粒≤5%；深度达标；密实断面齐边坡。","339":"方向不良七因“修位磨弯捣砟联”：维修、位置、磨耗作业、弯折点、捣固、道砟、联结。","340":"大修八类顺口念：线、轨、岔、枕，口、栏、其他、中修。","341":"支嘴四招：间接拨、禁硬顶、强联结、宽床夯砟加防爬。","342":"辙叉磨压三因：轮冲、吊板、床松。","343":"胀轨跑道一句话：高温先积压力，外界一干扰，轨道横向突然大弯。","344":"扣件三看：挡板“2缝6%”；弹条“1缝/120～150扭，III压11～13.2，坏≤8%”；胶垫“歪>5也≤8”，最后螺栓涂油。","345":"偏磨三治“二十垫、六高二坡、连接不相错”：1/20垫板、6mm超高、≤2‰顺坡。","346":"绳正法五步：先正直，十米点，三次均，算拨量，按桩拨。","347":"胀轨五因：温高、床软、锁低、作乱、线不顺。","348":"不圆顺四治：支距正、轨距递减对、目测消鹅头、个别拨改。","349":"头尾不对正矢就乱：先找中央定头尾，再重测正矢算拨量。","350":"辙叉轨距失格就记“查护＋槽槽”：查照护背不合，护轨槽和辙叉槽不合。","351":"新轨验收四看：错牙1、接头错20、25米轨千米缝80、螺栓涂油扭矩达标。","352":"尖轨磨伤四因：不密贴、顶铁短、基轨磨、轮缘轧挤辗。","353":"曲线四原理：总正矢相等；拨一点邻点反半；正矢和不变；正矢差和为零、头尾拨零。","354":"扳不灵五因“爬杆栓、弯板孔”：尖轨爬、拉杆错、栓夹磨、基轨弯/滑床板不平、孔杆磨。","355":"尖轨跳四因：缝磨松冲、垫板压、捣固空、尖轨拱。","356":"导曲线不圆五因：开口不准、支点不对、支距不标、作维不细、列车冲。","357":"辙叉偏磨三治：焊、倒、捣，捣时别忘水平。","358":"路排验收三条：肩平无草向外坡；侧沟通；符合设计。","359":"轨距扩大五治：外设撑、消离缝、接头垫桥板、换朽枕、混枕消两缝。","360":"辙叉磨压五治：捣底、换枕再捣、垫胶、竖栓扣、铁座弹条。","361":"偏磨一条链：没超高→离心力→反超高→上股偏磨。","362":"轨距扩大一条链：离心＋横推＋轮冲→道钉浮、配件松、钢轨移。","363":"经常保养十一项，压成一句：几床枕缝，钢扣无伤；沙雪冻、口排草，季节单项。","364":"临时补修七项：几何、伤轨、夹栓、轨缝、排水冲刷、道口、其他。","365":"30米两股轨：差150；内股29.925，外股30.075——记“内短925，外长075”。","366":"温升12度：压力232350N，伸长212.4mm——记“23万2350压，212点4长”。","367":"警冲距离就记“二一三五”＝2135mm。","368":"第5点拨后正矢：八九＝89mm。","369":"预留轨缝：六六大顺＝6.6mm。"};
 function makeMnemonic(q){
-  if(GOOD_MNEMONICS[q.id]) return GOOD_MNEMONICS[q.id];
   const answer=q.qa_answer||"";
   const parts=mnemonicChunks(answer);
   let cues=parts.map(mnemonicPiece).filter(Boolean);
@@ -388,9 +571,9 @@ function renderMemo(q){
   head.innerHTML='<b>📖 关键词渐进挖空</b><span>按标点分句；长句多挖、短句少挖，优先挖数字、专业术语、限定词和动作结论</span>';
   const view=document.createElement("div");view.className="memo-answer";
   const rhyme=document.createElement("div");rhyme.className="memo-rhyme";
-  const rhymeTitle=document.createElement("div");rhymeTitle.className="memo-rhyme-title";rhymeTitle.textContent="🧠 好背口诀 / 谐音记忆";
+  const rhymeTitle=document.createElement("div");rhymeTitle.className="memo-rhyme-title";rhymeTitle.textContent="⚡ 速记顺口溜";
   const rhymeText=document.createElement("div");rhymeText.className="memo-rhyme-text";rhymeText.textContent=makeMnemonic(q);
-  const rhymeNote=document.createElement("div");rhymeNote.className="memo-rhyme-note";rhymeNote.textContent="这行只负责帮你记住骨架、数字和顺序；考试时再把口诀展开成标准答案。";
+  const rhymeNote=document.createElement("div");rhymeNote.className="memo-rhyme-note";rhymeNote.textContent="先用口诀抓顺序和关键词，再回到标准答案补完整表述。";
   rhyme.append(rhymeTitle,rhymeText,rhymeNote);
   const controls=document.createElement("div");controls.className="memo-controls";
   const presets=document.createElement("div");presets.className="memo-presets";
