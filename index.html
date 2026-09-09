@@ -219,8 +219,7 @@ async function site2Rpc(name,body){
     method:"POST",
     headers:{
       "Content-Type":"application/json",
-      "apikey":SITE2_SUPABASE_PUBLISHABLE_KEY,
-      "Authorization":"Bearer "+SITE2_SUPABASE_PUBLISHABLE_KEY
+      "apikey":SITE2_SUPABASE_PUBLISHABLE_KEY
     },
     body:JSON.stringify(body)
   });
@@ -279,7 +278,8 @@ async function site2InitLicenseGate(){
       }
     }catch(e){
       msg.className="license-lock-msg bad";
-      msg.textContent="连接激活服务器失败，请检查网络后重试。";
+      const detail=String(e && e.message ? e.message : "");
+      msg.textContent="激活服务器返回错误："+(detail.length>160 ? detail.slice(0,160)+"…" : detail);
     }finally{
       btn.disabled=false;
       btn.textContent="激活本机";
