@@ -57,21 +57,15 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 @media(max-width:420px){.memo-presets{grid-template-columns:repeat(2,1fr)}.memo-answer{font-size:16px}.memo-count{min-width:82px}}
 
 
-/* ===== 第二网站独立激活锁 ===== */
 .site2-lock-screen{
   position:fixed;inset:0;z-index:999999;
   display:flex;align-items:center;justify-content:center;
-  padding:22px;
-  background:linear-gradient(180deg,#e9f6ff 0%,#f8fcff 52%,#fffaf1 100%);
+  padding:22px;background:linear-gradient(180deg,#eaf6ff 0%,#f8fcff 55%,#fffaf2 100%);
 }
 .site2-lock-screen.hidden{display:none!important}
 .site2-lock-card{
-  width:min(92vw,420px);
-  background:#fff;
-  border:1px solid #dce8f2;
-  border-radius:24px;
-  padding:24px 20px;
-  box-shadow:0 18px 55px rgba(63,104,145,.16);
+  width:min(92vw,420px);background:#fff;border:1px solid #dce8f2;
+  border-radius:24px;padding:24px 20px;box-shadow:0 18px 55px rgba(63,104,145,.16);
 }
 .site2-lock-card h2{margin:0 0 10px;color:#2f65c8;font-size:24px}
 .site2-lock-card p{margin:0 0 16px;color:#66798a;line-height:1.7;font-size:14px}
@@ -81,8 +75,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 }
 .site2-lock-card button{
   width:100%;margin-top:12px;min-height:48px;border:0;border-radius:14px;
-  font-size:16px;font-weight:800;color:#fff;
-  background:linear-gradient(135deg,#5aa7ff,#7473ff);
+  font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#5aa7ff,#7473ff);
 }
 .site2-lock-card button:disabled{opacity:.65}
 .site2-lock-msg{min-height:23px;margin-top:11px;font-size:14px;line-height:1.55}
@@ -162,9 +155,8 @@ body.site2-license-pending>.app{visibility:hidden}
 
 <script>
 
-// ===== 第二网站独立 Supabase 激活锁 =====
-const SITE2_SUPABASE_URL='https://blvutnapgehpqfeyfncf.supabase.co';
-const SITE2_SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsdnV0bmFwcWVocHFmZXlmbmNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjA4OTcsImV4cCI6MjEwNDUzNjg5N30.HN7ZopW_oYePi7EHyqGE6X5BMHDv0qiZyWlGNR7UV2o';
+const SITE2_SUPABASE_URL='https://blvutnapqehpqfeyfncf.supabase.co';
+const SITE2_SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXJhYmFzZSIsInJlZiI6ImJsdnV0bmFwcWVocHFmZXlmbmNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjA4OTcsImV4cCI6MjEwNDUzNjg5N30.HN7ZopW_oYePi7EHyqGE6X5BMHDv0qiZyWlGNR7UV2o';
 const SITE2_ACTIVATION_TOKEN_KEY="rail_quiz_site2_activation_token_v2";
 const SITE2_DEVICE_ID_KEY="rail_quiz_site2_device_id_v2";
 
@@ -193,15 +185,13 @@ async function site2Rpc(name,body){
     },
     body:JSON.stringify(body)
   });
-
   const txt=await r.text();
   if(!r.ok) throw new Error(txt||("HTTP "+r.status));
-  return txt ? JSON.parse(txt) : null;
+  return txt?JSON.parse(txt):null;
 }
 
 function site2Unlock(){
-  const screen=document.getElementById("site2LockScreen");
-  if(screen) screen.classList.add("hidden");
+  document.getElementById("site2LockScreen")?.classList.add("hidden");
   document.body.classList.remove("site2-license-pending");
 }
 
@@ -210,17 +200,13 @@ async function site2InitLicenseGate(){
   const btn=document.getElementById("site2LicenseBtn");
   const msg=document.getElementById("site2LicenseMsg");
 
-  // 与第一网站稳定版同一思路：
-  // 只要本浏览器保存过第二网站自己的激活凭证，升级 index.html 后仍直接进入。
-  const oldToken=localStorage.getItem(SITE2_ACTIVATION_TOKEN_KEY);
-  if(oldToken){
+  if(localStorage.getItem(SITE2_ACTIVATION_TOKEN_KEY)){
     site2Unlock();
     return;
   }
 
   async function go(){
     const code=site2NormalizeCode(input.value);
-
     if(!code){
       msg.className="site2-lock-msg bad";
       msg.textContent="请先输入激活码。";
@@ -237,8 +223,7 @@ async function site2InitLicenseGate(){
         p_code:code,
         p_device_id:site2GetDeviceId()
       });
-
-      if(res && res.ok===true && res.token){
+      if(res&&res.ok===true&&res.token){
         localStorage.setItem(SITE2_ACTIVATION_TOKEN_KEY,res.token);
         msg.className="site2-lock-msg ok";
         msg.textContent="激活成功。本机以后自动进入。";
@@ -249,8 +234,7 @@ async function site2InitLicenseGate(){
       }
     }catch(e){
       msg.className="site2-lock-msg bad";
-      const detail=String(e&&e.message?e.message:e);
-      msg.textContent="激活失败："+detail;
+      msg.textContent="激活失败："+String(e&&e.message?e.message:e);
     }finally{
       btn.disabled=false;
       btn.textContent="激活本机";
