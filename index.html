@@ -127,11 +127,12 @@ body.license-pending > .app{visibility:hidden}
 
 <div id="site2LockScreen" class="license-lock-screen">
   <div class="license-lock-card">
-    <h2>🔐 一次性激活</h2>
+    <h2>🔐 一次性激活 <span style="font-size:13px;color:#7a8da0;font-weight:700">V3自检版</span></h2>
     <p>每个激活码只能使用一次。首次激活成功后，这台浏览器会保存专属凭证，以后更新网站也不需要重新激活。</p>
     <input id="site2LicenseInput" type="text" autocomplete="off" autocapitalize="characters" placeholder="输入专属激活码">
     <button id="site2LicenseBtn" type="button">激活本机</button>
     <div id="site2LicenseMsg" class="license-lock-msg"></div>
+    <div id="site2ServerStatus" style="margin-top:6px;font-size:13px;color:#75879a">服务器：正在自检…</div>
   </div>
 </div>
 
@@ -234,11 +235,33 @@ function site2Unlock(){
   document.body.classList.remove("license-pending");
 }
 
+
+async function site2PingServer(){
+  const el=document.getElementById("site2ServerStatus");
+  if(!el) return;
+  try{
+    const res=await site2Rpc("site2_activate_license",{
+      p_code:"__SITE2_PING_INVALID_CODE__",
+      p_device_id:"site2-ping-"+Date.now()+"-"+Math.random().toString(36).slice(2)
+    });
+    // 能收到 JSON 返回就说明 RPC / key / 网络都通。
+    el.style.color="#14805d";
+    el.textContent="服务器：连接正常";
+    return true;
+  }catch(e){
+    el.style.color="#bc4545";
+    const detail=String(e && e.message ? e.message : "");
+    el.textContent="服务器：连接失败 "+(detail.length>120?detail.slice(0,120)+"…":detail);
+    return false;
+  }
+}
+
 async function site2InitLicenseGate(){
   const screen=document.getElementById("site2LockScreen");
   const input=document.getElementById("site2LicenseInput");
   const btn=document.getElementById("site2LicenseBtn");
   const msg=document.getElementById("site2LicenseMsg");
+  site2PingServer();
 
   // 和第一网站保持同一思路：
   // 本浏览器只要已经保存过第二网站自己的激活凭证，就直接永久认可。
