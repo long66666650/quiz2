@@ -217,6 +217,146 @@ body.site2-license-pending>.app{visibility:hidden}
   margin:7px 0 3px;
 }
 
+
+/* ===== 第二套计算题：题目下方直接显示完整解答 ===== */
+#sCalcSolution:empty{display:none}
+#sCalcSolution{margin-top:16px;margin-bottom:18px}
+.calc-solution{
+  border:1px solid #d7e6f5;
+  border-radius:20px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(64,109,150,.08);
+}
+.calc-solution-head{
+  padding:15px 16px;
+  background:linear-gradient(135deg,#eef7ff,#f7f6ff);
+  border-bottom:1px solid #dce9f5;
+}
+.calc-solution-head b{
+  display:block;
+  font-size:18px;
+  color:#285d9b;
+  margin-bottom:5px;
+}
+.calc-solution-head span{
+  display:block;
+  font-size:14px;
+  line-height:1.65;
+  color:#64778c;
+}
+.calc-section{
+  padding:14px 15px;
+  border-bottom:1px solid #edf2f7;
+}
+.calc-section:last-child{border-bottom:0}
+.calc-section-title{
+  font-size:15px;
+  font-weight:900;
+  color:#435d78;
+  margin-bottom:9px;
+}
+.calc-known-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+}
+.calc-known-item{
+  padding:8px 10px;
+  border-radius:10px;
+  background:#f8fbfd;
+  font-size:15px;
+  line-height:1.6;
+  color:#263b50;
+}
+.calc-step{
+  margin-top:12px;
+  padding:13px;
+  border-radius:15px;
+  background:#fbfdff;
+  border:1px solid #e2ebf3;
+}
+.calc-step:first-of-type{margin-top:0}
+.calc-step-name{
+  font-size:16px;
+  font-weight:900;
+  color:#2e587e;
+  margin-bottom:10px;
+}
+.calc-formula-title,
+.calc-sub-title,
+.calc-result-title{
+  font-size:12px;
+  font-weight:800;
+  color:#8290a0;
+  margin:9px 0 5px;
+}
+.calc-formula{
+  padding:12px 10px;
+  border-radius:12px;
+  background:#eef5ff;
+  border:1px solid #cee0fa;
+  text-align:center;
+  color:#163f70;
+  font-family:"Times New Roman","Cambria Math",serif;
+  font-size:21px;
+  font-weight:700;
+  line-height:1.8;
+  overflow-x:auto;
+}
+.calc-sub{
+  padding:10px 11px;
+  border-radius:11px;
+  background:#fff;
+  border:1px solid #e5ebf1;
+  color:#2d4053;
+  font-family:"Times New Roman","Cambria Math",serif;
+  font-size:17px;
+  line-height:1.75;
+  word-break:break-word;
+}
+.calc-step-result{
+  padding:9px 11px;
+  border-radius:11px;
+  background:#f4fbf7;
+  color:#267154;
+  font-size:15px;
+  line-height:1.7;
+}
+.calc-final-answer{
+  padding:14px 15px;
+  background:#ecfff7;
+}
+.calc-final-answer b{
+  display:block;
+  color:#147a59;
+  font-size:16px;
+  margin-bottom:5px;
+}
+.calc-final-answer div{
+  color:#195f49;
+  font-size:16px;
+  line-height:1.75;
+  font-weight:700;
+}
+.calc-frac{
+  display:inline-flex;
+  flex-direction:column;
+  vertical-align:middle;
+  text-align:center;
+  line-height:1.15;
+  margin:0 4px;
+}
+.calc-frac .num{
+  display:block;
+  padding:0 5px 3px;
+  border-bottom:1.7px solid currentColor;
+}
+.calc-frac .den{
+  display:block;
+  padding:3px 5px 0;
+}
+
 </style>
 </head>
 <body class="site2-license-pending">
@@ -279,7 +419,7 @@ body.site2-license-pending>.app{visibility:hidden}
 <section id="secondQuiz" class="card hidden">
   <div class="meta"><span id="sPos">第 1 / 369 题</span><span id="sSource" class="badge"></span></div>
   <div class="progress"><div id="sBar"></div></div>
-  <div id="sQuestion" class="q"></div><div id="sOptions"></div><div id="sQaAnswer" class="qa-answer hidden"></div>
+  <div id="sQuestion" class="q"></div><div id="sCalcSolution"></div><div id="sOptions"></div><div id="sQaAnswer" class="qa-answer hidden"></div>
   <div id="sFeedback" class="feedback hidden"></div>
   <div class="actions"><button id="sPrev" class="secondary">上一题</button><button id="sPaletteBtn" class="secondary">题号导航</button><button id="sNext" class="primary">下一题</button></div>
   <div id="sPaletteWrap" class="hidden"><div class="palette" id="sPalette"></div></div>
@@ -649,102 +789,109 @@ function makeMnemonic(q){
   return one.replace(/[，,]+/g,"，").replace(/[。；;]+$/g,"")+"。";
 }
 
-const CALC_DETAILS={"365":{"known":["L＝30 m","R＝300 m","S＝1500 mm"],"steps":[{"title":"第1步：求两股钢轨长度差","formula_html":"l＝<span class=\"calc-frac\"><span class=\"num\">S × L</span><span class=\"den\">R</span></span>","sub":"l＝1500 × 30 ÷ 300＝150 mm","result":"所以两股钢轨长度差 l＝150 mm＝0.15 m。"},{"title":"第2步：求内股钢轨长度","formula_html":"L<sub>内</sub>＝L－<span class=\"calc-frac\"><span class=\"num\">l</span><span class=\"den\">2</span></span>","sub":"L内＝30－0.15 ÷ 2＝29.925 m","result":"内股钢轨长度＝29.925 m。"},{"title":"第3步：求外股钢轨长度","formula_html":"L<sub>外</sub>＝L＋<span class=\"calc-frac\"><span class=\"num\">l</span><span class=\"den\">2</span></span>","sub":"L外＝30＋0.15 ÷ 2＝30.075 m","result":"外股钢轨长度＝30.075 m。"}],"final":"两股钢轨长度差为 150 mm；内股钢轨长度 29.925 m；外股钢轨长度 30.075 m。"},"366":{"known":["L＝1500 m","锁定轨温 t₁＝28 ℃","当前轨温 t₂＝40 ℃","F＝77.45 cm²","A＝0.0118 mm/(m·℃)","E·A≈250 N/(cm²·℃)"],"steps":[{"title":"第1步：求轨温变化量","formula_html":"Δt＝t₂－t₁","sub":"Δt＝40－28＝12 ℃","result":"轨温上升 12 ℃。"},{"title":"第2步：求钢轨内部温度压力","formula_html":"P<sub>压</sub>＝250 × F × Δt","sub":"P压＝250 × 77.45 × 12＝232350 N","result":"钢轨内部承受温度压力 232350 N。"},{"title":"第3步：求自由伸缩状态下的伸长量","formula_html":"Δl＝A × L × Δt","sub":"Δl＝0.0118 × 1500 × 12＝212.4 mm","result":"自由伸缩时，长轨条伸长 212.4 mm。"}],"final":"该长钢轨承受 232350 N 的温度压力；若处于自由伸缩状态，长轨条伸长 212.4 mm。"},"367":{"known":["连接曲线半径 R＝300 m","连接曲线后股道线间距＝4000 mm"],"steps":[{"title":"第1步：求 Wₐ","formula_html":"W<sub>A</sub>＝<span class=\"calc-frac\"><span class=\"num\">40500</span><span class=\"den\">R</span></span>","sub":"WA＝40500 ÷ 300＝135 mm","result":"WA＝135 mm。"},{"title":"第2步：求警冲标距连接曲线中心线距离","formula_html":"距离＝W<sub>A</sub>＋2000","sub":"距离＝135＋2000＝2135 mm","result":"警冲标距连接曲线中心线距离＝2135 mm。"}],"final":"警冲标距连接曲线中心线距离为 2135 mm。"},"368":{"known":["第4测点拨量＝－8 mm","第5测点实量正矢＝92 mm","第5测点拨量＝－18 mm","第6测点拨量＝－22 mm"],"steps":[{"title":"第1步：写出第5测点拨后正矢公式","formula_html":"f′₅＝f₅＋e₅－<span class=\"calc-frac\"><span class=\"num\">e₄＋e₆</span><span class=\"den\">2</span></span>","sub":"f′₅＝92＋(－18)－[(－8)＋(－22)] ÷ 2","result":"前后两点拨量之和：(－8)＋(－22)＝－30 mm。"},{"title":"第2步：继续计算","formula_html":"f′₅＝92－18－(－30 ÷ 2)","sub":"f′₅＝74＋15＝89 mm","result":"第5测点拨后正矢＝89 mm。"}],"final":"第5测点的拨后正矢为 89 mm。"},"369":{"known":["a₍g₎＝18 mm","Tmax＝62.8 ℃","Tmin＝－22.4 ℃","作业轨温 t₀＝28.2 ℃","a＝0.0118 mm/(m·℃)","L＝25 m"],"steps":[{"title":"第1步：求中间轨温","formula_html":"t<sub>z</sub>＝<span class=\"calc-frac\"><span class=\"num\">T<sub>max</sub>＋T<sub>min</sub></span><span class=\"den\">2</span></span>","sub":"tz＝[62.8＋(－22.4)] ÷ 2＝20.2 ℃","result":"中间轨温 tz＝20.2 ℃。"},{"title":"第2步：求预留轨缝","formula_html":"a₀＝a × L × (t<sub>z</sub>－t₀)＋<span class=\"calc-frac\"><span class=\"num\">a<sub>g</sub></span><span class=\"den\">2</span></span>","sub":"a₀＝0.0118 × 25 × (20.2－28.2)＋18 ÷ 2","result":"a₀＝0.0118 × 25 × (－8)＋9＝6.6 mm。"}],"final":"作业时应预留轨缝 6.6 mm。"}};
+const CALC_DETAILS={"365":{"idea":"先求两股钢轨的长度差，再把长度差换成米；内股减去一半，外股加上一半。","known":["曲线长 L＝30 m","曲线半径 R＝300 m","两股钢轨中心距离 S＝1500 mm"],"steps":[{"name":"第1步：求两股钢轨长度差","formula":"l＝<span class=\"calc-frac\"><span class=\"num\">S × L</span><span class=\"den\">R</span></span>","sub":"l＝1500 × 30 ÷ 300＝150 mm","result":"两股钢轨长度差 l＝150 mm＝0.15 m。"},{"name":"第2步：求内股钢轨长度","formula":"L<sub>内</sub>＝L－<span class=\"calc-frac\"><span class=\"num\">l</span><span class=\"den\">2</span></span>","sub":"L内＝30－0.15 ÷ 2＝29.925 m","result":"内股钢轨长度＝29.925 m。"},{"name":"第3步：求外股钢轨长度","formula":"L<sub>外</sub>＝L＋<span class=\"calc-frac\"><span class=\"num\">l</span><span class=\"den\">2</span></span>","sub":"L外＝30＋0.15 ÷ 2＝30.075 m","result":"外股钢轨长度＝30.075 m。"}],"final":"两股钢轨长度差为 150 mm；内股钢轨长度 29.925 m；外股钢轨长度 30.075 m。"},"366":{"idea":"先算轨温升高了多少，再算温度压力；最后按自由伸缩状态计算钢轨伸长量。","known":["钢轨长度 L＝1500 m","锁定轨温 t₁＝28 ℃","当前轨温 t₂＝40 ℃","钢轨断面积 F＝77.45 cm²","线膨胀系数 A＝0.0118 mm/(m·℃)","E·A≈250 N/(cm²·℃)"],"steps":[{"name":"第1步：求温差","formula":"Δt＝t₂－t₁","sub":"Δt＝40－28＝12 ℃","result":"轨温升高 12 ℃。"},{"name":"第2步：求温度压力","formula":"P<sub>压</sub>＝250 × F × Δt","sub":"P压＝250 × 77.45 × 12＝232350 N","result":"长钢轨内部承受温度压力 232350 N。"},{"name":"第3步：求自由伸缩时的伸长量","formula":"Δl＝A × L × Δt","sub":"Δl＝0.0118 × 1500 × 12＝212.4 mm","result":"长轨条伸长量＝212.4 mm。"}],"final":"长钢轨承受 232350 N 温度压力；自由伸缩时，长轨条伸长 212.4 mm。"},"367":{"idea":"这题分两步：先根据曲线半径求 WA，再在 WA 的基础上加 2000 mm。","known":["连接曲线半径 R＝300 m","连接曲线后股道线间距＝4000 mm"],"steps":[{"name":"第1步：求 WA","formula":"W<sub>A</sub>＝<span class=\"calc-frac\"><span class=\"num\">40500</span><span class=\"den\">R</span></span>","sub":"WA＝40500 ÷ 300＝135 mm","result":"WA＝135 mm。"},{"name":"第2步：求警冲标距连接曲线中心线距离","formula":"距离＝W<sub>A</sub>＋2000","sub":"距离＝135＋2000＝2135 mm","result":"警冲标距连接曲线中心线距离＝2135 mm。"}],"final":"警冲标距连接曲线中心线距离为 2135 mm。"},"368":{"idea":"把第5点的实量正矢、第5点拨量，以及相邻第4点和第6点的拨量，直接代入拨后正矢公式。","known":["第4测点拨量 e₄＝－8 mm","第5测点实量正矢 f₅＝92 mm","第5测点拨量 e₅＝－18 mm","第6测点拨量 e₆＝－22 mm"],"steps":[{"name":"第1步：写出拨后正矢公式","formula":"f′₅＝f₅＋e₅－<span class=\"calc-frac\"><span class=\"num\">e₄＋e₆</span><span class=\"den\">2</span></span>","sub":"f′₅＝92＋(－18)－[(－8)＋(－22)] ÷ 2","result":"相邻两点拨量之和＝－30 mm。"},{"name":"第2步：继续计算","formula":"f′₅＝92－18－(－30 ÷ 2)","sub":"f′₅＝74＋15＝89 mm","result":"第5测点拨后正矢＝89 mm。"}],"final":"第5测点的拨后正矢为 89 mm。"},"369":{"idea":"先由最高轨温和最低轨温求中间轨温，再把中间轨温、作业轨温和钢轨长度代入预留轨缝公式。","known":["钢轨长 L＝25 m","最高轨温 Tmax＝62.8 ℃","最低轨温 Tmin＝－22.4 ℃","作业轨温 t₀＝28.2 ℃","ag＝18 mm","线膨胀系数 a＝0.0118 mm/(m·℃)"],"steps":[{"name":"第1步：求中间轨温","formula":"t<sub>z</sub>＝<span class=\"calc-frac\"><span class=\"num\">T<sub>max</sub>＋T<sub>min</sub></span><span class=\"den\">2</span></span>","sub":"tz＝[62.8＋(－22.4)] ÷ 2＝20.2 ℃","result":"中间轨温 tz＝20.2 ℃。"},{"name":"第2步：求预留轨缝","formula":"a₀＝a × L × (t<sub>z</sub>－t₀)＋<span class=\"calc-frac\"><span class=\"num\">a<sub>g</sub></span><span class=\"den\">2</span></span>","sub":"a₀＝0.0118 × 25 × (20.2－28.2)＋18 ÷ 2","result":"a₀＝0.0118 × 25 × (－8)＋9＝6.6 mm。"}],"final":"作业时应预留轨缝 6.6 mm。"}};
 
 function renderCalcDetail(q, box){
   const d=CALC_DETAILS[q.id];
-  if(!d)return;
+  if(!d || !box)return;
 
-  const panel=document.createElement("div");
-  panel.className="calc-detail";
+  const wrap=document.createElement("div");
+  wrap.className="calc-solution";
 
-  const title=document.createElement("div");
-  title.className="calc-detail-title";
-  title.textContent="🧮 完整计算过程";
-  panel.append(title);
+  const head=document.createElement("div");
+  head.className="calc-solution-head";
+  const hb=document.createElement("b");
+  hb.textContent="🧮 解答过程";
+  const hs=document.createElement("span");
+  hs.textContent=d.idea||"按公式逐步代入计算。";
+  head.append(hb,hs);
+  wrap.append(head);
 
   const known=document.createElement("div");
-  known.className="calc-known";
-  const kl=document.createElement("div");
-  kl.className="calc-label";
-  kl.textContent="① 已知条件";
-  known.append(kl);
+  known.className="calc-section";
+  const kt=document.createElement("div");
+  kt.className="calc-section-title";
+  kt.textContent="① 已知条件";
+  known.append(kt);
+  const grid=document.createElement("div");
+  grid.className="calc-known-grid";
   (d.known||[]).forEach(x=>{
-    const line=document.createElement("div");
-    line.className="calc-known-line";
-    line.textContent=x;
-    known.append(line);
+    const item=document.createElement("div");
+    item.className="calc-known-item";
+    item.textContent=x;
+    grid.append(item);
   });
-  panel.append(known);
+  known.append(grid);
+  wrap.append(known);
 
-  (d.steps||[]).forEach((step,idx)=>{
+  const stepsSec=document.createElement("div");
+  stepsSec.className="calc-section";
+  const st=document.createElement("div");
+  st.className="calc-section-title";
+  st.textContent="② 计算步骤";
+  stepsSec.append(st);
+
+  (d.steps||[]).forEach(step=>{
     const card=document.createElement("div");
-    card.className="calc-step-card";
+    card.className="calc-step";
 
-    const st=document.createElement("div");
-    st.className="calc-step-title";
-    st.textContent=step.title;
-    card.append(st);
+    const name=document.createElement("div");
+    name.className="calc-step-name";
+    name.textContent=step.name;
+    card.append(name);
 
-    const fl=document.createElement("div");
-    fl.className="calc-row-label";
-    fl.textContent="公式";
-    card.append(fl);
+    const ft=document.createElement("div");
+    ft.className="calc-formula-title";
+    ft.textContent="公式";
+    card.append(ft);
 
-    const fb=document.createElement("div");
-    fb.className="calc-formula-box";
-    const eq=document.createElement("div");
-    eq.className="calc-equation";
-    eq.innerHTML=step.formula_html;
-    fb.append(eq);
-    card.append(fb);
+    const f=document.createElement("div");
+    f.className="calc-formula";
+    f.innerHTML=step.formula;
+    card.append(f);
 
-    const arrow=document.createElement("div");
-    arrow.className="calc-arrow";
-    arrow.textContent="↓";
-    card.append(arrow);
-
-    const sl=document.createElement("div");
-    sl.className="calc-row-label";
-    sl.textContent="代入数值";
-    card.append(sl);
+    const subt=document.createElement("div");
+    subt.className="calc-sub-title";
+    subt.textContent="代入";
+    card.append(subt);
 
     const sub=document.createElement("div");
-    sub.className="calc-substitution";
+    sub.className="calc-sub";
     sub.textContent=step.sub;
     card.append(sub);
 
-    const rl=document.createElement("div");
-    rl.className="calc-row-label";
-    rl.style.marginTop="9px";
-    rl.textContent="本步结果";
-    card.append(rl);
+    const rt=document.createElement("div");
+    rt.className="calc-result-title";
+    rt.textContent="本步结果";
+    card.append(rt);
 
-    const result=document.createElement("div");
-    result.className="calc-result-line";
-    result.textContent=step.result;
-    card.append(result);
+    const r=document.createElement("div");
+    r.className="calc-step-result";
+    r.textContent=step.result;
+    card.append(r);
 
-    panel.append(card);
+    stepsSec.append(card);
   });
+  wrap.append(stepsSec);
 
   const final=document.createElement("div");
-  final.className="calc-final";
-  final.textContent="✅ 最终答案："+d.final;
-  panel.append(final);
+  final.className="calc-final-answer";
+  const fb=document.createElement("b");
+  fb.textContent="③ 最终答案";
+  const fv=document.createElement("div");
+  fv.textContent=d.final;
+  final.append(fb,fv);
+  wrap.append(final);
 
-  box.append(panel);
+  box.append(wrap);
 }
 
 function renderMemo(q){
   const box=$("#sOptions");
   const answer=q.qa_answer||"暂无答案";
 
-  // 计算题：只展示完整解题过程，不做挖空，也不显示任何巧记/口诀
-  if(q.source==="计算题"){
-    renderCalcDetail(q,box);
-    return;
-  }
+  // 计算题由题目下方的专用解答区直接显示，这里不再做挖空或巧记
+  if(q.source==="计算题") return;
 
   let level=memoDefault(q);
 
@@ -788,9 +935,17 @@ function sRender(){
   $("#sPos").textContent=`第 ${sidx+1} / ${squeue.length} 题`;
   $("#sSource").textContent=q.source||"";
   $("#sBar").style.width=((sidx+1)/squeue.length*100)+"%";
-  $("#sQuestion").textContent=q.question;
+  $("#sQuestion").textContent=(q.source==="计算题"
+    ? q.question.replace(/（选择正确答案）\s*$/,"")
+    : q.question);
+  $("#sCalcSolution").innerHTML="";
   $("#sOptions").innerHTML="";
   $("#sQaAnswer").classList.add("hidden");
+
+  // 计算题：题目一出现，解答过程立刻显示在题目下面、导航按钮上面
+  if(q.source==="计算题"){
+    renderCalcDetail(q,$("#sCalcSolution"));
+  }
   $("#sFeedback").className="feedback hidden";
   $("#sPrev").disabled=sidx===0;
   sPalette();
