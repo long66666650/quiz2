@@ -633,7 +633,13 @@ function renderCalcDetail(q, box){
 function renderMemo(q){
   const box=$("#sOptions");
   const answer=q.qa_answer||"暂无答案";
-  if(q.source==="计算题")renderCalcDetail(q,box);
+
+  // 计算题不做挖空、不显示口诀，直接展示详细计算过程
+  if(q.source==="计算题"){
+    renderCalcDetail(q,box);
+    return;
+  }
+
   let level=memoDefault(q);
 
   const panel=document.createElement("div");panel.className="memo-panel";
