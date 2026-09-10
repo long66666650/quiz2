@@ -70,7 +70,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 body.site2-license-pending>.app{visibility:hidden}
 
 
-/* ===== 第二套 · 计算题详细解题过程 ===== */
+/* ===== 第二套 · 计算题清晰逐步过程 ===== */
 .calc-detail{
   margin-top:12px;
   padding:15px;
@@ -80,61 +80,84 @@ body.site2-license-pending>.app{visibility:hidden}
   box-shadow:0 8px 22px rgba(66,115,160,.06);
 }
 .calc-detail-title{
-  font-size:17px;
+  font-size:18px;
   font-weight:900;
   color:#2f65c8;
-  margin-bottom:11px;
+  margin-bottom:12px;
 }
-.calc-block{
-  margin-top:10px;
-  padding:11px 12px;
-  border-radius:13px;
-  background:#fff;
-  border:1px solid #e4edf5;
+.calc-known{
+  padding:12px 13px;
+  border-radius:14px;
+  background:#fff9e8;
+  border:1px solid #f1dda0;
+  margin-bottom:12px;
 }
 .calc-label{
   font-size:13px;
   font-weight:900;
   color:#5b7185;
-  margin-bottom:6px;
+  margin-bottom:7px;
 }
-.calc-text{
+.calc-known-line{
   font-size:16px;
-  line-height:1.85;
+  line-height:1.9;
   color:#24364a;
   white-space:pre-wrap;
-  word-break:break-word;
 }
-.calc-formula{
-  font-family:"Times New Roman","STIX Two Math","Cambria Math",serif;
-  font-size:18px;
-  line-height:1.9;
-  padding:8px 10px;
-  margin:5px 0;
-  border-radius:10px;
+.calc-step-card{
+  margin-top:12px;
+  padding:13px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #dfeaf3;
+}
+.calc-step-title{
+  font-size:16px;
+  font-weight:900;
+  color:#315f8c;
+  margin-bottom:9px;
+}
+.calc-row{
+  margin-top:8px;
+}
+.calc-row-label{
+  font-size:12px;
+  font-weight:800;
+  color:#718096;
+  margin-bottom:4px;
+}
+.calc-formula-line{
+  display:block;
+  width:100%;
+  padding:10px 11px;
+  border-radius:11px;
   background:#f4f8ff;
   color:#213c64;
-  overflow-x:auto;
-  white-space:nowrap;
+  font-family:"Times New Roman","STIX Two Math","Cambria Math",serif;
+  font-size:18px;
+  line-height:1.65;
+  white-space:normal;
+  word-break:break-word;
 }
-.calc-step{
-  margin:8px 0;
-  padding:9px 10px;
-  border-left:3px solid #6b91ff;
-  background:#fbfdff;
-  border-radius:8px;
-  line-height:1.8;
-  font-size:15px;
+.calc-result-line{
+  padding:10px 11px;
+  border-radius:11px;
+  background:#f8fbfd;
+  color:#24364a;
+  font-size:16px;
+  line-height:1.75;
+  white-space:pre-wrap;
 }
 .calc-final{
-  margin-top:11px;
-  padding:12px 13px;
-  border-radius:13px;
+  margin-top:14px;
+  padding:13px 14px;
+  border-radius:14px;
   background:#ecfff7;
   border:1px solid #a9e8d4;
   color:#147a59;
-  font-weight:850;
+  font-weight:900;
   line-height:1.8;
+  font-size:16px;
 }
 
 </style>
@@ -158,10 +181,10 @@ body.site2-license-pending>.app{visibility:hidden}
 
 <div class="app">
 <section id="home">
-  <div class="hero"><h1>☀️ 铁路刷题题库</h1><p>第一套继续无限变式练习；第二套保留原题，并给实作、简答、论述、计算题加入渐进挖空背诵。</p></div>
+  <div class="hero"><h1>☀️ 铁路刷题题库</h1><p>第一套继续无限变式练习；第二套保留原题，实作/简答/论述继续渐进挖空，计算题直接展示完整公式与步骤。</p></div>
   <div class="card">
     <button class="setbtn" id="goFirst">第一套 · 无限变式刷题<small>可选单选 / 多选 / 判断 / 混合；可选简单 / 一般 / 困难。</small></button>
-    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述、计算支持关键词挖空，并在完整答案下提供速记口诀。</small></button>
+    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常判题；填空照常看答案；实作、简答、论述支持关键词挖空和速记；计算题直接显示完整公式与逐步计算过程。</small></button>
   </div>
 </section>
 
@@ -189,7 +212,7 @@ body.site2-license-pending>.app{visibility:hidden}
   <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题不改；大题改成关键词渐进挖空：按标点分句，长句多挖、短句少挖，支持20% / 50% / 80% / 全挖。</p></div>
   <div class="card">
     <button class="setbtn sMode" data-mode="all">顺序练习<small>从上次位置继续。</small></button>
-    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；完整答案下带速记口诀，再逐级挖空背诵。</small></button>
+    <button class="setbtn sMode" data-mode="big">📖 大题背诵<small>只练实作、简答、论述、计算题；实作/简答/论述继续挖空背诵，计算题直接看完整解题过程。</small></button>
     <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
     <button class="secondary start" id="secondBackHome">返回两套题库</button>
@@ -580,47 +603,62 @@ function renderCalcDetail(q, box){
 
   const title=document.createElement("div");
   title.className="calc-detail-title";
-  title.textContent="🧮 详细解题过程";
+  title.textContent="🧮 完整解题过程";
   panel.append(title);
 
   const known=document.createElement("div");
-  known.className="calc-block";
+  known.className="calc-known";
   const knownLabel=document.createElement("div");
   knownLabel.className="calc-label";
   knownLabel.textContent="已知条件";
-  const knownText=document.createElement("div");
-  knownText.className="calc-text";
-  knownText.textContent=d.known;
-  known.append(knownLabel,knownText);
+  known.append(knownLabel);
+
+  (d.known||[]).forEach(x=>{
+    const line=document.createElement("div");
+    line.className="calc-known-line";
+    line.textContent=x;
+    known.append(line);
+  });
   panel.append(known);
 
-  const formula=document.createElement("div");
-  formula.className="calc-block";
-  const formulaLabel=document.createElement("div");
-  formulaLabel.className="calc-label";
-  formulaLabel.textContent="公式";
-  formula.append(formulaLabel);
-  (d.formulas||[]).forEach(x=>{
-    const line=document.createElement("div");
-    line.className="calc-formula";
-    line.textContent=x;
-    formula.append(line);
-  });
-  panel.append(formula);
+  (d.steps||[]).forEach(step=>{
+    const card=document.createElement("div");
+    card.className="calc-step-card";
 
-  const steps=document.createElement("div");
-  steps.className="calc-block";
-  const stepsLabel=document.createElement("div");
-  stepsLabel.className="calc-label";
-  stepsLabel.textContent="代入与计算";
-  steps.append(stepsLabel);
-  (d.steps||[]).forEach(x=>{
-    const line=document.createElement("div");
-    line.className="calc-step";
-    line.textContent=x;
-    steps.append(line);
+    const t=document.createElement("div");
+    t.className="calc-step-title";
+    t.textContent=step.title;
+    card.append(t);
+
+    const formulaRow=document.createElement("div");
+    formulaRow.className="calc-row";
+    formulaRow.innerHTML='<div class="calc-row-label">公式</div>';
+    const formula=document.createElement("div");
+    formula.className="calc-formula-line";
+    formula.textContent=step.formula;
+    formulaRow.append(formula);
+    card.append(formulaRow);
+
+    const subRow=document.createElement("div");
+    subRow.className="calc-row";
+    subRow.innerHTML='<div class="calc-row-label">代入</div>';
+    const sub=document.createElement("div");
+    sub.className="calc-formula-line";
+    sub.textContent=step.sub;
+    subRow.append(sub);
+    card.append(subRow);
+
+    const resultRow=document.createElement("div");
+    resultRow.className="calc-row";
+    resultRow.innerHTML='<div class="calc-row-label">本步结果</div>';
+    const result=document.createElement("div");
+    result.className="calc-result-line";
+    result.textContent=step.result;
+    resultRow.append(result);
+    card.append(resultRow);
+
+    panel.append(card);
   });
-  panel.append(steps);
 
   const final=document.createElement("div");
   final.className="calc-final";
@@ -634,7 +672,7 @@ function renderMemo(q){
   const box=$("#sOptions");
   const answer=q.qa_answer||"暂无答案";
 
-  // 计算题不做挖空、不显示口诀，直接展示详细计算过程
+  // 计算题：只展示完整解题过程，不做挖空，也不显示任何巧记/口诀
   if(q.source==="计算题"){
     renderCalcDetail(q,box);
     return;
