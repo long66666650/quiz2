@@ -57,30 +57,16 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 @media(max-width:420px){.memo-presets{grid-template-columns:repeat(2,1fr)}.memo-answer{font-size:16px}.memo-count{min-width:82px}}
 
 
-.site2-lock-screen{
-  position:fixed;inset:0;z-index:999999;
-  display:flex;align-items:center;justify-content:center;
-  padding:22px;background:linear-gradient(180deg,#eaf6ff 0%,#f8fcff 55%,#fffaf2 100%);
-}
+.site2-lock-screen{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;padding:22px;background:linear-gradient(180deg,#eaf6ff 0%,#f8fcff 55%,#fffaf2 100%)}
 .site2-lock-screen.hidden{display:none!important}
-.site2-lock-card{
-  width:min(92vw,420px);background:#fff;border:1px solid #dce8f2;
-  border-radius:24px;padding:24px 20px;box-shadow:0 18px 55px rgba(63,104,145,.16);
-}
+.site2-lock-card{width:min(92vw,420px);background:#fff;border:1px solid #dce8f2;border-radius:24px;padding:24px 20px;box-shadow:0 18px 55px rgba(63,104,145,.16)}
 .site2-lock-card h2{margin:0 0 10px;color:#2f65c8;font-size:24px}
 .site2-lock-card p{margin:0 0 16px;color:#66798a;line-height:1.7;font-size:14px}
-.site2-lock-card input{
-  width:100%;height:50px;border:1px solid #dfeaf3;border-radius:14px;
-  padding:0 13px;font-size:16px;background:#fff;color:#24364a;text-transform:uppercase;
-}
-.site2-lock-card button{
-  width:100%;margin-top:12px;min-height:48px;border:0;border-radius:14px;
-  font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#5aa7ff,#7473ff);
-}
+.site2-lock-card input{width:100%;height:50px;border:1px solid #dfeaf3;border-radius:14px;padding:0 13px;font-size:16px;background:#fff;color:#24364a;text-transform:uppercase}
+.site2-lock-card button{width:100%;margin-top:12px;min-height:48px;border:0;border-radius:14px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#5aa7ff,#7473ff)}
 .site2-lock-card button:disabled{opacity:.65}
 .site2-lock-msg{min-height:23px;margin-top:11px;font-size:14px;line-height:1.55}
-.site2-lock-msg.ok{color:#14805d}
-.site2-lock-msg.bad{color:#bc4545}
+.site2-lock-msg.ok{color:#14805d}.site2-lock-msg.bad{color:#bc4545}
 body.site2-license-pending>.app{visibility:hidden}
 
 </style>
@@ -155,17 +141,15 @@ body.site2-license-pending>.app{visibility:hidden}
 
 <script>
 
-const SITE2_SUPABASE_URL='https://blvutnapqehpqfeyfncf.supabase.co';
-const SITE2_SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXJhYmFzZSIsInJlZiI6ImJsdnV0bmFwcWVocHFmZXlmbmNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjA4OTcsImV4cCI6MjEwNDUzNjg5N30.HN7ZopW_oYePi7EHyqGE6X5BMHDv0qiZyWlGNR7UV2o';
-const SITE2_ACTIVATION_TOKEN_KEY="rail_quiz_site2_activation_token_v2";
-const SITE2_DEVICE_ID_KEY="rail_quiz_site2_device_id_v2";
+const SITE2_SUPABASE_URL='https://oljwfvgjuksfdrzurckw.supabase.co';
+const SITE2_SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sandmdmdqdWtzZmRyenVyY2t3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwMDIxMTAsImV4cCI6MjEwNDU3ODExMH0.TruImOUmvzL5SjC2BZkR7Fg2vXmsK0X9FpcGFaSlIZU';
+const SITE2_ACTIVATION_TOKEN_KEY="rail_quiz_second_site_activation_token_v3";
+const SITE2_DEVICE_ID_KEY="rail_quiz_second_site_device_id_v3";
 
 function site2GetDeviceId(){
   let id=localStorage.getItem(SITE2_DEVICE_ID_KEY);
   if(!id){
-    id=(crypto.randomUUID
-      ? crypto.randomUUID()
-      : ("dev-"+Date.now()+"-"+Math.random().toString(36).slice(2)));
+    id=(crypto.randomUUID?crypto.randomUUID():("dev-"+Date.now()+"-"+Math.random().toString(36).slice(2)));
     localStorage.setItem(SITE2_DEVICE_ID_KEY,id);
   }
   return id;
@@ -176,17 +160,25 @@ function site2NormalizeCode(v){
 }
 
 async function site2Rpc(name,body){
-  const r=await fetch(`${SITE2_SUPABASE_URL}/rest/v1/rpc/${name}`,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "apikey":SITE2_SUPABASE_ANON_KEY,
-      "Authorization":"Bearer "+SITE2_SUPABASE_ANON_KEY
-    },
-    body:JSON.stringify(body)
-  });
+  let r;
+  try{
+    r=await fetch(`${SITE2_SUPABASE_URL}/rest/v1/rpc/${name}`,{
+      method:"POST",
+      mode:"cors",
+      cache:"no-store",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":SITE2_SUPABASE_ANON_KEY,
+        "Authorization":"Bearer "+SITE2_SUPABASE_ANON_KEY
+      },
+      body:JSON.stringify(body)
+    });
+  }catch(err){
+    throw new Error("网络连接失败："+String(err&&err.message?err.message:err));
+  }
+
   const txt=await r.text();
-  if(!r.ok) throw new Error(txt||("HTTP "+r.status));
+  if(!r.ok) throw new Error("HTTP "+r.status+"："+(txt||r.statusText||"请求失败"));
   return txt?JSON.parse(txt):null;
 }
 
@@ -223,6 +215,7 @@ async function site2InitLicenseGate(){
         p_code:code,
         p_device_id:site2GetDeviceId()
       });
+
       if(res&&res.ok===true&&res.token){
         localStorage.setItem(SITE2_ACTIVATION_TOKEN_KEY,res.token);
         msg.className="site2-lock-msg ok";
@@ -242,12 +235,7 @@ async function site2InitLicenseGate(){
   }
 
   btn.addEventListener("click",go);
-  input.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){
-      e.preventDefault();
-      go();
-    }
-  });
+  input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();go()}});
 }
 
 window.addEventListener("DOMContentLoaded",site2InitLicenseGate);
