@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>铁路线路工题库 · 逻辑脱稿背诵版</title>
+<title>铁路线路工题库 · 逐步逻辑讲解脱稿背诵版</title>
 <style>
 :root{--bg:#eef8ff;--card:#fff;--text:#24364a;--muted:#718096;--line:#dfeaf3;--accent:#5b8ff9;--ok:#18b981;--bad:#ef6464}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:linear-gradient(180deg,#dff3ff 0%,#f8fcff 42%,#fffaf0 100%);min-height:100vh}
@@ -149,6 +149,22 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .recall-legacy{margin-top:12px}.recall-legacy summary{cursor:pointer;color:#718598;font-size:13px}
 @media(max-width:430px){.recall-panel{padding:11px}.recall-grid{gap:7px}.recall-rating{grid-template-columns:1fr}.recall-rating button{min-height:48px}.recall-empty{padding:18px 9px}}
 
+
+/* 与真实背题对话一致：先完整标准答案，随后逐步解释，最后撤提示脱稿复述 */
+.recall-story{background:#f7fbff;border-color:#d3e4f5;color:#28465d}
+.recall-story h4{color:#285d88}
+.recall-story-scene{font-size:14px;line-height:1.95;padding:10px 12px;background:#fff;border-left:3px solid #6c9de2;border-radius:7px;margin-bottom:13px}
+.recall-story-step{background:#fff;border:1px solid #dce9f4;border-radius:13px;padding:11px 12px;margin:10px 0}
+.recall-story-step b{display:block;color:#2a6496;margin-bottom:5px;font-size:15px}
+.recall-story-ask{color:#6f6c64;font-weight:650;line-height:1.8;margin-top:5px;font-size:13px}
+.recall-story-explain{color:#27445a;line-height:1.95;margin-top:6px;font-size:14px}
+.recall-story-note{font-size:12px;color:#667e90;line-height:1.75;margin-top:11px}
+.recall-practice{padding:17px 14px;background:#f5fbff;border:1px solid #d1e6f6;border-radius:16px;line-height:1.85}
+.recall-practice-progress{color:#5a83ab;font-size:13px;font-weight:800}
+.recall-practice h4{color:#255d90;font-size:18px;margin:10px 0}
+.recall-practice-question{font-weight:850;color:#2e4258;font-size:18px;line-height:1.85}
+.recall-practice-answer{background:#fff;border:1px solid #d9e9d9;border-radius:10px;margin-top:13px;padding:11px;color:#305645;font-weight:650;font-size:15px;line-height:1.9}
+@media(max-width:430px){.recall-story-step{padding:10px}.recall-practice-question{font-size:16px}}
 </style>
 </head>
 <body>
@@ -159,7 +175,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   <div class="hero"><h1>☀️ 重点刷题题库</h1><p>第一套已按最新重点知识更新，保留单选、多选、判断、混合与上一题；第二套、第三套原有内容和功能保持不变。</p></div>
   <div class="card">
     <button class="setbtn" id="goFirst">第一套 · 安全 / 理论分开刷题<small>安全与理论分开练、分开考试；错题仍统一放在第一套错题集。</small></button>
-    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常刷；实作、简答、论述、计算支持逻辑框架、脱稿回忆、漏点记录与间隔复习。</small></button>
+    <button class="setbtn" id="goSecond">第二套 · 高级工综合题库<small>选择、判断照常刷；大题先看标准答案，再按题意逐步理解和自问自答，最后脱稿背诵。</small></button>
     <button class="setbtn" id="goThird">第三套 · 中级理论知识<small>保持原题型：860 道选择题 + 198 道判断题；答完后显示本题速记关键词。</small></button>
   </div>
 </section>
@@ -305,10 +321,10 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 </section>
 
 <section id="secondHome" class="hidden">
-  <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题和标准答案不改。大题新版：先抓逻辑和答题框架，再只看题目脱稿背诵；逐项对照漏点，按10分钟、次日、3天逐步复习。</p></div>
+  <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题和标准答案不改。大题像一对一讲题：先看完整答案，再按发生情况、处理步骤和结果逐段理解；最后只看题目背，逐项查漏、间隔复习。</p></div>
   <div class="card">
     <button class="setbtn sMode" data-mode="all">顺序练习<small>从上次位置继续。</small></button>
-    <button class="setbtn sMode" data-mode="big">🧠 大题 · 逻辑背诵<small>先理解 → 记框架 → 撤掉提示脱稿背 → 对照漏项，旧挖空不再是默认方式。</small></button>
+    <button class="setbtn sMode" data-mode="big">🧠 大题 · 逻辑背诵<small>先看标准答案 → 逐步讲逻辑 → 一问一答 → 隐藏提示脱稿背 → 对照漏项。</small></button>
     <div class="recall-submodes"><span>按题型单独背：</span><div>
       <button class="sMode" data-mode="short">简答题</button><button class="sMode" data-mode="essay">论述题</button><button class="sMode" data-mode="practical">实作题</button><button class="sMode" data-mode="calculation">计算题</button>
     </div></div>
@@ -2548,6 +2564,7 @@ let recallDB={};
 try{const stored=JSON.parse(localStorage.getItem(RECALL_KEY)||"{}");if(stored&&typeof stored==="object"&&!Array.isArray(stored))recallDB=stored;}catch(e){recallDB={};}
 function recallSave(){try{localStorage.setItem(RECALL_KEY,JSON.stringify(recallDB));}catch(e){console.warn("背诵记录保存失败",e);}}
 const RECALL_STEP_DELAYS=[10*60*1000,24*60*60*1000,3*24*60*60*1000,7*24*60*60*1000,14*24*60*60*1000];
+const RECALL_STORIES={"281":{"scene":"这题是冻害垫板的使用限制。先判断顺垫板，再看横垫板，最后注意叠放顺序。","steps":[["先看顺垫板","顺垫板重叠时有哪两个上限？","先回答块数，再回答总厚度：不得超过2块、15mm。"],["再看横垫板","横垫板可以叠几块？","横垫板最多3块。"],["最后看摆放","厚板要放在哪里？","较厚的垫板放在下层，不能只记块数忘了位置。"]]},"282":{"scene":"先确定是无缝道岔固定型辙叉接头冻结，再记螺栓等级和扭矩。","steps":[["确定连接件","接头冻结用什么螺栓？","采用高强度螺栓。"],["检查施拧要求","扭矩保持在什么范围？","1100～1400N·m，范围的上下限都要背。"]]},"283":{"scene":"这题是计算关系，不是作业流程。先分清总磨耗由哪两部分组成。","steps":[["列出两种磨耗","总磨耗考虑哪两项？","垂直磨耗和侧面磨耗。"],["确定系数","侧面磨耗是全加还是只加一半？","只计二分之一，得出总磨耗＝垂直磨耗＋1/2侧面磨耗。"]]},"284":{"scene":"先抓题目给的速度、轨型和线路条件，再对应重伤数值，避免和50kg/m混淆。","steps":[["辨别条件","这里问的是哪种轨型？","60kg/m钢轨，题目已限定vmax≤120km/h等条件。"],["给出限值","侧磨达到什么重伤标准？","19mm。"]]},"285":{"scene":"先抓题目给的速度、轨型和线路条件，再对应重伤数值。","steps":[["辨别轨型","这里和上一题有何不同？","本题是50kg/m钢轨。"],["给出限值","侧磨的重伤标准是多少？","17mm。"]]},"286":{"scene":"把一条温度应力式无缝线路按结构区段来理解，而不是死记三个孤立名词。","steps":[["先找基本区段","中间主要是哪一区？","固定区。"],["再找端部变化区","钢轨伸缩对应哪一区？","伸缩区。"],["最后找连接过渡区","剩下哪一区？","缓冲区。"]]},"287":{"scene":"题目问基本轨何时必须修换，按‘弯折位置尺寸→垂直磨耗→其他伤损’检查。","steps":[["先查曲股弯折","什么情况会影响轨距？","曲股基本轨弯折点位置或尺寸不符合要求，造成轨距不符合规定。"],["再查垂直磨耗","磨耗限值为什么要分轨型和线路？","要按照题库原答案分别说明50kg/m及以下、60kg/m及以上钢轨与不同线路条件，不能只背一组数。"],["最后查其他病害","还有没有其他伤损判据？","对照原答案末段逐项核对。"]]},"288":{"scene":"道岔尖轨或基本轨伤损时，先考虑配对更换；如果仅换尖轨，要区分换前和换后。","steps":[["先判断更换方式","一般宜怎样更换？","宜同时更换尖轨和基本轨。"],["如果单换尖轨","更换前先做什么？","校核尖轨几何尺寸。"],["完成更换后","最后做什么才算达到要求？","对基本轨、尖轨顺坡打磨，保证符合技术标准。"]]},"289":{"scene":"辙叉磨耗标准的关键是先找测量断面，再按轨型和速度区分不同限值。","steps":[["先明确位置","从辙叉心哪个断面量？","心宽40mm断面处，且垂直磨耗不含翼轨加高部分。"],["再分条件","哪些条件会改变限值？","钢轨轨型、正线/到发线/其他站线以及线路允许速度。"],["最后给数值","怎样避免把多个数字串在一起？","按题库完整答案一组条件对应一组数值逐组复述。"]]},"290":{"scene":"更换无缝道岔后先查尖轨方正，再检查限位器位置与间隙。","steps":[["检查尖轨","左右两股尖轨相错量有什么限制？","应方正，相错量不得超过10mm。"],["检查限位器","在哪种铺设条件下要求居中？","在锁定轨温范围内铺设时，限位器要求居中。"],["焊联前测量","两侧间隙偏差多少？","允许偏差±1.0mm。"]]},"291":{"scene":"先把侧线、渡线自身锁定，再判断附近有没有邻线道岔需要加强。","steps":[["先做基本锁定","一般和困难情况下锁定长度分别多少？","一般不小于75m，困难不小于50m。"],["再看特殊邻接","50m以内有邻线道岔怎么办？","还应加强邻线道岔的锁定。"]]},"292":{"scene":"先说护轨平直部分的槽宽，再说允许误差，最后说缓冲段末端与侧向加宽。","steps":[["平直段","护轨平直段标准宽度是多少？","42mm。"],["侧向加宽及误差","需要加宽时如何处理？","随侧向轨距等量加宽，容许误差+3、-1mm。"],["缓冲段末端","末端宽度的下限？","不小于65mm；侧向加宽仍等量调整。"]]},"293":{"scene":"把断轨紧急处理当作连续应急过程：先看断缝条件，再临时固定、拧紧扣件、看守和限速，最后考虑修复。","steps":[["判断能否紧急处理","断缝满足什么条件？","断缝不大于50mm，按照题库紧急处理条件判断。"],["先把断缝固定","用什么办法？","在断缝处上好夹板或臌包夹板，用急救器固定。"],["加固两侧","前后多大范围处理？","断缝前后各50m拧紧扣件，并派人看守。"],["放行与后续","放行有什么速度条件？","先按题库规定的限速条件放行；再结合断缝小于30mm等特殊规定及能否焊复的后续处理，逐项展开原答案。"]]},"294":{"scene":"临时处理比紧急处理更彻底，按‘封锁→切除→插入短轨→连接紧固→放行’来理解。","steps":[["先确认情形","什么时候进入临时处理？","钢轨折损严重、断缝大于50mm，或紧急处理后不能立即焊复。"],["先保证作业条件","开始作业前怎么办？","封锁线路，切除伤损部分。"],["恢复钢轨","切除后插入什么？","两锯口之间插入不短于6m的同型钢轨。"],["固定连接","短轨怎么固定？","轨端钻孔、上接头夹板，用10.9级螺栓拧紧。"],["怎样放行","处理完后需遵守什么条件？","按题库原文核对前后扣件、放行要求及160km/h限值。"]]},"295":{"scene":"先明确查照间隔的量取位置，再按有无客车分两个下限。","steps":[["先找测量对象","查照间隔是哪里到哪里？","辙叉心作用面至护轨头部外侧。"],["有客车的线路","最小值是多少？","1391mm。"],["仅有货车的线路","最小值是多少？","1388mm；测量位置按设计图纸。"]]},"296":{"scene":"检查夹板时，先判断有没有直接折断，再按裂纹所处部位和线路类型分情况，最后查绝缘性能。","steps":[["直接损坏","第一类必须换的情况？","夹板折断。"],["中间螺栓孔","裂纹怎样分线路和夹板类型？","正线、到发线有裂纹；其他站线依夹板类型对照5mm或15mm限值。"],["其他位置","裂纹发展到哪里？","其他部位裂纹发展到螺栓孔。"],["绝缘夹板","最后检查什么？","胶接绝缘夹板性能不良。"]]},"297":{"scene":"先分清护背距离与上一题查照间隔不是同一测量对象，再看它的上限。","steps":[["明确量取位置","护背距离量哪里？","辙叉翼作用面至护轨头部外侧。"],["给出限值","它不得大于多少？","1348mm；测量位置按设计图纸。"]]},"298":{"scene":"先比较道岔直向允许速度，再选护轨侧磨重伤标准，并记测量点。","steps":[["速度大于120","对应哪个值？","侧面磨耗10mm。"],["速度不大于120","对应哪个值？","侧面磨耗12mm。"],["测量位置","在哪里量取？","护轨平直段中点。"]]},"299":{"scene":"无缝线路缓冲区接头有三个方面需要依次确认：螺栓等级、施拧扭矩和绝缘轨缝。","steps":[["螺栓规格","最低等级？","不低于10.9级。"],["拧紧程度","保持什么扭矩？","700～1100N·m。"],["绝缘接头","轨缝至少多少？","不得小于6mm。"]]},"300":{"scene":"按‘绝缘构件本身→可能短接的位置→钢轨端部→实际漏电’检查胶接绝缘接头。","steps":[["检查胶层端板","出现什么要处理？","胶层及端板破损。"],["检查外部接触","哪些位置可能破坏绝缘？","扣件与夹板/螺栓可能接触，或轨底道砟过高。"],["检查轨端","轨端什么变化要处理？","出现肥边。"],["检查绝缘状态","最后一种情况？","有漏电现象。"]]},"301":{"scene":"钢轨钻孔先要保证孔位和孔口质量，再核对孔间距，其他部门作业还要确认审批和监督。","steps":[["确定孔位","孔在哪里并做什么处理？","螺栓孔中心线上钻孔，且必须倒棱。"],["校核孔距","两孔净距不得小于多少？","不得小于大孔径的2倍。"],["其他部门钻孔","谁同意、谁监督？","须征得工务设备管理单位同意，并有工务人员现场监督。"]]},"302":{"scene":"判定钢轨折断，先看全截面，再看轨头、轨底贯通裂纹，最后看顶面掉块判据。","steps":[["全断","第一类是什么？","钢轨全截面断裂。"],["轨头","轨头裂纹达到什么程度？","贯通整个轨头截面。"],["轨底","轨底裂纹达到什么程度？","贯通整个轨底截面。"],["掉块","怎样区分速度条件？","按题库原文分≤160km/h与>160km/h两组长度和深度判据。"]]},"303":{"scene":"先说明正确截断方法，然后明确两类禁止做法。","steps":[["正确截断","钢轨应该怎么锯？","全断面垂直锯断。"],["禁止强行处理","不能用什么？","严禁剁子及其他工具强行截断和冲孔。"],["禁止热切割","乙炔切割有什么限制？","除符合规定的处理线路故障方式外，严禁乙炔切割或烧孔。"]]},"304":{"scene":"这道题只考轨缝预留的两个依据，不要额外添加条件。","steps":[["第一个依据","先看钢轨自身什么参数？","钢轨长度。"],["第二个依据","再看施工时什么条件？","钢轨温度。"]]},"305":{"scene":"处理重伤、折断钢轨分成‘在线路上及时处置’和‘换下以后防止再用’两个阶段。","steps":[["在线路上","普通线路和缓冲区的重伤折断钢轨怎么办？","及时更换。"],["拆下来后","怎么防止旧伤轨再用？","换下的钢轨做明显标记。"]]},"306":{"scene":"先把护轨两端做成喇叭口，再记转弯位置和最终离钢轨工作边的距离。","steps":[["护轨端部形状","两端做成什么形状？","喇叭口。"],["何处弯向中心","距端部多少处？","距护轨端300mm处弯向线路中心。"],["终端位置","距工作边多少？","150～180mm。"]]},"307":{"scene":"轮缘槽的宽度按直线/曲线内股分两种，深度单独记一组。","steps":[["直线槽宽","是多少？","70～100mm。"],["曲线内股槽宽","是多少？","90～100mm。"],["槽深","是多少？","45～60mm。"]]},"308":{"scene":"不是把4个数硬背下来，而是先看半径越小轨距加宽越大，再逐档对照。","steps":[["半径较大","R≥295m时怎样加宽？","0mm。"],["次一级半径","295m＞R≥245m？","加宽5mm。"],["更小半径","245m＞R≥195m？","加宽10mm。"],["最小半径档","R＜195m？","加宽15mm。"]]},"309":{"scene":"先分有砟和无砟，再看有砟单线与双线限值。","steps":[["有砟单线","最大实设超高？","125mm。"],["有砟双线","最大实设超高？","150mm。"],["无砟轨道","最大实设超高？","150mm。"]]},"310":{"scene":"欠超高先说正常限度，再说困难情况，最后补充特定高速线路的既有特殊情况。","steps":[["正常情况","不应大于多少？","75mm。"],["困难情况","不应大于多少？","90mm。"],["特殊既有情况","哪些范围可暂留？","按题库原文讲清>120km/h线路个别特殊情况的90（不含）～110mm及逐步改造要求。"]]},"311":{"scene":"过超高和欠超高不是一题，先说普遍限值、困难限值，再看>160km/h特殊情况。","steps":[["一般","不应大于多少？","30mm。"],["困难","不应大于多少？","50mm。"],["特殊高速",">160km/h个别情况下？","不应大于70mm。"]]},"312":{"scene":"先确认缓和曲线不足能否向直线延伸，再分两档速度确定顺坡率与直线超高限制。","steps":[["适用条件","缓和曲线长度不足时能否延到直线？","允许速度≤160km/h线路，顺坡可延至直线。"],["速度120～160","直线顺坡有哪些限制？","坡度不大于1/(10vmax)，直线顺坡超高不大于8mm。"],["速度≤120","有无缓和曲线要分开记什么？","坡度上限及有缓和、无缓和两种直线超高限值，按原答案展开。"]]},"313":{"scene":"曲线正矢验收按三种指标区分，不是同一个限值用三遍。","steps":[["缓和曲线","实测与计算正矢差多少？","3mm。"],["圆曲线连续差","是多少？","6mm。"],["圆曲线最大最小差","是多少？","9mm。"]]},"314":{"scene":"先按直、曲尖轨区分，再分道岔型号与速度条件说动程。","steps":[["一般直尖轨","第一拉杆中心设计动程？","142mm。"],["一般曲尖轨","对应多少？","152mm。"],["AT型与提速道岔","12号和18号的数值怎么展开？","按原答案依次说12号普通、12号提速及18号不同速度条件，避免混在一起。"]]},"315":{"scene":"按允许速度切成两档，对应焊缝离轨枕边缘最小距离。","steps":[["速度≤160","不小于多少？","40mm。"],["速度>160","不小于多少？","100mm。"]]},"316":{"scene":"按焊接前的环境要求和放行列车时的温度要求分开。","steps":[["焊接阶段","轨温下限和天气要求？","轨温不低于0℃；遇大风、雨雪等不良天气要避免或采取措施。"],["放行阶段","焊缝温度要怎样？","低于300℃。"]]},"317":{"scene":"起道收工前检查顺坡率，速度档越高要求越严。","steps":[["≤120km/h","顺坡率上限？","2.0‰。"],["120～160km/h","顺坡率上限？","1.0‰。"],["＞160km/h","顺坡率上限？","0.8‰。"]]},"318":{"scene":"先分道岔的转辙部分与辙叉部分；两处问题不同，处理方式也不同。","steps":[["转辙部分","先整修哪两个问题？","曲股基本轨弯折尺寸和尖轨侧弯。"],["辙叉部分","重点协调什么几何关系？","查照间隔、护背距离和翼轨/护轨轮缘槽宽度。"],["具体调整","用什么办法调整轮缘槽？","打磨钢轨肥边、间隔铁加垫片等。"]]},"319":{"scene":"把捣固车作业分起道、拨道、曲线处理以及收工稳定四段。","steps":[["先看起道","一次起道量的限制与超限怎么办？","不宜超过50mm；超过时分次起道捣固。"],["再看拨道","一次拨道量上限？","不宜超过80mm。"],["曲线地段","上挑下压有什么要求？","两者尽量接近。"],["每次作业之后","最后必须做什么？","进行道床动力稳定。"]]},"320":{"scene":"冻害回落后，先处理垫板，再处理顺坡和平顺，最后分轨枕类型撤垫板。","steps":[["回落时","要及时做什么？","撤出或调整冻害（调高）垫板，做好顺坡。"],["质量状态","轨道几何尺寸保持什么要求？","保持在日常保持容许偏差以内。"],["解冻后","木枕和混凝土枕如何区分？","木枕冬季垫入的全部撤出；混凝土枕总厚度超过10mm的垫板及时撤出。"]]},"321":{"scene":"把绳正法拨正曲线理解为一条测量—计算—实施的作业链，不要把记忆顺序当成任意现场指令。","steps":[["测量前","两端直线轨向不良怎么办？","事先拨正；两曲线间直线短时可同时拨正。"],["设置测点","在哪股钢轨、间距多少？","外股钢轨上用钢尺丈量，每10m一个测点。"],["测量正矢","需要怎样测才能可靠？","按题库原文核对风力条件与反复测量要求。"],["计算与拨正","得到测值后怎么开展？","依据原答案的计算和拨道要求逐步完成。"]]},"322":{"scene":"这道题是同一速度档的静态几何验收表，先识别轨距，随后核对其余项目。","steps":[["轨距","80～120km/h正线、混凝土枕轨距限值？","+6、-2mm。"],["其他项目","水平、高低、轨向和三角坑是多少？","均按原题列出的4mm分别说全，别漏项目名称。"]]},"323":{"scene":"这是道岔而不是普通线路的验收表，注意轨距和支距有不同限值。","steps":[["轨距","本题轨距限值？","+3、-2mm。"],["其他一般项目","水平、高低、轨向直线、三角坑？","分别为4mm。"],["支距","轨向支距限值是多少？","2mm。"]]},"324":{"scene":"发现危及行车安全的故障，先确保车停下来、做好防护，再通知和抢修，不能马上修好就采取行车控制措施。","steps":[["第一反应","先做什么？","立即连续发出停车信号，并以停车手信号防护。"],["随后通知","通知谁？","就近车站和工长或车间主任。"],["组织处置","现场需要做什么？","采取紧急措施修复故障设备。"],["不能立即修复","最后怎样保证行车安全？","封锁区间或限速运行。"]]},"325":{"scene":"先看橡胶垫板是否压溃变形，再按厚度分界，最后检查复合垫板的粘结情况。","steps":[["垫板压溃变形","7mm和10mm厚的压宽限值分别多少？","7mm对应15mm；10mm对应20mm。"],["一般损坏","哪些情况要更换？","丧失作用、橡胶垫片损坏。"],["复合垫板","哪种分离也要更换？","橡胶与不锈钢片分离。"]]},"326":{"scene":"把作业人员安全分成三个场景：车辆附近作业、休息、绕行车辆。","steps":[["作业时","哪些危险动作严禁？","跳车、钻车、扒车、从车底或车钩上传递工具材料。"],["休息时","不能坐在哪里？","钢轨、轨枕头、道床边坡。"],["绕行车辆","距离与观察要求？","距离不少于5m，注意车辆动态和邻线来车。"]]},"327":{"scene":"先考虑野外遭遇雷雨，再考虑酷暑与严寒季节。","steps":[["雷雨时","手里的金属器具怎么办？","放下金属器具，迅速到安全处躲避。"],["避险地点","哪些地方不能躲？","大树下、电杆旁、涵洞内。"],["季节防护","还要预防哪些危险？","中暑、溺水、冻伤和煤气中毒。"]]},"328":{"scene":"发现胀轨苗头，先识别几种变化，再马上停止作业采取防胀措施。","steps":[["先识别迹象","轨道、起拨道手感、枕端道砟有什么异常？","轨向高低不良，起拨道省力，枕端道砟离缝等。"],["随后怎么办","还可以继续作业吗？","必须停止作业，并及时采取防胀措施。"]]},"329":{"scene":"胀轨跑道已经发生，处理按应急先后：拦车→恢复线路→首列低速→看守整修→逐步提速。","steps":[["先保行车安全","第一步是什么？","立即拦停列车。"],["尽快处置","第二步？","采取措施恢复线路。"],["首列放行","速度不能超过多少？","15km/h。"],["持续看守","谁来关注线路？","派专人看守并整修线路。"],["恢复运行","怎么恢复速度？","逐步提高行车速度。"]]},"330":{"scene":"先把两种故障分开：‘接头拉开’与‘绝缘失效’分别有自己的处置过程。","steps":[["接头拉开","立刻处理什么范围？","复紧两端各50m线路扣件。"],["行车与后续","拉开后怎么限速、怎么收尾？","限速不超过160km/h，并及时永久处理。"],["绝缘失效","是先永久处理吗？","先立即临时处理，待温度适宜时永久处理。"]]},"331":{"scene":"菱形道岔在普通单开道岔检查外，还要按锐角和钝角辙叉分别检查，别混为一条。","steps":[["先检查锐角辙叉","重点看哪些部位？","前后锐角辙叉叉前、叉后端的轨距水平，以及叉心内的轨距、查照间隔、护背距离。"],["再检查钝角辙叉","重点看哪些部位？","钝角辙叉前后半部叉前叉后端的轨距、水平，以及叉心内的查照间隔、护背距离和轨距。"]]},"332":{"scene":"按线路地段分两种拨道限值，再考虑无缝线路的温度限制。","steps":[["一般地段","一次中心位移与年度累计？","一次不超过30mm，一侧年度累计不大于120mm，且不侵限。"],["桥梁地段","桥上年度累计和中心偏差？","桥梁一侧年度累计不大于60mm；钢梁和其他结构的中心偏差按原答案分开。"],["无缝线路","还要受什么条件约束？","根据原答案核对允许作业轨温要求。"]]},"333":{"scene":"无缝线路起拨道，按开工前、机具位置、作业结束前、回填道床四个环节理解。","steps":[["开工前","先保证什么？","道砟足够；起道前先拨正线路方向。"],["机具放置","哪里不能放？","铝热焊缝处不能安放起、拨道机具。"],["列车通过前","起道和拨道分别要做到什么？","起道顺坡捣固，拨道拨顺。"],["收尾","扒开的道床怎么办？","及时回填饱满并夯实。"]]},"334":{"scene":"轨枕验收按位置、状态、特殊宽枕三方面。","steps":[["位置","方正均匀和间距偏斜限值？","误差不超过40mm。"],["状态","哪些缺陷不允许？","无失效、无严重伤损。"],["混凝土宽枕","有什么特别限值？","间距和偏斜误差均不得超过30mm。"]]},"335":{"scene":"复式交分道岔优点按站场布置→投资→运营→维修几个影响来理解。","steps":[["占地布置","为什么适合紧凑站场？","根据地理位置减少占地、缩短咽喉区和站场长度。"],["费用","会影响哪些成本？","降低站场造价、减少运营费用。"],["运营效率","效率如何变化？","相对提高运输效率。"],["设备维护","数量与维修量有什么变化？","减少道岔组数，设备维修量相对减少。"]]},"336":{"scene":"曲线整正先固定整体方向，再讨论拨动一个点时相邻点如何变化。","steps":[["第一条假定","两端切线方向和始终点拨量？","切线方向不变，曲线始、终点拨量为零。"],["第二条假定","拨动某点后相邻测点长度会跟着变吗？","相邻测点在长度上不随之移动。"]]},"337":{"scene":"跨区间无缝线路的道床要求按材料、砟肩、边坡、枕盒四类检查。","steps":[["材料","先用什么道砟？","一级碎石道砟。"],["砟肩宽度","III型枕和II型枕/道岔分别多少？","III型400mm；II型及道岔范围450mm。"],["边坡和砟肩高","坡度与堆高？","坡度1:1.75；砟肩堆高150mm。"],["枕盒","填筑高度相对承轨槽是多少？","填平并低于承轨槽顶面20～30mm。"]]},"338":{"scene":"道床验收可以想成依次检查道砟干不干净、清筛够不够深、恢复后够不够密实整齐。","steps":[["清洁程度","小于25mm的颗粒质量上限？","不得大于5%。"],["清筛深度","和什么比较？","达到设计要求。"],["道床成形","最后检查什么？","密实、符合设计断面、边坡整齐。"]]},"339":{"scene":"道岔方向不良原因复杂，沿着整体维护、铺设位置、钢轨几何、捣固道床及连接状态排查。","steps":[["先看整体","维修和铺设哪里可能有问题？","忽视整体维修、铺设位置不正确。"],["再看轨向几何","作业方法、弯折点怎么影响方向？","硬凑支距轨距、曲基本轨弯折点不正确等，逐条对照原答案。"],["再查基础","捣固、道砟与联结有什么问题？","按原答案末几项对照捣固、道床与联结零件的问题。"]]},"340":{"scene":"这题是分类，不是施工流程。把大修先按线路整体、钢轨、道岔枕木、道口栏栅和其他工程归类。","steps":[["线路和钢轨","最前面的类别有哪些？","线路大修、成段更换再用轨。"],["道岔与轨枕","接着是什么？","成组更换道岔和岔枕、成段更换混凝土枕。"],["附属设施","还有哪两类？","道口大修、隔离栅栏大修。"],["收尾类别","最后两类？","其他大修、线路中修。"]]},"341":{"scene":"整治接头支嘴，先理解拨道如何带动接头，再看禁止硬顶与加强联结、道床的措施。","steps":[["先靠拨道调整","向外/向里拨时如何相互带动？","通过拨接头或两侧小腰，利用间接影响法带动支嘴处移动。"],["注意方法","为什么不应硬性顶拨？","题库强调处理接头时采用合适的拨道方式，不能只把支嘴单点硬顶。"],["增强保持能力","整治之后还需做什么？","按原答案加强联结、整修道床和有关防爬措施。"]]},"342":{"scene":"辙叉磨耗压溃的原因从列车冲击开始，接着观察岔枕是否吊板、道床是否失去坚实性。","steps":[["车轮经过有害空间","对哪里产生冲击？","心轨和翼轨。"],["支承部位","哪里经常发生吊板？","辙叉心处岔枕。"],["最终基础状态","道床发生什么变化？","破坏道床坚实性。"]]},"343":{"scene":"先有高温造成的钢轨温度压力，再有列车或人工干扰，最后横向弯曲可能突然加大。","steps":[["高温条件","钢轨内部出现什么？","巨大温度压力。"],["外部干扰","哪些作用可能触发变形？","列车动力或人工作业等干扰。"],["结果","出现什么现象？","轨道横向弯曲变形突然增大，称胀轨跑道（臌曲）。"]]},"344":{"scene":"扣件验收按挡板、弹条、胶垫及螺栓分别检查，每类都有自己的限值，不能只背数字。","steps":[["挡板挡板座","贴靠状态和不密贴比例？","核对缝隙大于2mm和数量不超过6%等条件。"],["弹条","贴靠、扭矩和扣压力？","按原答案区分≤1mm、120～150N·m、III型扣压力等条件。"],["胶垫","缺损歪斜怎样验收？","按原答案分别检查胶垫和连续100头的比例。"],["螺栓","最后要做什么？","检查涂油和状态要求。"]]},"345":{"scene":"导曲线上股偏面磨耗，按改善轨底支承、调整超高、保持连接平顺三个方向处理。","steps":[["改善铺设状态","上股铺什么垫板？","1/20铁垫板。"],["调整超高","设多少、如何顺坡？","按需要设6mm超高，导曲线范围内按不大于2‰顺坡。"],["保持平顺","连接处不能有什么？","保持连接部分无钢轨相错。"]]},"346":{"scene":"绳正法先校直两端直线，再设测点、测正矢、算拨量，最后据此拨正。","steps":[["测量前","直线轨向不良怎么办？","先拨正两端直线；必要时可连两曲线同时拨正。"],["设点","在哪、间距多少？","外股钢轨上每10m一个测点。"],["测量","为什么要多测？","按原答案核对风力较小、反复测量取平均等要求。"],["拨正","测完以后做什么？","计算拨量，再按测点进行拨正。"]]},"347":{"scene":"无缝线路胀轨跑道可以从内在压力、横向抵抗能力、锁定轨温和作业干扰来理解。","steps":[["内在作用","轨道温度有什么变化？","温度压力增大。"],["抵抗能力","道床和轨道框架有什么问题？","横向阻力、轨道框架刚度降低。"],["锁定与施工","哪些施工因素会加重风险？","锁定轨温偏低、低温焊复、锁定轨温不明、违章作业、线路爬行。"],["线路状态","还受什么影响？","线路不平顺和各种附加力。"]]},"348":{"scene":"整治导曲线不圆顺，依次检查支距点、轨距递减、外观圆顺与局部问题。","steps":[["先查支距","哪里要保证正确？","支距点位置和跟端支距。"],["再查轨距","尺寸和递减率怎样？","保持轨距尺寸、递减率符合要求。"],["外观检查","目测主要看什么？","导曲线圆顺，消灭鹅头。"],["个别处所","局部不顺怎么办？","通过拨道和改正轨距解决。"]]},"349":{"scene":"这题是因果加处理顺序：头尾位置错→正矢数据乱→计算拨正效果差→先重新定位再重测计算。","steps":[["发现问题","为什么正矢会不正常？","直线方向变化、曲线头尾位置不对。"],["不能直接算","这样做会有什么后果？","拨道量大，曲线也不能圆顺。"],["先修正基准","正确做法第一步？","通过计算找到曲线中央点，确定头尾位置。"],["再测再算","后续是什么？","重新测现场正矢并计算拨量。"]]},"350":{"scene":"辙叉轨距失格分为两组尺寸不合标准：安全间隔类和轮缘槽类。","steps":[["先查安全间隔","哪两个距离不标准？","查照间隔和护背距离。"],["再查轮缘槽","哪两个槽宽不标准？","护轨轮缘槽和辙叉轮缘槽。"]]},"351":{"scene":"新钢轨及配件验收按钢轨形状、接头相错、轨缝总误差和连接螺栓分四项。","steps":[["钢轨和错牙","有什么要求？","钢轨无硬弯，接头轨面及内侧错牙≤1mm。"],["接头相错","直线和曲线如何分开？","直线≤20mm；曲线≤20mm加缩短轨缩短量的一半。"],["轨缝误差","25m钢轨每千米？","总误差≤80mm。"],["连接螺栓","最后检查什么？","螺栓涂油，扭矩达到标准。"]]},"352":{"scene":"尖轨轧伤、侧面磨耗，先看密贴和顶铁，再看基本轨磨耗，最后考虑车轮直接作用。","steps":[["先查尖轨密贴","出现什么问题？","尖轨与基本轨不密贴或假密贴。"],["再查顶铁","尺寸怎样？","尖轨顶铁过短。"],["基本轨","什么磨耗超限？","基本轨垂直磨耗超限。"],["列车作用","哪里受到什么作用？","尖轨前部顶面受到车轮踏面和轮缘轧、挤、辗作用。"]]},"353":{"scene":"四条曲线整正原理，先理解正矢总量，再理解某点拨动影响相邻点，最后看不变量和代数和。","steps":[["总量关系","现场正矢与计划正矢总和如何？","两者合计相等。"],["局部拨动","某点拨动怎样影响相邻点？","相邻点正矢变化是拨量的二分之一，方向相反。"],["总和不变","曲线上各点正矢之和？","是一个常数。"],["差值关系","代数和与端点有什么要求？","正矢差的代数和为零，曲线始终点拨量为零。"]]},"354":{"scene":"尖轨扳动不灵活可以沿着能不能正常移动去查：尖轨位置、拉杆、跟端零件、基本轨与滑床板、孔杆磨耗。","steps":[["尖轨位置","两股前后有没有变化？","尖轨爬行，两股前后不一致。"],["拉杆位置","有什么问题？","拉杆或连接杆位置不正确。"],["跟端连接","螺栓与夹板怎样影响扳动？","双头螺栓磨损，间隔铁夹板磨耗严重，紧固后影响扳动。"],["轨和板","什么地方不平顺？","基本轨小弯、滑床板不平直。"],["连接孔和螺杆","最后查哪里磨耗？","孔壁磨耗扩大，螺杆磨细。"]]},"355":{"scene":"想象列车通过道岔时，尖轨上下跳动。沿着跟端连接→跟部支承→枕下捣固→尖轨自身，从外到内找原因。","steps":[["先检查尖轨跟端","跟端哪些问题会造成过车冲击？","轨缝过大、间隔铁和夹板磨耗、螺栓松动，过车时产生冲击。"],["接着检查跟部垫板","垫板或凸台出现什么情况？","跟部桥型垫板或凸台压溃。"],["再看下方的支承","捣固有什么问题？","捣固不实，有吊板。"],["最后看尖轨本身","自身发生什么变形？","尖轨拱腰。"]]},"356":{"scene":"导曲线不圆顺，沿着‘两端开口→支距→作业维修→列车冲击’依次寻找原因。这里是原因分析，并不意味着现场必须按此顺序维修。","steps":[["先检查两端开口","尖轨跟端与辙叉前后有什么问题？","开口尺寸不合标准。"],["接着检查支距","位置和尺寸分别可能有什么问题？","支距点位置不对，支距尺寸不标准。"],["再看作业维修","人为作业可能有什么不足？","作业不细、维修不当。"],["最后看列车影响","列车运行还会带来什么？","车轮冲击作用。"]]},"357":{"scene":"发现辙叉偏磨，先考虑修复磨耗部位，再考虑倒换方向使用，最后改善下方支承和水平状态。","steps":[["先处理磨耗位置","偏磨的辙叉怎么处理？","焊补偏磨辙叉。"],["再考虑使用方向","还能怎样使用？","可倒换方向使用。"],["最后检查支承","捣固时还要兼顾什么？","加强偏磨部位捣固，并兼顾辙叉水平状态。"]]},"358":{"scene":"把验收想象成从路肩走到侧沟，再看整体是否达到设计。","steps":[["检查路肩","路肩有哪些要求？","平整、无大草、并有向外流水横坡。"],["检查侧沟","排水状态要如何？","原题写‘侧沟捧水畅通’，疑为排水笔误；标准答案保持原字不变。"],["最终验收","总体还要满足什么？","符合设计要求。"]]},"359":{"scene":"导曲线轨距扩大时，从限制钢轨向外移动入手，再处理不密贴、接头支承与岔枕状态。","steps":[["先在外侧设置支承","轨撑怎么设置？","导曲线外侧设轨撑，可隔一根枕木或连续设置。"],["修轨撑离缝","目的是什么？","整治轨撑离缝，消除假轨距。"],["加固外股接头","接头处装什么？","导曲线外股接头处安装桥型垫板。"],["检查木岔枕","腐朽怎么办？","更换腐朽岔枕。"],["检查混凝土岔枕","应消除哪两处离缝？","扣件挡肩与轨底边离缝。"]]},"360":{"scene":"辙叉垂直磨耗、压溃，按改善下方捣固→缓冲冲击→固定辙叉的位置来理解。","steps":[["先加强底部捣固","哪些部位最需要加强？","辙叉底部，尤其叉心和辙叉前后接头处。"],["利用换枕机会","可以顺便做什么？","彻底加强辙叉底捣固。"],["缓冲受力","垫胶垫在哪里？","辙叉底岔枕顶面垫胶垫。"],["第一种固定办法","怎样增强整体稳定性？","用竖螺栓扣板把辙叉固定在垫板上。"],["第二种固定办法","还有什么装置？","岔枕上安设特制铁座，用弹条扣件固定辙叉。"]]},"361":{"scene":"这题就是一条真正的因果关系：外股无超高→长期受到离心力→出现反超高与上股偏心磨耗。","steps":[["先找条件","导曲线外股缺了什么？","没有设置超高。"],["再找外力","长期受到什么作用？","离心力。"],["最后说结果","产生哪些现象？","反超高和上股钢轨偏心磨耗。"]]},"362":{"scene":"列车通过导曲线时，横向作用和车轮冲击使固定件逐渐失去可靠约束，最后钢轨位移、轨距扩大。","steps":[["先列出外力","列车通过时哪三种作用？","离心力、横向推力、车轮冲击钢轨。"],["再看连接零件","道钉和配件有什么变化？","道钉浮离、配件松动。"],["最后看钢轨","钢轨发生什么？","钢轨有位移，形成轨距扩大的问题。"]]},"363":{"scene":"这道经常保养有11项。把它当成一次全面日常维护检查：几何状态→道床和轨枕→钢轨接头与联结→无缝线路→灾害设施和季节工作。下面是理解分组，标准答案仍需逐项背全。","steps":[["先看轨道几何","超经常保养值怎么办？","根据超限状态成段整修线路。"],["接着看道床","翻浆冒泥和道砟状态怎么办？","整治翻浆冒泥、均匀道砟、整理道床。"],["接着看轨枕","枕木问题怎么处理？","更换和修理轨枕。"],["再看轨缝","轨缝与线路锁定？","调整轨缝，锁定线路。"],["钢轨和接头","怎么处理钢轨表面及接头病害？","焊补、打磨钢轨，整治接头病害。"],["扣件螺栓","成段整修什么？","有计划成段整修扣件，螺栓涂油。"],["无缝线路","温度应力怎么办？","进行应力放散或调整。"],["严重伤损钢轨","怎么处理？","更换伤损钢轨，断轨焊复。"],["季节性设备","防沙防雪和冻害？","整修防沙、防雪设备，整治冻害。"],["道口与排水","还有哪些附属工作？","整修道口、疏通排水、清除道床杂草及路肩大草。"],["其他工作","最后还有什么？","季节性工作及周期短于综合维修的其他单项工作。"]]},"364":{"scene":"临时补修的核心是及时消除严重影响线路状态的问题。顺着一次线路检查来理解：超限→伤轨→连接零件→轨缝→排水与路肩→道口→其他。","steps":[["检查轨道几何","超过什么标准要整修？","超过临时补修容许偏差管理值的处所要整修。"],["检查钢轨","哪几种钢轨需要处理？","折断、重伤钢轨，及桥上、隧道内轻伤钢轨。"],["检查夹板与螺栓","连接零件有什么问题？","伤损夹板达到更换标准和指定螺栓折断时更换；第3条螺栓种类多，按原答案逐个核对。"],["检查轨缝","轨缝严重不良怎么办？","调整严重不良轨缝。"],["检查排水与道床","淤塞、冲刷分别怎么处理？","疏通严重淤塞的排水设备，处理严重冲刷的路肩与道床。"],["经过道口","设备严重不良怎么办？","整修严重不良的道口设备。"],["最后补充","还有什么内容？","其他需要临时补修的工作。"]]},"433":{"scene":"综合维修不是只修一个小缺陷，而是一次系统性的整修。可按轨道几何→道床→零部件→无缝线路→附属设施的顺序理解，但正式作答必须按完整原答案逐项展开。","steps":[["先整修轨道几何","起、拨、改道和捣固怎么开展？","根据线路、道岔状态起拨改道、全面捣固，并注意混凝土枕垫板处理。"],["接着调整尺寸","整修哪些几何参数？","调整线路、道岔各部尺寸，拨正曲线。"],["继续处理道床","哪里需要清筛和整治？","枕盒不洁道床、边坡等，按题库原文逐项说。"],["随后检查零件","哪些轨道部件要整修？","按照原答案逐条核对钢轨、轨枕、接头及扣件等项目。"],["最后查设施和收尾","哪些项目容易漏？","继续核对原答案后半部分和季节性、附属项目，不能把分组当作完整答案。"]]},"365":{"scene":"先求内外股钢轨长度差，再把总差的一半分配到内、外两股。","steps":[["计算长度差","先根据已知半径、曲线长求什么？","先求两股钢轨长度差，题库结果为150mm。"],["确定内股","为何内股比中心线短？","内股长度为30m减去差值的一半，即29.925m。"],["确定外股","另一股是多少？","外股长度为30m加上差值的一半，即30.075m。"]]},"366":{"scene":"先求轨温变化量，再分别计算约束情况下的温度压力和自由状态下的伸长量。","steps":[["先求温差","40℃与28℃相差多少？","温差12℃。"],["判断受力","钢轨受约束、升温时是什么力？","温度压力。"],["代入数值","压力结果？","232350N。"],["自由伸缩","此时计算什么？","根据钢轨长度、线膨胀系数和温差求伸长量212.4mm。"]]},"367":{"scene":"这是距离计算题。先辨认连接曲线半径与线间距，再按题库规定公式求警冲标位置。","steps":[["整理已知","题目给出哪两个几何量？","连接曲线半径300m、后股道线间距4000mm。"],["求目标距离","最终问的是哪里到哪里？","警冲标距连接曲线中心线的距离。"],["核对结果","题库结果是多少？","2135mm。"]]},"368":{"scene":"曲线正矢计算不能只记答案；先分清前点、本点、后点拨量，再代入拨后正矢关系。","steps":[["确定本点","第5点原正矢和拨量？","92mm、-18mm。"],["确定相邻点","第4、6点拨量？","前点-8mm、后点-22mm。"],["核对结果","第5点拨后正矢？","89mm。"]]},"369":{"scene":"预留轨缝先找中间轨温，再将作业轨温、钢轨长度和膨胀系数代入。","steps":[["整理温度条件","最高、最低、作业轨温是什么？","62.8℃、-22.4℃、28.2℃。"],["求中间轨温","高低轨温取平均是多少？","20.2℃。"],["求轨缝","按题库计算结果？","6.6mm。"]]},"434":{"scene":"这是缓和曲线正矢逐点计算：先求圆曲线正矢，再求分段数和增量，最后分别算始点、中间点和终点。","steps":[["求圆曲线正矢","500m半径对应多少？","fc=50000/500=100mm。"],["求分段数","50m缓和曲线分几段？","n=50/10=5段。"],["求递增率","每段增加多少正矢？","fN=100/5=20mm。"],["算各测点","始终点要单独计算什么？","始点约3mm，中间依次20、40、60、80mm，终点97mm。"]]},"435":{"scene":"这道计算题先从实测正矢找曲线中点位置，再算圆曲线平均正矢，最后求圆曲线长。","steps":[["找中点","倒累计合计除以实测正矢合计？","22046/2013=10.952。"],["算平均正矢","半径320m对应多少？","50000/320=156.25mm。"],["算曲线长","合计正矢怎样换算长度？","2013×10/156.25=128.8m。"],["解释位置","中点在什么位置？","测点10和11之间，距测点10约9.5m。"]]},"436":{"scene":"预留轨缝先识别这题是24.5m的再用轨，再将当地轨温与作业轨温带入原题公式。","steps":[["先整理条件","轨长与三项轨温？","24.5m、最高63℃、最低-14℃、作业40℃。"],["代入公式","先算什么？","按原答案把温差、膨胀系数、轨长和构造轨缝带入公式。"],["最终取值","保留多大轨缝？","计算4.52mm，取4.5mm。"]]},"437":{"scene":"应力放散锯轨量按温差和长轨长度求：先算新旧锁定轨温差，再乘长度与线膨胀系数。","steps":[["温差","新旧锁定轨温差？","35-20=15℃。"],["套公式","锯轨量如何计算？","Δl=0.0118×1000×15。"],["结果","需要锯多少？","177mm。"]]},"438":{"scene":"同一题分两步：先求中间轨温，再求作业时应留的轨缝。","steps":[["求中间轨温","最高与最低轨温平均？","(62.8-22.4)/2=20.2℃。"],["计算轨缝","哪些量要代入？","轨长25m、膨胀系数0.0118、作业轨温28.2℃和构造轨缝18mm。"],["最后答题","结果是多少？","6.6mm。"]]}};
 const RECALL_GUIDES={
   355:["尖轨跟端连接有问题","桥型垫板或凸台压溃","下面捣固不实、有吊板","尖轨自身拱腰"],
   356:["尖轨跟端与辙叉开口尺寸","支距点位置和支距尺寸","作业与维修质量","列车车轮冲击"],
@@ -2625,81 +2642,150 @@ function recallButton(label,fn,cls="recall-soft"){
 }
 function recallDiv(cls,text){const e=document.createElement("div");e.className=cls;if(text!==undefined)e.textContent=text;return e;}
 function renderMemo(q){
- const container=document.getElementById("sOptions"),parts=recallParts(q.qa_answer),cues=recallCues(q,parts),guide=recallGuideRoute(q,parts);
+ const container=document.getElementById("sOptions");
+ const parts=recallParts(q.qa_answer);
+ const story=RECALL_STORIES[q.id]||{
+   scene:"先明确题目所问的条件或问题，再按原答案逐项理解，最后只看原题独立说出每一项。",
+   steps:parts.map((p,i)=>["第"+(i+1)+"个要点","这一项要回答什么？",p])
+ };
+ const stages=story.steps||[];
  const current=recallDB[q.id]||{};
- let stage="question",assist=0,showCount=false,missed=new Set(current.missed||[]);
+ let assist=0,stage="learn",showCount=false,missed=new Set(current.missed||[]);
  const panel=recallDiv("recall-panel");
  const header=recallDiv("recall-heading");
- const heading=document.createElement("strong");heading.textContent="🧠 脱稿背诵 · 只看原题回忆";
- const status=recallDiv("recall-mini",current.rating===2?"上次：独立会背":current.rating===1?"上次：提示后会":current.rating===0?"上次：需要看答案":"尚未测试");
+ const heading=document.createElement("strong");heading.textContent="📖 按题意理解 → 只看题目脱稿背";
+ const status=recallDiv("recall-mini",current.rating===2?"上次：独立会背":current.rating===1?"上次：提示后会":current.rating===0?"上次：需要看答案":"第一次学习");
  header.append(heading,status);panel.append(header);
- const desc=recallDiv("recall-sub","目标：看到题目能自己想起答题框架，再展开成原标准答案。遇到卡壳才逐级求助。此模式不录音、不自动评判口述。 ");panel.append(desc);
+ panel.append(recallDiv("recall-sub","先看原版标准答案，再按场景、原因、处理顺序逐步理解。理解后完全隐藏提示，仅凭题目复述；最后自己对照查漏。逻辑讲解只作理解辅助，考试以标准答案为准。"));
  const work=recallDiv("recall-work");panel.append(work);
- const footer=recallDiv("recall-status",current.dueAt?"下次复习："+recallDueText(current.dueAt)+"；已记录漏项 "+(current.missed||[]).length+" 处。":"这道题还没有复习记录。背完后自评，系统会安排下次复习。");panel.append(footer);
- const legacy=document.createElement("details");legacy.className="recall-legacy";const summary=document.createElement("summary");summary.textContent="备用：旧版关键词挖空（不是默认练法）";legacy.append(summary);
- legacy.addEventListener("toggle",()=>{if(legacy.open&&legacy.childElementCount===1){const inner=recallDiv("");const oldHolder=document.getElementById("sOptions");
- // 在旧算法中临时使用一个容器，避免覆盖现在的背诵界面。
- const saved=q.qa_answer||""; const oldPanel=recallDiv("memo-panel");let level=0;
- const display=recallDiv("memo-answer",saved),switches=recallDiv("memo-presets");
- [["原答案",0],["挖20%",20],["挖50%",50],["挖80%",80],["全挖",100]].forEach(([label,n])=>switches.append(recallButton(label,()=>{level=n;display.textContent=n?clozeText(saved,n):saved;},"recall-soft")));
- oldPanel.append(display,switches);legacy.append(oldPanel);
+ const footer=recallDiv("recall-status",current.dueAt?"下次复习："+recallDueText(current.dueAt)+"；上次记录漏项 "+(current.missed||[]).length+" 处。":"尚未记录本题。练完请自评，系统会安排间隔复习。");panel.append(footer);
+ const legacy=document.createElement("details");legacy.className="recall-legacy";
+ const summary=document.createElement("summary");summary.textContent="备用：旧版关键词挖空（非默认）";legacy.append(summary);
+ legacy.addEventListener("toggle",()=>{if(legacy.open&&legacy.childElementCount===1){
+   const saved=q.qa_answer||"",oldPanel=recallDiv("memo-panel");
+   const display=recallDiv("memo-answer",saved),switches=recallDiv("memo-presets");
+   [["原答案",0],["挖20%",20],["挖50%",50],["挖80%",80],["全挖",100]].forEach(([label,n])=>switches.append(recallButton(label,()=>{display.textContent=n?clozeText(saved,n):saved;},"recall-soft")));
+   oldPanel.append(display,switches);legacy.append(oldPanel);
  }});
  panel.append(legacy);container.append(panel);
  function resetWork(){work.innerHTML="";}
- function steps(texts,withNumbers=true){const list=recallDiv("recall-list");texts.forEach((t,i)=>{const x=recallDiv("recall-line");if(withNumbers){const n=document.createElement("span");n.className="recall-num";n.textContent=(i+1)+".";x.append(n)}const txt=document.createElement("span");txt.textContent=t;x.append(txt);list.append(x)});return list;}
- function showRoute(){const g=recallDiv("recall-guide");const h=document.createElement("h4");h.textContent="按逻辑串成一条线（记忆辅助，不是标准答案）";g.append(h);
- const r=recallDiv("recall-route");guide.forEach((c,i)=>{const x=document.createElement("span");x.textContent=c;r.append(x);if(i<guide.length-1)r.append(document.createTextNode("→"));});g.append(r);
- const mn=recallDiv("recall-muted","速记口诀："+makeMnemonic(q));g.append(mn);work.append(g);}
- function showLearn(){stage="learn";assist=Math.max(assist,4);resetWork();work.append(recallDiv("recall-sub","先看原答案，理解这些条目为什么按这个顺序记；看完立即隐藏答案，再从题目回忆。"));
- showRoute();const a=recallDiv("recall-answer"),h=document.createElement("h4");h.textContent="完整标准答案（原文，不改字）";a.append(h,recallDiv("original",q.qa_answer||"暂无答案"));work.append(a);
- const grid=recallDiv("recall-grid");grid.append(recallButton("隐藏全部 → 脱稿背",startRecall,"recall-primary"),recallButton("只显示关键词框架",()=>hint(2),"recall-soft"));work.append(grid);
+ function makeButtons(buttons){const x=recallDiv("recall-grid");for(const [text,fn,cls] of buttons)x.append(recallButton(text,fn,cls||"recall-soft"));work.append(x);}
+ function addOriginal(){const a=recallDiv("recall-answer"),h=document.createElement("h4");h.textContent="一、完整标准答案（题库原文）";a.append(h,recallDiv("original",q.qa_answer||"暂无答案"));work.append(a);}
+ function addRoadmap(full){
+   const g=recallDiv("recall-guide recall-story");
+   const h=document.createElement("h4");h.textContent=full?"二、按题意逐步理解（像老师讲题，不是口诀）":"先想清楚答题的逻辑顺序";g.append(h);
+   const intro=recallDiv("recall-story-scene",story.scene);g.append(intro);
+   if(full){
+     stages.forEach((step,i)=>{
+       const block=recallDiv("recall-story-step");
+       const cap=document.createElement("b");cap.textContent=(i+1)+"．"+step[0];block.append(cap);
+       const ask=recallDiv("recall-story-ask","先问自己："+step[1]);block.append(ask);
+       const exp=recallDiv("recall-story-explain",step[2]);block.append(exp);
+       g.append(block);
+     });
+     g.append(recallDiv("recall-story-note","提示：这些步骤是为了把答案串成一段有逻辑的叙述，不是实际作业必须照此顺序操作；需要放行条件、具体数字和工具时，以题库原文为准。"));
+   }else{
+     const route=recallDiv("recall-route");stages.forEach((step,i)=>{
+       const s=document.createElement("span");s.textContent=step[0];route.append(s);
+       if(i<stages.length-1)route.append(document.createTextNode("→"));
+     });g.append(route);
+   }
+   work.append(g);
  }
- function startRecall(){stage="recall";assist=0;resetWork();
- const blank=recallDiv("recall-empty");const b=document.createElement("b");b.textContent="现在只看上面的题目，独立背一遍";
- const p=document.createElement("p");p.textContent="先在脑中说出各条大方向，再逐条展开。可以口头说，不用打字；忘了再点提示。";blank.append(b,p);work.append(blank);
- const row=recallDiv("recall-grid");row.append(
- recallButton("① 实在卡住：看逻辑链",()=>hint(1)),
- recallButton("② 再提示：逐条关键词",()=>hint(2)),
- recallButton("③ 最后提示：开头几个字",()=>hint(3)),
- recallButton("背完了 → 对照标准答案",()=>answer(),"recall-primary"));work.append(row);
- const row2=recallDiv("recall-grid");row2.append(recallButton("先重新理解这道题",showLearn),recallButton("📌 显示/隐藏条数",()=>{showCount=!showCount;renderCount();}));work.append(row2);renderCount();
+ function showLearn(){
+   stage="learn";resetWork();
+   work.append(recallDiv("recall-sub","第一遍：先完整看一遍标准答案。接着看下面每一步的提问和解释，想清楚为什么先说这个、后面接什么。"));
+   addOriginal();addRoadmap(true);
+   makeButtons([
+     ["按逻辑一问一答（逐步练）",()=>practiceLogic(0,false),"recall-primary"],
+     ["隐藏所有内容 → 只看题目背",startRecall,"recall-primary"]
+   ]);
  }
- function renderCount(){let e=work.querySelector(".recall-count");if(!e){e=recallDiv("recall-muted recall-count");work.append(e)}e.textContent=showCount?"本题辅助提示：可分为 "+parts.length+" 个答题要点。":"已隐藏条数提示，尽量自己想起答题结构。";}
- function hint(level){stage="hint";assist=Math.max(assist,level);resetWork();
- const tip=recallDiv("recall-sub",level===1?"只给逻辑方向。试着自己补出完整答案。":level===2?"下面只是每条的关键词；用它们展开原答案。":"最后一层辅助：看每一条的开头，再把剩余内容接出来。");work.append(tip);
- if(level===1)showRoute();
- if(level===2)work.append(steps(cues));
- if(level===3)work.append(steps(parts.map(x=>{const s=x.replace(/^\s*/,"");return [...s].slice(0,Math.min(7,[...s].length)).join("")+" ……";})));
- const grid=recallDiv("recall-grid");grid.append(recallButton("隐藏提示，再背一遍",startRecall,"recall-primary"));
- if(level<3)grid.append(recallButton(level===1?"还想看逐条关键词":"还想看每条开头",()=>hint(level+1)));
- grid.append(recallButton("对照标准答案",()=>answer(),"recall-warn"));work.append(grid);
+ function practiceLogic(i=0,revealed=false){
+   stage="practice";assist=Math.max(assist,1);resetWork();
+   if(!stages.length){startRecall();return;}
+   i=Math.max(0,Math.min(i,stages.length-1));
+   work.append(recallDiv("recall-sub","先看这一小问，不要立刻看解释。试着口头答出相关标准答案，再点开对照。完成后进入下一步。"));
+   const p=recallDiv("recall-practice");
+   p.append(recallDiv("recall-practice-progress","逻辑练习 "+(i+1)+" / "+stages.length));
+   const title=document.createElement("h4");title.textContent=stages[i][0];p.append(title);
+   const ask=recallDiv("recall-practice-question",stages[i][1]);p.append(ask);
+   if(revealed)p.append(recallDiv("recall-practice-answer",stages[i][2]));
+   work.append(p);
+   if(!revealed)makeButtons([["我想过了 → 对照这一段解释",()=>practiceLogic(i,true),"recall-primary"],["不看提示，直接脱稿背",startRecall]]);
+   else makeButtons([
+      [i<stages.length-1?"下一步：继续问自己 →":"逻辑练完 → 脱稿背",()=>i<stages.length-1?practiceLogic(i+1,false):startRecall(),"recall-primary"],
+      [i>0?"返回上一步":"回看完整答案与讲解",()=>i>0?practiceLogic(i-1,false):showLearn()]
+   ]);
  }
- function answer(){stage="answer";resetWork();work.append(recallDiv("recall-sub","逐条对照：凡是漏了关键动作、条件、数字或专业术语的，把对应条目勾出来。下面答案与题库原文一致。"));
- const a=recallDiv("recall-answer");const h=document.createElement("h4");h.textContent="完整标准答案（原文）";a.append(h,recallDiv("original",q.qa_answer||"暂无答案"));
- const h2=document.createElement("h4");h2.textContent="对照每个要点，标记漏项 / 说错项";a.append(h2);
- parts.forEach((part,i)=>{const lab=document.createElement("label");lab.className="recall-check";const cb=document.createElement("input");cb.type="checkbox";cb.checked=missed.has(i);cb.onchange=()=>{if(cb.checked)missed.add(i);else missed.delete(i);};const span=document.createElement("span");span.textContent=`第${i+1}处：${part}`;lab.append(cb,span);a.append(lab)});work.append(a);
- if(assist===0){work.append(recallDiv("recall-muted","提醒：如果脱稿背前已经看过答案，请按实际情况自评。网站不会假装知道你刚才口述得对不对。"));}
- const prompt=document.createElement("h4");prompt.textContent="这道题刚才背得怎么样？";prompt.style.margin="16px 0 4px";work.append(prompt);
- const rate=recallDiv("recall-rating");
- const levels=[[-1,"看答案才会","10分钟后再试","recall-warn"],[1,"靠提示才会","10分钟后再试","recall-soft"],[2,"只看题目会背","先10分钟，之后逐步延长","recall-primary"]];
- levels.forEach(([rating,name,detail,cls])=>rate.append(recallButton(name+"\n"+detail,()=>grade(rating===-1?0:rating),cls)));
- work.append(rate);
- const controls=recallDiv("recall-grid");controls.append(recallButton("隐藏答案，再独立背",startRecall),recallButton("重新看逻辑解释",showLearn));work.append(controls);
+ function startRecall(){
+   stage="recall";assist=0;resetWork();
+   const blank=recallDiv("recall-empty");
+   const h=document.createElement("b");h.textContent="现在只看上面的原题，自己完整背一遍";
+   const p=document.createElement("p");p.textContent="先在脑子里找出答案有哪些大方向，再逐条展开成题库原话。别看口诀、别看答案；实在卡住才按需点提示。";
+   blank.append(h,p);work.append(blank);
+   makeButtons([
+     ["① 卡住了：只看处理思路",()=>hint(1)],
+     ["② 还是卡住：逐步提问",()=>hint(2)],
+     ["③ 最后提示：答案开头",()=>hint(3)],
+     ["背完了 → 对照原答案",answer,"recall-primary"]
+   ]);
+   makeButtons([
+     ["返回完整答案与逻辑讲解",showLearn],
+     ["显示/隐藏理解步骤数",()=>{showCount=!showCount;renderCount();}]
+   ]);
+   renderCount();
+ }
+ function renderCount(){let e=work.querySelector(".recall-count");if(!e){e=recallDiv("recall-muted recall-count");work.append(e);}e.textContent=showCount?"可以从 "+stages.length+" 个理解环节组织回答；具体标准答案请以题库原文为准。":"已隐藏理解步骤数，尽量自己想出整道题的结构。";}
+ function hint(level){
+   stage="hint";assist=Math.max(assist,level);resetWork();
+   if(level===1){work.append(recallDiv("recall-sub","只显示答题方向，不显示标准答案和详细解释。看完尽量立即遮住提示，自己继续背。"));addRoadmap(false);}
+   if(level===2){work.append(recallDiv("recall-sub","依照咱俩以前的练法，把这题拆成几个有先后关联的小问题。你逐个回答，但这里仍不展示答案。"));
+     const g=recallDiv("recall-list");stages.forEach((s,i)=>{const x=recallDiv("recall-line");const b=document.createElement("b");b.textContent=(i+1)+"．"+s[0];x.append(b,recallDiv("recall-story-ask",s[1]));g.append(x);});work.append(g);}
+   if(level===3){work.append(recallDiv("recall-sub","最后一层提示，只给标准答案每个部分的开头几个字，自己把剩下的话接出来。"));
+     const g=recallDiv("recall-list");parts.forEach((x,i)=>{const s=String(x).trim();g.append(recallDiv("recall-line",(i+1)+"．"+[...s].slice(0,Math.min(7,[...s].length)).join("")+" ……"));});work.append(g);}
+   makeButtons([
+     ["撤掉所有提示，再独立背",startRecall,"recall-primary"],
+     ...(level<3?[["还需要下一层提示",()=>hint(level+1)]]:[]),
+     ["对照标准答案",answer,"recall-warn"]
+   ]);
+ }
+ function answer(){
+   stage="answer";resetWork();
+   work.append(recallDiv("recall-sub","把你刚才说的和原答案逐项对照。漏掉关键动作、条件、数字、专业术语的条目，勾选为漏项。这里由你自己核对，不会虚构语音识别评分。"));
+   addOriginal();
+   const a=recallDiv("recall-answer"),h=document.createElement("h4");h.textContent="三、逐项查漏（勾选漏背或说错的内容）";a.append(h);
+   parts.forEach((part,i)=>{
+      const label=document.createElement("label");label.className="recall-check";
+      const cb=document.createElement("input");cb.type="checkbox";cb.checked=missed.has(i);
+      cb.onchange=()=>{if(cb.checked)missed.add(i);else missed.delete(i);};
+      const s=document.createElement("span");s.textContent="第"+(i+1)+"项："+part;
+      label.append(cb,s);a.append(label);
+   });work.append(a);
+   const h2=document.createElement("h4");h2.textContent="刚才是怎样想起来的？";h2.style.margin="15px 0 5px";work.append(h2);
+   const r=recallDiv("recall-rating");
+   [[0,"看答案才会","10分钟后重练","recall-warn"],[1,"逐步提示后会","10分钟后重练","recall-soft"],[2,"只看题目独立背会","按掌握程度逐步延长间隔","recall-primary"]].forEach(([v,l,d,c])=>r.append(recallButton(l+"\n"+d,()=>grade(v),c)));
+   work.append(r);
+   makeButtons([["隐藏答案，重新脱稿背",startRecall],["重新按逻辑逐条理解",showLearn]]);
  }
  function grade(rating){
- const prev=recallDB[q.id]||{};
- let streak=rating===2?Math.min(4,(Number(prev.streak)||0)+1):0;
- const delay=rating===2?RECALL_STEP_DELAYS[Math.min(RECALL_STEP_DELAYS.length-1,streak-1)]:RECALL_STEP_DELAYS[0];
- const now=Date.now();
- recallDB[q.id]={rating,streak,dueAt:now+delay,reviewedAt:now,attempts:(Number(prev.attempts)||0)+1,missed:[...missed].sort((a,b)=>a-b)};
- recallSave();updateRecallHome();status.textContent=rating===2?"本次：独立背出":rating===1?"本次：靠提示背出":"本次：看答案才会";
- footer.textContent="已保存："+(rating===2?"独立会背":rating===1?"提示后会":"看答案才会")+"；漏项 "+missed.size+" 处；下次 "+recallDueText(recallDB[q.id].dueAt)+"。";
- resetWork();const done=recallDiv("recall-empty");const hd=document.createElement("b");hd.textContent="✓ 这次背诵已记录";const pr=document.createElement("p");pr.textContent=`下次复习：${recallDueText(recallDB[q.id].dueAt)}。${missed.size?"建议优先补练刚才勾选的漏项。":"下次直接只看题目背。"}`;done.append(hd,pr);work.append(done);
- if(missed.size){work.append(recallDiv("recall-sub","本次漏项重点："));work.append(steps([...missed].map(i=>parts[i]).filter(Boolean)));}
- const grid=recallDiv("recall-grid");grid.append(recallButton("马上再背一次",startRecall,"recall-primary"),recallButton("看下一题 →",()=>sNext()));work.append(grid);
- sPalette();
+   const prev=recallDB[q.id]||{};
+   const downgraded=rating===2&&missed.size>0;
+   if(downgraded)rating=1;
+   const streak=rating===2?Math.min(5,(Number(prev.streak)||0)+1):0;
+   const delay=rating===2?RECALL_STEP_DELAYS[Math.min(RECALL_STEP_DELAYS.length-1,streak-1)]:RECALL_STEP_DELAYS[0];
+   const now=Date.now();
+   recallDB[q.id]={rating,streak,dueAt:now+delay,reviewedAt:now,attempts:(Number(prev.attempts)||0)+1,missed:[...missed].sort((a,b)=>a-b)};
+   recallSave();updateRecallHome();status.textContent=rating===2?"本次：独立背出":rating===1?"本次：提示后会":"本次：看答案才会";
+   footer.textContent="已保存："+(rating===2?"独立会背":rating===1?"提示后会":"看答案才会")+"；漏项 "+missed.size+" 处；下次 "+recallDueText(recallDB[q.id].dueAt)+"。";
+   resetWork();const done=recallDiv("recall-empty");
+   const h=document.createElement("b");h.textContent="✓ 这次背诵已记录";done.append(h);
+   const p=document.createElement("p");p.textContent=(downgraded?"你标记了漏项，这次按‘还需提示’记入复习，而不是直接算完全掌握。":"")+"下次复习："+recallDueText(recallDB[q.id].dueAt)+"。";done.append(p);work.append(done);
+   if(missed.size){work.append(recallDiv("recall-sub","这次漏掉的原文："));const l=recallDiv("recall-list");[...missed].forEach(i=>{if(parts[i])l.append(recallDiv("recall-line",parts[i]));});work.append(l);}
+   makeButtons([["马上再只看题目背一次",startRecall,"recall-primary"],["进入下一题 →",()=>sNext()]]);
+   sPalette();
  }
- startRecall();
+ if(current.attempts){startRecall();}else{showLearn();}
 }
 
 function sRender(){
