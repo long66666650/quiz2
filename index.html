@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>铁路线路工题库 · 逻辑故事链背诵版（免激活）</title>
+<title>铁路线路工题库 · 按整题逻辑背诵版（免激活）</title>
 <style>
 :root{--bg:#eef8ff;--card:#fff;--text:#24364a;--muted:#718096;--line:#dfeaf3;--accent:#5b8ff9;--ok:#18b981;--bad:#ef6464}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:linear-gradient(180deg,#dff3ff 0%,#f8fcff 42%,#fffaf0 100%);min-height:100vh}
@@ -2646,12 +2646,37 @@ const RECALL_DIALOG_OVERRIDES={
 
 // 每道题按自身逻辑组织的故事链；“工长”只是某种可选情境，不强行代入任何身份。
 const RECALL_MEMORY_CHAINS={"321":["发现两端直线轨向不好，先把基准方向拨正。","然后在曲线外股钢轨上布置测点。","遇到合适风力条件，再拉绳反复测量正矢。","有了正矢数据，接着计算计划拨道量。","最后把计算结果落到现场，设桩拨道。"],"333":["准备进行无缝线路起、拨道，首先确认道砟和线路方向。","准备使用机具时，先排除不能放机具的位置。","列车通过前，起道和拨道必须分别处理到位。","作业收尾时，扒开的道床不能留下。"],"339":["发现道岔方向不良，先想整体维修是不是不到位。","接着看道岔铺设时位置有没有问题。","再看轨距支距调整的方法和钢轨零件磨耗。","继续查曲基本轨弯折点的位置。","再往下看捣固有没有不实。","接着查道砟和夯实情况。","最后查钢轨和零件联结状态。"],"341":["发现接头支嘴，先用拨道间接影响法整治。","处理接头时，还有一种做法必须禁止。","拨正后，要让轨道联结更牢靠。","最后加固道床或设置防爬支撑，让曲线保持稳定。"],"343":["夏季钢轨温度升高，内部首先积累温度压力。","这时如果再受到列车动力或人工作业干扰。","最后轨道的横向弯曲变形可能突然增大。"],"346":["准备绳正法拨正曲线，先把两端直线方向处理好。","有了正确基准，接着到外股钢轨上布设测点。","随后在风小的时候拉绳测正矢。","有了现场正矢，就按绳正法计算拨量。","最后设置拨道桩，按桩进行拨道。"],"347":["先看钢轨内部受到的温度压力。","再看轨道抵抗横向变形的能力。","接着回顾铺设锁定轨温、焊复和施工作业情况。","最后不要漏掉线路不平顺和其他附加力。"],"355":["列车经过道岔，发现尖轨发生跳动，先检查尖轨跟端连接。","接着检查尖轨跟部的桥型垫板或凸台。","再往下查看道床捣固和吊板情况。","最后检查尖轨自身是否变形。"],"356":["发现导曲线不圆顺，先看尖轨跟端和辙叉前后的开口。","然后检查支距点的位置和支距尺寸。","再回想作业和维修质量有没有问题。","最后考虑列车车轮的冲击作用。"],"357":["发现辙叉偏磨，先考虑怎样修复磨耗位置。","焊补之外，还可以从使用方向上想办法。","最后改善偏磨位置的支承，同时保持水平状态。"],"358":["验收路基和排水，先从路肩的形状和杂草情况查起。","随后检查侧沟能否正常排水。","最后整体核对是否达到设计要求。"],"359":["发现导曲线轨距扩大，先在外侧考虑设置轨撑。","设置轨撑以后，还要检查是否离缝、有没有假轨距。","接着查看导曲线外股接头的支承。","然后看木岔枕有没有腐朽。","混凝土岔枕还要排查扣件与轨底边的离缝。"],"360":["发现辙叉垂直磨耗或压溃，先加强辙叉下面的捣固。","如果碰上更换岔枕，利用机会进一步加强捣固。","接下来想办法缓冲辙叉受到的力。","再通过竖螺栓扣板固定辙叉。","另一种固定方式是安装特制铁座并配合弹条扣件。"],"361":["先想导曲线外股本来缺少了什么。","列车长期运行，接着受到什么力的作用。","在这种条件下，最后出现了什么磨耗和高低状态。"],"362":["列车通过导曲线时，先受到三种横向相关作用。","受到这些作用后，道钉和其他配件会出现问题。","失去可靠约束后，钢轨就可能发生位移。"],"363":["做经常保养，先检查轨道几何尺寸有没有超限。","接着检查道床，看看有没有翻浆冒泥、道砟不匀。","往下再看轨枕，有损坏就要修理或更换。","然后检查轨缝，还要考虑线路锁定。","继续看钢轨和接头病害。","再看扣件和螺栓。","无缝线路还要处理温度应力。","如果发现钢轨伤损或断轨。","季节性还要查看防沙、防雪设备及冻害。","走到道口、路肩时，检查排水和杂草。","最后不要漏掉其他季节性、短周期工作。"],"364":["发现线路有问题，首先检查几何尺寸。","接着检查钢轨。","然后检查夹板、螺栓。","再往前发现轨缝严重不良。","接着发现排水堵塞、路肩道床冲刷。","经过道口时发现设备严重不良。","最后还有其他问题。"],"433":["综合维修开始，先根据线路、道岔状态处理起拨改道与捣固。","然后复核线路、道岔各部尺寸以及曲线。","再检查道床是否不洁或翻浆冒泥。","接着检查轨枕。","之后检查轨缝、轨道加强设备和线路爬行。","再看钢轨本身和接头病害。","还要考虑计划性的打磨列车作业。","继续检查联结零件。","再转向路肩、排水和杂草。","经过线路标志和道口时，还要处理附属设备与旧料。","最后补上其他病害的预防和整治。"]};
+// 记忆链讲的是整道题如何自然展开，不是将每个数值单独列成一行，更不是死套“工长”身份。
+// 最关键的题目单独写清场景与分支条件；标准答案与逐段练习均保持题库原文。
+const RECALL_CHAIN_EXACT={
+  314:{
+    intro:"你拿着钢板尺去检查尖轨动程。",
+    items:[
+      ["首先看尖轨类型。","直尖轨142mm，曲尖轨152mm。"],
+      ["接着遇到AT型弹性可弯尖轨12号道岔，分普通和提速。","普通160mm或180mm；提速160mm。"],
+      ["然后遇到18号道岔，分允许速度。","大于160km/h是160mm；不大于160km/h是160mm或180mm（具体按标准图或设计图规定办理）。"],
+      ["最后遇到其他型号道岔。","按标准图或设计图办理。"]
+    ]
+  }
+};
 function recallMemoryLead(q,step,i){
   const leads=RECALL_MEMORY_CHAINS[q.id];
   if(leads&&leads[i])return leads[i];
-  // 其他题目使用本题已专门编写的步骤标题，不机械套用某种身份或固定故事。
-  let label=String(step?.[0]||('第'+(i+1)+'个要点')).trim();
-  return /[。！？.!?]$/.test(label)?label:label+'。';
+  const label=String(step?.[0]||('第'+(i+1)+'个要点')).trim().replace(/[。！？]+$/,'');
+  // 已经写成连贯语句的阶段，不再额外套固定身份。
+  if(/^(先|首先|然后|随后|接着|再|最后|发现|遇到|准备|当|如果|经过|列车)/.test(label))return label+'。';
+  const question=String(q.question||'');
+  const isCause=/原因|产生|病害|导致/.test(question);
+  const isCalculation=/计算题|计算|求|算出/.test(q.source+' '+question);
+  const isStandard=/标准|规定|要求|允许偏差|设计动程|重伤|限值/.test(question);
+  const isCheck=/检查|验收|整治|维修|改道|补修|保养|更换|修理/.test(question);
+  const total=(RECALL_STORIES[q.id]?.steps||[]).length;
+  const beginning=i===0,ending=i===total-1&&i!==0;
+  if(isCause)return (beginning?'先从':'接着再想')+label+'这一方面。';
+  if(isCalculation)return (beginning?'先明确':'接着计算')+label+'。';
+  if(isStandard)return (beginning?'首先确认':'接着核对')+label+'。';
+  if(isCheck)return (beginning?'先检查':ending?'最后核对':'接着查看')+label+'。';
+  return (beginning?'首先想到':ending?'最后别漏掉':'接着想到')+label+'。';
 }
 function recallMemoryAnswer(q,step,i){
   return String(step?.[2]||'').trim();
@@ -2798,14 +2823,15 @@ function renderMemo(q){
  function addMemoryChain(){
    const card=recallDiv("recall-chain-card");
    const title=document.createElement("h4");title.textContent="三、整道题的记忆链";card.append(title);
-   card.append(recallDiv("recall-chain-intro","我给你串成一个故事："));
-   stages.forEach((step,i)=>{
+   const exact=RECALL_CHAIN_EXACT[q.id];
+   card.append(recallDiv("recall-chain-intro",exact?exact.intro:"我给你串成一个故事："));
+   const items=exact?exact.items:stages.map((step,i)=>[recallMemoryLead(q,step,i),recallMemoryAnswer(q,step,i)]);
+   items.forEach(([sentence,answer])=>{
      const item=recallDiv("recall-chain-item");
-     const lead=recallDiv("recall-chain-lead",recallMemoryLead(q,step,i));
-     const response=recallDiv("recall-chain-answer","→ "+recallMemoryAnswer(q,step,i));
-     item.append(lead,response);card.append(item);
+     item.append(recallDiv("recall-chain-lead",sentence));
+     item.append(recallDiv("recall-chain-answer","→ "+answer));
+     card.append(item);
    });
-   card.append(recallDiv("recall-chain-bottom","先在脑子里顺着这条线想，再对照上面的完整标准答案补齐所有技术条件、数字和专业术语。这里是记忆顺序，不代表现场作业的强制先后顺序。"));
    work.append(card);
  }
  function showLearn(){
