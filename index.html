@@ -369,7 +369,6 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     <div class="recall-home" id="recallHomeStats" aria-live="polite"><strong>背诵复习进度</strong><small>进入背诵后会自动统计；记录只保存在当前浏览器中。</small></div>
     <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
     <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
-    <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
     <button class="setbtn" id="startSecondExam">📝 第二套模拟考试 · 100分<small>选择60道×1分，判断20道×1分，实作5道×4分；共85题。实作题交卷后按参考答案自评。</small></button>
     <button class="secondary start" id="secondBackHome">返回题库首页</button>
@@ -393,7 +392,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
       <div id="sqkReference" class="quick-reference"></div>
     </div>
     <div class="quick-controls">
-      <button id="sqkNext" class="primary hidden">下一题</button>
+      <button id="sqkNext" class="primary">下一道</button>
       <button id="sqkBack" class="secondary">返回第二套</button>
     </div>
   </div>
@@ -3052,7 +3051,7 @@ function sqkDraw(){
   $("#sqkMyAnswer").readOnly=false;
   $("#sqkSubmit").classList.remove("hidden");
   $("#sqkReveal").classList.add("hidden");
-  $("#sqkNext").classList.add("hidden");
+  // “下一道”始终显示，未提交也可直接跳到下一道题。
   $("#sqkReference").textContent="";
   window.scrollTo(0,0);
 }
@@ -3064,7 +3063,6 @@ function sqkSubmit(){
   $("#sqkMyAnswer").readOnly=true;
   $("#sqkReveal").classList.remove("hidden");
   $("#sqkSubmit").classList.add("hidden");
-  $("#sqkNext").classList.remove("hidden");
   $("#sqkReveal").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 $("#startSecondPractical").onclick=()=>sqkStart("practical");
