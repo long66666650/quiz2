@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>铁路线路工题库 · 按整题逻辑背诵版（免激活）</title>
+<title>铁路线路工题库 · 逻辑背诵 + 随机实作简答（免激活）</title>
 <style>
 :root{--bg:#eef8ff;--card:#fff;--text:#24364a;--muted:#718096;--line:#dfeaf3;--accent:#5b8ff9;--ok:#18b981;--bad:#ef6464}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:linear-gradient(180deg,#dff3ff 0%,#f8fcff 42%,#fffaf0 100%);min-height:100vh}
@@ -191,6 +191,17 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .recall-chain-bottom{margin-top:12px;padding-top:11px;border-top:1px dashed #dde7ed;color:#76838f;font-size:12px;line-height:1.7}
 @media(max-width:430px){.recall-chain-card{padding:14px 12px}.recall-chain-lead,.recall-chain-answer{font-size:14px}}
 
+
+/* 第二套新增：实作/简答随机默写，点击提交后才展示原题标准答案。 */
+.quick-answer-panel{margin-top:14px;padding:15px;border:1px solid #d9e9f5;border-radius:16px;background:#f7fbff}
+.quick-answer-panel .quick-title{font-size:16px;font-weight:900;color:#285a88;margin-bottom:8px}
+.quick-answer-panel .quick-reference{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:1.95;color:#253d37}
+.quick-help{font-size:13px;line-height:1.7;color:#627d91;margin:8px 0 12px}
+.quick-progress{font-size:13px;font-weight:750;color:#486a82}
+.quick-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.quick-controls button{width:100%}
+@media(max-width:450px){.quick-controls{grid-template-columns:1fr}.quick-answer-panel{padding:12px}}
+
 </style>
 </head>
 <body>
@@ -356,11 +367,45 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     </div></div>
     <button class="setbtn sMode" data-mode="review">⏰ 到期复习<small>只练需要复习的大题：10分钟、次日、3天、7天等，优先补漏。</small></button>
     <div class="recall-home" id="recallHomeStats" aria-live="polite"><strong>背诵复习进度</strong><small>进入背诵后会自动统计；记录只保存在当前浏览器中。</small></div>
+    <button class="setbtn" id="startSecondQuick">🎲 实作 + 简答 · 随机答题<small>可选实作、简答或混合随机；先自行作答，点击“提交答案”后才显示完整标准答案，随后继续下一题。</small></button>
     <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
-    <button class="setbtn" id="startSecondExam">📝 试卷A · 实作考试 · 100分<small>随机5道实作，每题20分；交卷后对照原答案自评。</small></button>
-<button class="setbtn" id="startSecondExamB">📝 试卷B · 综合考试 · 100分<small>45道选择×1分＋10道填空×2分＋1道论述10分＋1道计算10分＋3道简答×5分。选择自动评分；填空忽略空格、全半角及常见分隔标点核对，可对照原答案修正得分；主观题自评。</small></button>
+    <button class="setbtn" id="startSecondExam">📝 第二套模拟考试 · 100分<small>选择60道×1分，判断20道×1分，实作5道×4分；共85题。实作题交卷后按参考答案自评。</small></button>
     <button class="secondary start" id="secondBackHome">返回题库首页</button>
+  </div>
+</section>
+
+
+<section id="secondQuick" class="hidden">
+  <div class="hero">
+    <h1>🎲 第二套 · 实作与简答随机练习</h1>
+    <p>只看原题独立回忆。写下答案或口头背诵后，点击“提交答案”，才能看到本题的完整标准答案。每轮内不重复抽题。</p>
+  </div>
+  <div class="card">
+    <label class="title" for="sqkMode">选择随机范围</label>
+    <select id="sqkMode" aria-label="选择随机范围">
+      <option value="mixed">实作 + 简答混合随机</option>
+      <option value="practical">只抽实作题</option>
+      <option value="short">只抽简答题</option>
+    </select>
+    <div class="meta" style="margin-top:16px;align-items:center">
+      <span id="sqkProgress" class="quick-progress">本轮第1题</span>
+      <span id="sqkType" class="badge">实作题</span>
+    </div>
+    <div id="sqkQuestion" class="q"></div>
+    <label class="title" for="sqkMyAnswer">我的答案（可选）</label>
+    <textarea id="sqkMyAnswer" class="exam-textarea" placeholder="先自己回答。可以在这里写答案；如果习惯口头背诵，也可以不输入文字，背完后直接提交查看标准答案。"></textarea>
+    <div id="sqkTip" class="quick-help">提交前不会展示标准答案；提交后可保留自己的作答，对照查漏。</div>
+    <button id="sqkSubmit" class="primary start">提交答案 · 查看标准答案</button>
+    <div id="sqkReveal" class="quick-answer-panel hidden" aria-live="polite">
+      <div class="quick-title">✅ 本题完整标准答案</div>
+      <div id="sqkReference" class="quick-reference"></div>
+      <div class="quick-help">对照标准答案检查有没有漏掉条件、数字或关键步骤。主观题不自动判分。</div>
+    </div>
+    <div class="quick-controls">
+      <button id="sqkNext" class="primary hidden">下一道随机题</button>
+      <button id="sqkBack" class="secondary">返回第二套</button>
+    </div>
   </div>
 </section>
 
@@ -377,10 +422,10 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 <section id="secondExam" class="card hidden">
   <div class="stats">
     <div class="stat"><b id="seAnswered">0</b><span>已答</span></div>
-    <div class="stat"><b id="seRemain">5</b><span>未答</span></div>
+    <div class="stat"><b id="seRemain">85</b><span>未答</span></div>
     <div class="stat"><b>100</b><span>总分</span></div>
   </div>
-  <div class="meta"><span id="seSerial">第 1 / 5 题</span><span id="seTag" class="badge">选择题 · 1分</span></div>
+  <div class="meta"><span id="seSerial">第 1 / 85 题</span><span id="seTag" class="badge">选择题 · 1分</span></div>
   <div class="progress"><div id="seBar"></div></div>
   <div id="seQuestion" class="q"></div>
   <div id="seOptions"></div>
@@ -392,12 +437,11 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   </div>
   <div id="sePaletteWrap" class="hidden"><div class="palette" id="sePalette"></div></div>
   <button id="seSubmit" class="primary start exam-submit">交卷并评分</button>
-<button id="seReturnResult" class="secondary start hidden">返回成绩与自评</button>
   <button id="seExit" class="secondary start">退出模拟考试</button>
 </section>
 
 <section id="secondExamResult" class="hidden">
-  <div class="hero"><h1>📝 第二套模拟考试成绩</h1><p>选择、填空自动核对；主观题对照原答案自评，满分100分。</p></div>
+  <div class="hero"><h1>📝 第二套模拟考试成绩</h1><p>客观题自动评分；5道实作题请对照参考答案自评，每题4分。</p></div>
   <div class="card">
     <div class="exam-score-main"><span id="seTotalScore" class="exam-score-num">0</span><span class="exam-score-den">/ 100</span></div>
     <div class="exam-breakdown">
@@ -405,7 +449,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
       <div><b id="seJudgeScore">0 / 20</b><span>判断题 · 20道</span></div>
       <div><b id="sePracticalScore">待自评 / 20</b><span>实作题 · 5道</span></div>
     </div>
-    <div id="seResultNote" class="exam-note">请完成主观题自评，最终总分会自动更新。</div>
+    <div id="seResultNote" class="exam-note">请完成下面5道实作题自评，最终总分会自动更新。</div>
     <div id="sePracticalReview"></div>
     <div class="exam-result-actions">
       <button id="seReviewExam" class="secondary">查看整张试卷</button>
@@ -506,7 +550,7 @@ const [ORIGINAL,HARD,SET2,SET3,RECALL_STORIES]=await Promise.all(
 const $=s=>document.querySelector(s), shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 // navigation
-function show(id){if(id==="secondHome")setTimeout(updateRecallHome,0);["home","firstSetup","firstQuiz","firstSequential","firstWrong","firstBatch100","firstExam","firstExamResult","secondHome","secondQuiz","secondExam","secondExamResult","thirdHome","thirdQuiz","thirdExam","thirdExamResult"].forEach(x=>$("#"+x).classList.add("hidden"));$("#"+id).classList.remove("hidden");window.scrollTo(0,0)}
+function show(id){if(id==="secondHome")setTimeout(updateRecallHome,0);["home","firstSetup","firstQuiz","firstSequential","firstWrong","firstBatch100","firstExam","firstExamResult","secondHome","secondQuick","secondQuiz","secondExam","secondExamResult","thirdHome","thirdQuiz","thirdExam","thirdExamResult"].forEach(x=>$("#"+x).classList.add("hidden"));$("#"+id).classList.remove("hidden");window.scrollTo(0,0)}
 $("#goFirst").onclick=()=>show("firstSetup");$("#goSecond").onclick=()=>show("secondHome");$("#goThird").onclick=()=>show("thirdHome");$("#firstHome").onclick=()=>show("home");$("#secondBackHome").onclick=()=>show("home");$("#thirdBackHome").onclick=()=>show("home");
 
 // FIRST SET infinite engine — 最新重点知识题库 + 准确选项 + 详细判断解析 + 历史上一题
@@ -2985,29 +3029,86 @@ function sPalette(){
 
 
 
-// SECOND SET mock exam — A: 5×20; B: 45×1 + 10×2 + 10 + 10 + 3×5
-let sePaper=[],sePos=0,seSubmitted=false,sePracticalMarks={},seVariant='A';
-const seSubject=it=>it.type==='practical';
-const seNormalize=v=>String(v).normalize('NFKC').replace(/\s+/g,'').replace(/[，,。；;]/g,'').toLowerCase();
+
+// 第二套独立随机默写：实作50道、简答32道，答前只显示题干，交卷后才显示原文答案。
+const sqkIndex=new Map();
+["实作题","简答题"].forEach(type=>{
+  SET2.filter(q=>q.type==="qa"&&q.source===type).forEach((q,i)=>sqkIndex.set(q.id,i+1));
+});
+let sqkPool=[],sqkBag=[],sqkCurrent=null,sqkRound=0,sqkDrawn=0,sqkLastId=null,sqkSubmitted=false;
+function sqkStart(){
+  const mode=$("#sqkMode").value;
+  sqkPool=SET2.filter(q=>q.type==="qa" && (
+    mode==="mixed"?(q.source==="实作题"||q.source==="简答题"):
+    q.source===(mode==="practical"?"实作题":"简答题")
+  ));
+  sqkBag=[];sqkCurrent=null;sqkRound=0;sqkDrawn=0;sqkLastId=null;
+  if(!sqkPool.length){alert("暂时没有符合条件的题目。");return;}
+  show("secondQuick");
+  sqkDraw();
+}
+function sqkDraw(){
+  if(!sqkPool.length)return;
+  if(!sqkBag.length){
+    sqkBag=shuffle(sqkPool);
+    if(sqkBag.length>1 && sqkBag[sqkBag.length-1].id===sqkLastId){
+      [sqkBag[0],sqkBag[sqkBag.length-1]]=[sqkBag[sqkBag.length-1],sqkBag[0]];
+    }
+    sqkRound++;sqkDrawn=0;
+  }
+  const q=sqkBag.pop();sqkCurrent=q;sqkLastId=q.id;sqkDrawn++;sqkSubmitted=false;
+  $("#sqkQuestion").textContent=q.question;
+  $("#sqkProgress").textContent=`第${sqkRound}轮 · 第 ${sqkDrawn} / ${sqkPool.length} 题`;
+  $("#sqkType").textContent=`${q.source} · 第${sqkIndex.get(q.id)||"?"}题`;
+  $("#sqkMyAnswer").value="";
+  $("#sqkMyAnswer").readOnly=false;
+  $("#sqkMyAnswer").classList.remove("hidden");
+  $("#sqkSubmit").classList.remove("hidden");
+  $("#sqkReveal").classList.add("hidden");
+  $("#sqkNext").classList.add("hidden");
+  $("#sqkReference").textContent="";
+  $("#sqkTip").textContent="提交前不会展示标准答案；提交后可保留自己的作答，对照查漏。";
+  window.scrollTo(0,0);
+}
+function sqkSubmit(){
+  if(!sqkCurrent || sqkSubmitted)return;
+  sqkSubmitted=true;
+  $("#sqkReference").textContent=sqkCurrent.qa_answer||"原题库未提供参考答案。";
+  $("#sqkMyAnswer").readOnly=true;
+  $("#sqkReveal").classList.remove("hidden");
+  $("#sqkSubmit").classList.add("hidden");
+  $("#sqkNext").classList.remove("hidden");
+  $("#sqkTip").textContent="已提交，下面是原题库标准答案。核对完成后点击“下一道随机题”。";
+  $("#sqkReveal").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+$("#startSecondQuick").onclick=sqkStart;
+$("#sqkMode").onchange=sqkStart;
+$("#sqkSubmit").onclick=sqkSubmit;
+$("#sqkNext").onclick=sqkDraw;
+$("#sqkBack").onclick=()=>show("secondHome");
+
+// SECOND SET mock exam — 60选择×1 + 20判断×1 + 5实作×4 = 100分
+let sePaper=[],sePos=0,seSubmitted=false,sePracticalMarks={};
+
 function seBuildPaper(){
- const used=new Set();
- const take=(source,count,type,points)=>{
-  const pool=shuffle(SET2.filter(q=>q.source===source)).filter(q=>{const key=q.question.replace(/\s|（选择正确答案）/g,'');if(used.has(key))return false;used.add(key);return true});
-  if(pool.length<count)throw new Error(source+'题目不足');
-  return pool.slice(0,count).map(q=>({q,type,points,selected:[],ok:null,got:type==='practical'?null:0,text:''}));
- };
- sePaper=seVariant==='A'?take('实作题',5,'practical',20):[
- ...take('选择题',45,'choice',1),...take('填空题',10,'fill',2),
- ...take('论述题',1,'practical',10),...take('计算题',1,'practical',10),...take('简答题',3,'practical',5)];
- sePos=0;seSubmitted=false;sePracticalMarks={};
+  const choices=shuffle(SET2.filter(q=>q.source==="选择题"&&q.type!=="qa")).slice(0,60);
+  const judges=shuffle(SET2.filter(q=>q.source==="判断题"&&q.type!=="qa")).slice(0,20);
+  const practical=shuffle(SET2.filter(q=>q.source==="实作题"&&q.type==="qa")).slice(0,5);
+
+  sePaper=[
+    ...choices.map(q=>({q,type:"choice",points:1,selected:[],ok:null,got:0,text:""})),
+    ...judges.map(q=>({q,type:"judge",points:1,selected:[],ok:null,got:0,text:""})),
+    ...practical.map(q=>({q,type:"practical",points:4,selected:[],ok:null,got:null,text:""}))
+  ];
+  sePos=0;seSubmitted=false;sePracticalMarks={};
 }
 function seAnsweredCount(){
-  return sePaper.filter(x=>(x.type==="practical"||x.type==="fill")?String(x.text||"").trim().length>0:(x.selected||[]).length>0).length;
+  return sePaper.filter(x=>x.type==="practical"?String(x.text||"").trim().length>0:(x.selected||[]).length>0).length;
 }
 function seUpdateStats(){
   const n=seAnsweredCount();
   $("#seAnswered").textContent=n;
-  $("#seRemain").textContent=sePaper.length-n;
+  $("#seRemain").textContent=85-n;
 }
 function seCorrectText(item){
   return item.q.options.filter(o=>item.q.answer.includes(o.key)).map(o=>o.text).join("、");
@@ -3018,7 +3119,7 @@ function seRenderPalette(){
     const b=document.createElement("button");b.className="qnum";b.textContent=i+1;
     if(i===sePos)b.classList.add("current");
     if(seSubmitted&&it.type!=="practical")b.classList.add(it.ok?"correct":"wrong");
-    else if((it.type==="practical"||it.type==="fill")?(String(it.text||"").trim().length>0):(it.selected||[]).length)b.classList.add("answered");
+    else if(it.type==="practical"?(String(it.text||"").trim().length>0):(it.selected||[]).length)b.classList.add("answered");
     b.onclick=()=>{sePos=i;seRender()};
     p.append(b);
   });
@@ -3026,18 +3127,17 @@ function seRenderPalette(){
 function seRender(){
   if(!sePaper.length)return;
   const it=sePaper[sePos],q=it.q;
-  $("#seSerial").textContent=`第 ${sePos+1} / ${sePaper.length} 题`;
-  $("#seBar").style.width=((sePos+1)/sePaper.length*100)+"%";
-  $("#seTag").textContent=`试卷${seVariant} · ${q.source} · ${it.points}分`;
+  $("#seSerial").textContent=`第 ${sePos+1} / 85 题`;
+  $("#seBar").style.width=((sePos+1)/85*100)+"%";
+  $("#seTag").textContent=it.type==="choice"?"选择题 · 1分":it.type==="judge"?"判断题 · 1分":"实作题 · 4分";
   $("#seQuestion").textContent=q.question;
   const wrap=$("#seOptions");wrap.innerHTML="";
   $("#seFeedback").className="feedback hidden";
   $("#sePrev").disabled=sePos===0;
-  $("#seNext").disabled=sePos===sePaper.length-1;
+  $("#seNext").disabled=sePos===84;
   $("#seSubmit").classList.toggle("hidden",seSubmitted);
-  $("#seReturnResult").classList.toggle("hidden",!seSubmitted);
 
-  if(it.type==="practical"||it.type==="fill"){
+  if(it.type==="practical"){
     const ta=document.createElement("textarea");
     ta.className="exam-textarea";ta.placeholder="在这里写你的作答要点（也可以只在脑中作答）";
     ta.value=it.text||"";ta.disabled=seSubmitted;
@@ -3048,7 +3148,7 @@ function seRender(){
       ref.textContent="参考答案："+(q.qa_answer||"暂无答案");
       wrap.append(ref);
       const score=document.createElement("div");score.className="exam-note";
-      score.textContent=`本题得分：${it.type==="fill"?it.got:(sePracticalMarks[q.id]??"待自评")} / ${it.points}`;
+      score.textContent=`本题自评分：${sePracticalMarks[q.id]??0} / 4`;
       wrap.append(score);
     }
   }else{
@@ -3085,37 +3185,46 @@ function sePracticalScore(){
   return Object.values(sePracticalMarks).reduce((a,b)=>a+Number(b||0),0);
 }
 function seUpdateResult(){
- const subjects=sePaper.filter(seSubject), marked=subjects.filter(it=>Object.hasOwn(sePracticalMarks,it.q.id)).length;
- const score=seObjectiveScore()+sePracticalScore();
- const groups=[['choice','#seChoiceScore'],['fill','#seJudgeScore'],['practical','#sePracticalScore']];
- groups.forEach(([type,id])=>{const items=sePaper.filter(x=>x.type===type),max=items.reduce((a,x)=>a+x.points,0),got=type==='practical'?sePracticalScore():items.reduce((a,x)=>a+(x.got||0),0);$(id).textContent=got+' / '+max;$(id).nextElementSibling.textContent=type==='choice'?'选择题 · '+items.length+'道':type==='fill'?'填空题 · '+items.length+'道':'主观题 · '+items.length+'道';});
- $('#seTotalScore').textContent=score;
- $('#secondExamResult .hero p').textContent=seVariant==='A'?'试卷A：5道实作，每题20分，满分100分。':'试卷B：选择45分＋填空20分＋论述10分＋计算10分＋简答15分。';
- $('#seResultNote').textContent=marked===subjects.length?'全部自评完成，最终成绩 '+score+' / 100。':'当前得分 '+score+' / 100（待完成主观题自评 '+marked+'/'+subjects.length+'，尚非最终成绩）。';
+  const ch=sePaper.filter(x=>x.type==="choice").reduce((a,x)=>a+(x.got||0),0);
+  const ju=sePaper.filter(x=>x.type==="judge").reduce((a,x)=>a+(x.got||0),0);
+  const ps=sePracticalScore();
+  const marked=Object.keys(sePracticalMarks).length;
+  $("#seChoiceScore").textContent=`${ch} / 60`;
+  $("#seJudgeScore").textContent=`${ju} / 20`;
+  $("#sePracticalScore").textContent=marked===5?`${ps} / 20`:`${ps} / 20（已评${marked}/5）`;
+  $("#seTotalScore").textContent=seObjectiveScore()+ps;
+  $("#seResultNote").textContent=marked===5
+    ?`实作题自评已完成，最终成绩 ${seObjectiveScore()+ps} / 100。`
+    :`客观题得分 ${seObjectiveScore()} / 80。请把下面5道实作题全部自评后再看最终成绩。`;
 }
 function seRenderPracticalReview(){
- const box=$('#sePracticalReview');box.innerHTML='';
- sePaper.filter(it=>seSubject(it)||it.type==='fill').forEach(it=>{
-  const q=it.q,card=document.createElement('div');card.className='exam-practical-card';
-  card.innerHTML='<div class="pq">'+fEsc(q.source)+' · '+it.points+'分<br>'+fEsc(q.question)+'</div><div class="exam-user-answer"><b>你的作答：</b><br>'+fEsc(it.text||'（未填写）')+'</div><div class="exam-ref-answer"><b>参考答案：</b><br>'+fEsc(q.qa_answer||'暂无答案')+'</div>';
-  const label=document.createElement('label');label.textContent=it.type==='fill'?'填空自动核对，可对照答案修正得分：':'对照参考答案自评：';
-  const select=document.createElement('select');select.setAttribute('aria-label',q.source+'自评分');
-  if(seSubject(it)){const option=document.createElement('option');option.value='';option.textContent='请选择得分';select.append(option);}
-  for(let v=0;v<=it.points;v++){const option=document.createElement('option');option.value=v;option.textContent=v+' / '+it.points+'分';select.append(option);}
-  select.value=seSubject(it)?(sePracticalMarks[q.id]??''):it.got;
-  select.onchange=()=>{if(seSubject(it)){if(select.value==='')delete sePracticalMarks[q.id];else sePracticalMarks[q.id]=Number(select.value);}else{it.got=Number(select.value);it.ok=it.got===it.points;}seUpdateResult();};
-  label.append(select);card.append(label);box.append(card);
- });
+  const box=$("#sePracticalReview");box.innerHTML="";
+  sePaper.filter(x=>x.type==="practical").forEach((it,idx)=>{
+    const q=it.q,card=document.createElement("div");card.className="exam-practical-card";
+    card.innerHTML=`<div class="pq">实作题 ${idx+1} · 4分<br>${fEsc(q.question)}</div>
+      <div class="exam-user-answer"><b>你的作答：</b><br>${fEsc(String(it.text||"").trim()||"（未填写）")}</div>
+      <div class="exam-ref-answer"><b>参考答案：</b><br>${fEsc(q.qa_answer||"暂无答案")}</div>
+      <div class="exam-self-buttons"></div>`;
+    const btns=card.querySelector(".exam-self-buttons");
+    [0,2,4].forEach(v=>{
+      const b=document.createElement("button");b.className="secondary";
+      b.textContent=v===0?"不会 · 0分":v===2?"部分会 · 2分":"会 · 4分";
+      if(sePracticalMarks[q.id]===v)b.classList.add("chosen");
+      b.onclick=()=>{sePracticalMarks[q.id]=v;seRenderPracticalReview();seUpdateResult()};
+      btns.append(b);
+    });
+    box.append(card);
+  });
 }
 function seSubmitExam(){
-  const unanswered=sePaper.length-seAnsweredCount();
+  const unanswered=85-seAnsweredCount();
   if(!confirm(unanswered?`还有 ${unanswered} 道题未作答，确定交卷吗？`:"确定交卷并评分吗？"))return;
 
   sePaper.forEach(it=>{
     if(it.type==="practical")return;
-    const ok=it.type==="fill"?!!it.text.trim()&&seNormalize(it.text)===seNormalize(it.q.qa_answer):eq(it.selected||[],it.q.answer||[]);
+    const ok=eq(it.selected||[],it.q.answer||[]);
     it.ok=ok;it.got=ok?it.points:0;
-    if(it.type!=="fill"&&(it.selected||[]).length){
+    if((it.selected||[]).length){
       ss.done[it.q.id]=ok;
       if(ok)ss.wrong=ss.wrong.filter(id=>id!==it.q.id);
       else if(!ss.wrong.includes(it.q.id))ss.wrong.push(it.q.id);
@@ -3124,14 +3233,11 @@ function seSubmitExam(){
   saveS();seSubmitted=true;
   seRenderPracticalReview();seUpdateResult();show("secondExamResult");
 }
-function seStart(variant){seVariant=variant;seBuildPaper();show("secondExam");$("#sePaletteWrap").classList.add("hidden");seRender()};
-$("#startSecondExam").onclick=()=>seStart("A");
-$("#startSecondExamB").onclick=()=>seStart("B");
+$("#startSecondExam").onclick=()=>{seBuildPaper();show("secondExam");$("#sePaletteWrap").classList.add("hidden");seRender()};
 $("#sePrev").onclick=()=>{if(sePos>0){sePos--;seRender()}};
-$("#seNext").onclick=()=>{if(sePos<sePaper.length-1){sePos++;seRender()}};
+$("#seNext").onclick=()=>{if(sePos<84){sePos++;seRender()}};
 $("#sePaletteBtn").onclick=()=>{$("#sePaletteWrap").classList.toggle("hidden");seRenderPalette()};
 $("#seSubmit").onclick=seSubmitExam;
-$("#seReturnResult").onclick=()=>{seRenderPracticalReview();seUpdateResult();show("secondExamResult")};
 $("#seExit").onclick=()=>{if(seSubmitted||confirm("确定退出第二套模拟考试吗？当前答题不会保存。"))show("secondHome")};
 $("#seReviewExam").onclick=()=>{show("secondExam");$("#sePaletteWrap").classList.remove("hidden");seRender()};
 $("#seNewExam").onclick=()=>{seBuildPaper();show("secondExam");$("#sePaletteWrap").classList.add("hidden");seRender()};
