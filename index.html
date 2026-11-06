@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>铁路线路工题库 · 逻辑背诵 + 随机实作简答（免激活）</title>
+<title>铁路线路工题库 · 免激活版</title>
 <style>
 :root{--bg:#eef8ff;--card:#fff;--text:#24364a;--muted:#718096;--line:#dfeaf3;--accent:#5b8ff9;--ok:#18b981;--bad:#ef6464}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:linear-gradient(180deg,#dff3ff 0%,#f8fcff 42%,#fffaf0 100%);min-height:100vh}
@@ -367,7 +367,8 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     </div></div>
     <button class="setbtn sMode" data-mode="review">⏰ 到期复习<small>只练需要复习的大题：10分钟、次日、3天、7天等，优先补漏。</small></button>
     <div class="recall-home" id="recallHomeStats" aria-live="polite"><strong>背诵复习进度</strong><small>进入背诵后会自动统计；记录只保存在当前浏览器中。</small></div>
-    <button class="setbtn" id="startSecondQuick">🎲 实作 + 简答 · 随机答题<small>可选实作、简答或混合随机；先自行作答，点击“提交答案”后才显示完整标准答案，随后继续下一题。</small></button>
+    <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
+    <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
     <button class="setbtn sMode" data-mode="random">随机练习<small>随机顺序，进度单独保存。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
     <button class="setbtn" id="startSecondExam">📝 第二套模拟考试 · 100分<small>选择60道×1分，判断20道×1分，实作5道×4分；共85题。实作题交卷后按参考答案自评。</small></button>
@@ -377,33 +378,22 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 
 
 <section id="secondQuick" class="hidden">
-  <div class="hero">
-    <h1>🎲 第二套 · 实作与简答随机练习</h1>
-    <p>只看原题独立回忆。写下答案或口头背诵后，点击“提交答案”，才能看到本题的完整标准答案。每轮内不重复抽题。</p>
-  </div>
+  <div class="hero"><h1 id="sqkHeading">第二套 · 随机实作题</h1></div>
   <div class="card">
-    <label class="title" for="sqkMode">选择随机范围</label>
-    <select id="sqkMode" aria-label="选择随机范围">
-      <option value="mixed">实作 + 简答混合随机</option>
-      <option value="practical">只抽实作题</option>
-      <option value="short">只抽简答题</option>
-    </select>
-    <div class="meta" style="margin-top:16px;align-items:center">
-      <span id="sqkProgress" class="quick-progress">本轮第1题</span>
-      <span id="sqkType" class="badge">实作题</span>
+    <div class="meta" style="align-items:center">
+      <span id="sqkProgress" class="quick-progress">第1题</span>
+      <span id="sqkType" class="badge"></span>
     </div>
     <div id="sqkQuestion" class="q"></div>
-    <label class="title" for="sqkMyAnswer">我的答案（可选）</label>
-    <textarea id="sqkMyAnswer" class="exam-textarea" placeholder="先自己回答。可以在这里写答案；如果习惯口头背诵，也可以不输入文字，背完后直接提交查看标准答案。"></textarea>
-    <div id="sqkTip" class="quick-help">提交前不会展示标准答案；提交后可保留自己的作答，对照查漏。</div>
-    <button id="sqkSubmit" class="primary start">提交答案 · 查看标准答案</button>
+    <label class="title" for="sqkMyAnswer">我的回答（可选）</label>
+    <textarea id="sqkMyAnswer" class="exam-textarea" placeholder="可以输入答案，也可以口头答完后直接提交。"></textarea>
+    <button id="sqkSubmit" class="primary start">提交答案</button>
     <div id="sqkReveal" class="quick-answer-panel hidden" aria-live="polite">
-      <div class="quick-title">✅ 本题完整标准答案</div>
+      <div class="quick-title">标准答案</div>
       <div id="sqkReference" class="quick-reference"></div>
-      <div class="quick-help">对照标准答案检查有没有漏掉条件、数字或关键步骤。主观题不自动判分。</div>
     </div>
     <div class="quick-controls">
-      <button id="sqkNext" class="primary hidden">下一道随机题</button>
+      <button id="sqkNext" class="primary hidden">下一题</button>
       <button id="sqkBack" class="secondary">返回第二套</button>
     </div>
   </div>
@@ -3030,20 +3020,18 @@ function sPalette(){
 
 
 
-// 第二套独立随机默写：实作50道、简答32道，答前只显示题干，交卷后才显示原文答案。
+// 第二套独立随机练习：只选实作或简答，显示用户提供的原文标准答案。
 const sqkIndex=new Map();
 ["实作题","简答题"].forEach(type=>{
   SET2.filter(q=>q.type==="qa"&&q.source===type).forEach((q,i)=>sqkIndex.set(q.id,i+1));
 });
 let sqkPool=[],sqkBag=[],sqkCurrent=null,sqkRound=0,sqkDrawn=0,sqkLastId=null,sqkSubmitted=false;
-function sqkStart(){
-  const mode=$("#sqkMode").value;
-  sqkPool=SET2.filter(q=>q.type==="qa" && (
-    mode==="mixed"?(q.source==="实作题"||q.source==="简答题"):
-    q.source===(mode==="practical"?"实作题":"简答题")
-  ));
+function sqkStart(type){
+  const label=type==="practical"?"实作题":"简答题";
+  sqkPool=SET2.filter(q=>q.type==="qa" && q.source===label);
   sqkBag=[];sqkCurrent=null;sqkRound=0;sqkDrawn=0;sqkLastId=null;
-  if(!sqkPool.length){alert("暂时没有符合条件的题目。");return;}
+  if(!sqkPool.length){alert("题库中没有这类题目。");return;}
+  $("#sqkHeading").textContent="第二套 · 随机"+label;
   show("secondQuick");
   sqkDraw();
 }
@@ -3062,27 +3050,25 @@ function sqkDraw(){
   $("#sqkType").textContent=`${q.source} · 第${sqkIndex.get(q.id)||"?"}题`;
   $("#sqkMyAnswer").value="";
   $("#sqkMyAnswer").readOnly=false;
-  $("#sqkMyAnswer").classList.remove("hidden");
   $("#sqkSubmit").classList.remove("hidden");
   $("#sqkReveal").classList.add("hidden");
   $("#sqkNext").classList.add("hidden");
   $("#sqkReference").textContent="";
-  $("#sqkTip").textContent="提交前不会展示标准答案；提交后可保留自己的作答，对照查漏。";
   window.scrollTo(0,0);
 }
 function sqkSubmit(){
   if(!sqkCurrent || sqkSubmitted)return;
   sqkSubmitted=true;
-  $("#sqkReference").textContent=sqkCurrent.qa_answer||"原题库未提供参考答案。";
+  // 只读原题库答案，不追加任何口诀、解释、改写或附加材料。
+  $("#sqkReference").textContent=sqkCurrent.qa_answer||"";
   $("#sqkMyAnswer").readOnly=true;
   $("#sqkReveal").classList.remove("hidden");
   $("#sqkSubmit").classList.add("hidden");
   $("#sqkNext").classList.remove("hidden");
-  $("#sqkTip").textContent="已提交，下面是原题库标准答案。核对完成后点击“下一道随机题”。";
   $("#sqkReveal").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
-$("#startSecondQuick").onclick=sqkStart;
-$("#sqkMode").onchange=sqkStart;
+$("#startSecondPractical").onclick=()=>sqkStart("practical");
+$("#startSecondShort").onclick=()=>sqkStart("short");
 $("#sqkSubmit").onclick=sqkSubmit;
 $("#sqkNext").onclick=sqkDraw;
 $("#sqkBack").onclick=()=>show("secondHome");
