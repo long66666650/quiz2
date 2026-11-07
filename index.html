@@ -370,7 +370,8 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
     <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
-    <button class="setbtn" id="startSecondExam">📝 第二套模拟考试 · 100分<small>选择10道×2分、填空10道×2分、判断10道×1分、计算2道×10分、论述1道×10分、简答4道×5分；共37道。客观题自动判分，大题交卷后对照原答案自评。</small></button>
+    <button class="setbtn" id="startSecondPracticalExam">🧰 实作模拟考试 · 单独一套 · 100分<small>随机5道实作题，每题20分。交卷后对照原版标准答案自评。</small></button>
+    <button class="setbtn" id="startSecondExam">📝 理论综合模拟考试 · 单独一套 · 100分<small>10选择、10填空、10判断、2计算、1论述、4简答；共37道。客观题自动判分，大题交卷后自评。</small></button>
     <button class="secondary start" id="secondBackHome">返回题库首页</button>
   </div>
 </section>
@@ -409,6 +410,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 </section>
 
 <section id="secondExam" class="card hidden">
+  <div class="hero"><h1 id="seExamHeading">📝 理论综合模拟考试</h1><p id="seExamDesc">37道题 · 满分100分</p></div>
   <div class="stats">
     <div class="stat"><b id="seAnswered">0</b><span>已答</span></div>
     <div class="stat"><b id="seRemain">37</b><span>未答</span></div>
@@ -430,16 +432,17 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 </section>
 
 <section id="secondExamResult" class="hidden">
-  <div class="hero"><h1>📝 第二套模拟考试成绩</h1><p>共37道题，满分100分。选择、填空、判断自动判分；2计算、1论述、4简答交卷后对照标准答案自评。</p></div>
+  <div class="hero"><h1 id="seResultHeading">📝 理论综合模拟考试成绩</h1><p id="seResultDesc">共37道题，满分100分。选择、填空、判断自动判分；2计算、1论述、4简答交卷后对照标准答案自评。</p></div>
   <div class="card">
     <div class="exam-score-main"><span id="seTotalScore" class="exam-score-num">0</span><span class="exam-score-den">/ 100</span></div>
     <div class="exam-breakdown">
-      <div><b id="seChoiceScore">0 / 20</b><span>选择题 · 10道</span></div>
-      <div><b id="seFillScore">0 / 20</b><span>填空题 · 10道</span></div>
-      <div><b id="seJudgeScore">0 / 10</b><span>判断题 · 10道</span></div>
-      <div><b id="seCalculationScore">待自评 / 20</b><span>计算题 · 2道</span></div>
-      <div><b id="seEssayScore">待自评 / 10</b><span>论述题 · 1道</span></div>
-      <div><b id="seShortScore">待自评 / 20</b><span>简答题 · 4道</span></div>
+      <div id="sePracticalRow" class="hidden"><b id="sePracticalScore">待自评 / 100</b><span>实作题 · 5道</span></div>
+      <div class="seTheoryScoreRow"><b id="seChoiceScore">0 / 20</b><span>选择题 · 10道</span></div>
+      <div class="seTheoryScoreRow"><b id="seFillScore">0 / 20</b><span>填空题 · 10道</span></div>
+      <div class="seTheoryScoreRow"><b id="seJudgeScore">0 / 10</b><span>判断题 · 10道</span></div>
+      <div class="seTheoryScoreRow"><b id="seCalculationScore">待自评 / 20</b><span>计算题 · 2道</span></div>
+      <div class="seTheoryScoreRow"><b id="seEssayScore">待自评 / 10</b><span>论述题 · 1道</span></div>
+      <div class="seTheoryScoreRow"><b id="seShortScore">待自评 / 20</b><span>简答题 · 4道</span></div>
     </div>
     <div id="seResultNote" class="exam-note">请对照下面的原版标准答案给7道大题自评。全部评分完成后显示最终总分。</div>
     <div id="seSubjectiveReview"></div>
@@ -3074,8 +3077,9 @@ $("#sqkSubmit").onclick=sqkSubmit;
 $("#sqkNext").onclick=sqkDraw;
 $("#sqkBack").onclick=()=>show("secondHome");
 
-// SECOND SET mock exam — 10选择×2 + 10填空×2 + 10判断×1 + 2计算×10 + 1论述×10 + 4简答×5 = 100分
-const SE_SPEC=[
+// SECOND SET independent exams:
+// (A) 实作：5 × 20 = 100；(B) 理论综合：10选择、10填空、10判断、2计算、1论述、4简答 = 100。
+const SE_THEORY_SPEC=[
   {source:"选择题",type:"choice",count:10,points:2},
   {source:"填空题",type:"fill",count:10,points:2},
   {source:"判断题",type:"judge",count:10,points:1},
@@ -3083,12 +3087,16 @@ const SE_SPEC=[
   {source:"论述题",type:"essay",count:1,points:10},
   {source:"简答题",type:"short",count:4,points:5}
 ];
-const SE_LABEL={choice:"选择题",fill:"填空题",judge:"判断题",calculation:"计算题",essay:"论述题",short:"简答题"};
-const SE_N=SE_SPEC.reduce((a,x)=>a+x.count,0); // 37
-const SE_FULL=SE_SPEC.reduce((a,x)=>a+x.count*x.points,0); // 100
+const SE_PRACTICAL_SPEC=[{source:"实作题",type:"practical",count:5,points:20}];
+const SE_LABEL={choice:"选择题",fill:"填空题",judge:"判断题",calculation:"计算题",essay:"论述题",short:"简答题",practical:"实作题"};
+let seExamKind="theory",SE_SPEC=SE_THEORY_SPEC,SE_N=37,SE_FULL=100;
 let sePaper=[],sePos=0,seSubmitted=false,seSubjectiveMarks={};
-function seIsSubjective(item){return ["calculation","essay","short"].includes(item.type)}
-function seBuildPaper(){
+function seIsSubjective(item){return ["calculation","essay","short","practical"].includes(item.type)}
+function seBuildPaper(kind=seExamKind){
+  seExamKind=kind;
+  SE_SPEC=kind==="practical"?SE_PRACTICAL_SPEC:SE_THEORY_SPEC;
+  SE_N=SE_SPEC.reduce((a,x)=>a+x.count,0);
+  SE_FULL=SE_SPEC.reduce((a,x)=>a+x.count*x.points,0);
   sePaper=[];
   for(const spec of SE_SPEC){
     const pool=SET2.filter(q=>q.source===spec.source && (spec.type==="choice"||spec.type==="judge"?q.type==="single":q.type==="qa"));
@@ -3096,7 +3104,16 @@ function seBuildPaper(){
     sePaper.push(...shuffle(pool).slice(0,spec.count).map(q=>({q,type:spec.type,points:spec.points,selected:[],ok:null,got:0,text:""})));
   }
   sePos=0;seSubmitted=false;seSubjectiveMarks={};
-  return sePaper.length===SE_N && sePaper.reduce((a,x)=>a+x.points,0)===SE_FULL;
+  if(sePaper.length!==SE_N||sePaper.reduce((a,x)=>a+x.points,0)!==SE_FULL)return false;
+  const practical=seExamKind==="practical";
+  $("#seExamHeading").textContent=practical?"🧰 实作模拟考试":"📝 理论综合模拟考试";
+  $("#seExamDesc").textContent=practical?"随机5道实作题，每题20分，满分100分":"37道题，满分100分：10选择、10填空、10判断、2计算、1论述、4简答";
+  $("#seResultHeading").textContent=practical?"🧰 实作模拟考试成绩":"📝 理论综合模拟考试成绩";
+  $("#seResultDesc").textContent=practical?"5道实作题，每题20分，共100分。交卷后对照原版答案逐题自评。":"37道题，满分100分。选择、填空、判断自动判分；计算、论述、简答交卷后对照标准答案自评。";
+  $("#sePracticalRow").classList.toggle("hidden",!practical);
+  document.querySelectorAll(".seTheoryScoreRow").forEach(x=>x.classList.toggle("hidden",practical));
+  $("#seResultNote").textContent=practical?"请对照5道实作题的原版标准答案逐题评分。":"请对照7道大题的原版标准答案逐题评分。";
+  return true;
 }
 function seAnsweredCount(){
   return sePaper.filter(x=>x.type==="choice"||x.type==="judge"?(x.selected||[]).length>0:String(x.text||"").trim().length>0).length;
@@ -3181,10 +3198,20 @@ function seSum(type){return sePaper.filter(x=>x.type===type).reduce((a,x)=>a+(Nu
 function seSelfSum(type){return sePaper.filter(x=>x.type===type).reduce((a,x)=>a+(Number(seSubjectiveMarks[x.q.id])||0),0)}
 function seScoreText(n){return Number.isInteger(n)?String(n):String(Number(n.toFixed(2)))}
 function seUpdateResult(){
+  const completed=sePaper.filter(x=>seIsSubjective(x)&&Object.prototype.hasOwnProperty.call(seSubjectiveMarks,x.q.id)).length;
+  const practical=seExamKind==="practical";
+  if(practical){
+    const got=seSelfSum("practical");
+    $("#sePracticalScore").textContent=`${seScoreText(got)} / 100`;
+    $("#seTotalScore").textContent=seScoreText(got);
+    $("#seResultNote").textContent=completed===5
+      ?`实作考试自评完成：5道共 ${seScoreText(got)} / 100 分。`
+      :`实作考试已自评 ${completed} / 5 道；当前 ${seScoreText(got)} 分为暂计分，请核对原版标准答案完成剩余自评。`;
+    return;
+  }
   const c=seSum("choice"),f=seSum("fill"),j=seSum("judge");
   const ca=seSelfSum("calculation"),es=seSelfSum("essay"),sh=seSelfSum("short");
   const objective=c+f+j,manual=ca+es+sh;
-  const completed=sePaper.filter(x=>seIsSubjective(x) && Object.prototype.hasOwnProperty.call(seSubjectiveMarks,x.q.id)).length;
   $("#seChoiceScore").textContent=`${c} / 20`;
   $("#seFillScore").textContent=`${f} / 20`;
   $("#seJudgeScore").textContent=`${j} / 10`;
@@ -3244,14 +3271,18 @@ function seSubmitExam(){
   saveS();seSubmitted=true;
   seRenderSubjectiveReview();seUpdateResult();show("secondExamResult");
 }
-$("#startSecondExam").onclick=()=>{if(seBuildPaper()){show("secondExam");$("#sePaletteWrap").classList.add("hidden");seRender()}};
+function seStartExam(kind){
+  if(seBuildPaper(kind)){show("secondExam");$("#sePaletteWrap").classList.add("hidden");seRender()}
+}
+$("#startSecondPracticalExam").onclick=()=>seStartExam("practical");
+$("#startSecondExam").onclick=()=>seStartExam("theory");
 $("#sePrev").onclick=()=>{if(sePos>0){sePos--;seRender()}};
 $("#seNext").onclick=()=>{if(sePos<SE_N-1){sePos++;seRender()}};
 $("#sePaletteBtn").onclick=()=>{$("#sePaletteWrap").classList.toggle("hidden");seRenderPalette()};
 $("#seSubmit").onclick=seSubmitExam;
 $("#seExit").onclick=()=>{if(seSubmitted||confirm("确定退出第二套模拟考试吗？当前答题不会保存。"))show("secondHome")};
 $("#seReviewExam").onclick=()=>{show("secondExam");$("#sePaletteWrap").classList.remove("hidden");seRender()};
-$("#seNewExam").onclick=()=>{if(seBuildPaper()){show("secondExam");$("#sePaletteWrap").classList.add("hidden");seRender()}};
+$("#seNewExam").onclick=()=>seStartExam(seExamKind);
 $("#seBackHome").onclick=()=>show("secondHome");
 
 // THIRD SET: 中级理论知识（860选择 + 198判断），独立进度/错题/随机顺序
