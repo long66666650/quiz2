@@ -201,6 +201,14 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .quick-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
 .quick-controls button{width:100%}
 @media(max-width:450px){.quick-controls{grid-template-columns:1fr}.quick-answer-panel{padding:12px}}
+.quick-mark{margin-top:12px;padding:12px 14px;background:#fff;border:1px solid #dce9f1;border-radius:14px}
+.quick-mark-title{font-size:14px;font-weight:800;margin-bottom:9px;color:#395166}
+.quick-mark-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick-mark-actions button{min-height:43px;white-space:normal}
+.quick-mark-actions button.mark-know{background:#e8f9ed;border-color:#58bf85;color:#167541;font-weight:900}
+.quick-mark-actions button.mark-wrong{background:#fff0f0;border-color:#e88e8e;color:#b33131;font-weight:900}
+.quick-mark-status{min-height:18px;color:#627c8e;font-size:12px;line-height:1.6;margin-top:9px}
+@media(max-width:450px){.quick-mark-actions{grid-template-columns:1fr 1fr}.quick-mark-actions button{font-size:13px;padding:9px 5px}}
 
 </style>
 </head>
@@ -369,7 +377,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     <div class="recall-home" id="recallHomeStats" aria-live="polite"><strong>背诵复习进度</strong><small>进入背诵后会自动统计；记录只保存在当前浏览器中。</small></div>
     <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
     <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
-    <button class="setbtn sMode" data-mode="wrong">错题重练<small>只练做错的选择/判断题。</small></button>
+    <button class="setbtn sMode" data-mode="wrong">错题重练 · <span id="secondWrongCount">0</span> 道<small>包括答错的选择、判断题，以及标记“背错”的实作题、简答题。</small></button>
     <button class="setbtn" id="startSecondPracticalExam">🧰 实作模拟考试 · 单独一套 · 100分<small>随机5道实作题，每题20分。交卷后对照原版标准答案自评。</small></button>
     <button class="setbtn" id="startSecondExam">📝 理论综合模拟考试 · 单独一套 · 100分<small>10选择、10填空、10判断、2计算、1论述、4简答；共37道。客观题自动判分，大题交卷后自评。</small></button>
     <button class="secondary start" id="secondBackHome">返回题库首页</button>
@@ -391,6 +399,14 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     <div id="sqkReveal" class="quick-answer-panel hidden" aria-live="polite">
       <div class="quick-title">标准答案</div>
       <div id="sqkReference" class="quick-reference"></div>
+    </div>
+    <div id="sqkMark" class="quick-mark hidden" aria-label="背诵结果自评">
+      <div class="quick-mark-title">对照答案后，给这道题做个标记：</div>
+      <div class="quick-mark-actions">
+        <button type="button" id="sqkKnow" class="secondary">✓ 会背</button>
+        <button type="button" id="sqkWrong" class="secondary">✗ 背错 · 加入错题集</button>
+      </div>
+      <div id="sqkMarkStatus" class="quick-mark-status" aria-live="polite"></div>
     </div>
     <div class="quick-controls">
       <button id="sqkNext" class="primary">下一道</button>
@@ -2393,7 +2409,11 @@ const SKEY="rail_quiz_second_unchanged_v1";
 let ss=JSON.parse(localStorage.getItem(SKEY)||'{"done":{},"wrong":[],"progress":{"all":0,"random":0,"wrong":0,"big":0},"randomOrder":[],"wrongOrder":[]}');
 if(!ss.progress)ss.progress={all:0,random:0,wrong:0,big:0};
 if(ss.progress.big==null)ss.progress.big=0;
-function saveS(){localStorage.setItem(SKEY,JSON.stringify(ss))}
+function saveS(){localStorage.setItem(SKEY,JSON.stringify(ss));sUpdateWrongCount()}
+function sUpdateWrongCount(){
+  const box=document.getElementById("secondWrongCount");
+  if(box)box.textContent=(ss.wrong||[]).length;
+}
 let smode="all",squeue=[],sidx=0,slocked=false;
 
 const BIG_SOURCES=new Set(["实作题","简答题","论述题","计算题"]);
@@ -2986,7 +3006,11 @@ function sRender(){
 
   if(q.type==="qa"){
     if(BIG_SOURCES.has(q.source)){
-      renderMemo(q);
+      if(smode==="wrong"&&(q.source==="实作题"||q.source==="简答题")){
+        sRenderWrongBig(q);
+      }else{
+        renderMemo(q);
+      }
     }else{
       let btn=document.createElement("button");btn.className="secondary";btn.style.width="100%";btn.type="button";btn.textContent="查看答案";
       btn.onclick=()=>{$("#sQaAnswer").textContent=q.qa_answer||"暂无答案";$("#sQaAnswer").classList.toggle("hidden");btn.textContent=$("#sQaAnswer").classList.contains("hidden")?"查看答案":"收起答案"};
@@ -3002,6 +3026,45 @@ function sRender(){
     l.append(inp,k,tx);$("#sOptions").append(l);inp.onchange=()=>sGrade(q);
   });
 }
+// 错题集中重新练实作/简答：仍只显示原题库标准答案，不提前显示讲解或口诀。
+function sRenderWrongBig(q){
+  const container=$("#sOptions");
+  const input=document.createElement("textarea");
+  input.className="exam-textarea";
+  input.placeholder="先自己背诵或填写答案，再点击提交查看原标准答案。";
+  container.append(input);
+  const submit=document.createElement("button");
+  submit.type="button";submit.className="primary start";submit.textContent="提交答案";
+  const ref=document.createElement("div");
+  ref.className="quick-answer-panel hidden";
+  const title=document.createElement("div");title.className="quick-title";title.textContent="标准答案";
+  const answer=document.createElement("div");answer.className="quick-reference";answer.textContent=q.qa_answer||"";
+  ref.append(title,answer);
+  const grades=document.createElement("div");grades.className="quick-mark hidden";
+  const hint=document.createElement("div");hint.className="quick-mark-title";hint.textContent="对照标准答案，自评本题：";
+  const actions=document.createElement("div");actions.className="quick-mark-actions";
+  const know=document.createElement("button");know.type="button";know.className="secondary";know.textContent="✓ 会背 · 移出错题集";
+  const wrong=document.createElement("button");wrong.type="button";wrong.className="secondary";wrong.textContent="✗ 背错 · 留在错题集";
+  const status=document.createElement("div");status.className="quick-mark-status";
+  function mark(yes){
+    ss.done[q.id]=yes;
+    if(yes)ss.wrong=ss.wrong.filter(id=>id!==q.id);
+    else if(!ss.wrong.includes(q.id))ss.wrong.push(q.id);
+    saveS();
+    know.classList.toggle("mark-know",yes);
+    wrong.classList.toggle("mark-wrong",!yes);
+    status.textContent=yes?"已掌握并移出错题集。":"仍在错题集中，下次可继续重练。";
+    sPalette();
+  }
+  know.onclick=()=>mark(true);wrong.onclick=()=>mark(false);
+  actions.append(know,wrong);grades.append(hint,actions,status);
+  submit.onclick=()=>{
+    input.readOnly=true;submit.classList.add("hidden");
+    ref.classList.remove("hidden");grades.classList.remove("hidden");
+  };
+  container.append(submit,ref,grades);
+}
+
 function sSelected(){return[...document.querySelectorAll('#sOptions input:checked')].map(x=>x.value)}
 function sGrade(q){
   if(slocked)return;let sel=sSelected(),cor=q.answer;
@@ -3036,6 +3099,7 @@ function sqkStart(type){
   sqkPool=SET2.filter(q=>q.type==="qa" && q.source===label);
   sqkBag=[];sqkCurrent=null;sqkRound=0;sqkDrawn=0;sqkLastId=null;
   if(!sqkPool.length){alert("题库中没有这类题目。");return;}
+  sUpdateWrongCount();
   $("#sqkHeading").textContent="第二套 · 随机"+label;
   show("secondQuick");
   sqkDraw();
@@ -3057,8 +3121,12 @@ function sqkDraw(){
   $("#sqkMyAnswer").readOnly=false;
   $("#sqkSubmit").classList.remove("hidden");
   $("#sqkReveal").classList.add("hidden");
+  $("#sqkMark").classList.add("hidden");
   // “下一道”始终显示，未提交也可直接跳到下一道题。
   $("#sqkReference").textContent="";
+  $("#sqkMarkStatus").textContent="";
+  $("#sqkKnow").classList.remove("mark-know");
+  $("#sqkWrong").classList.remove("mark-wrong");
   window.scrollTo(0,0);
 }
 function sqkSubmit(){
@@ -3069,13 +3137,41 @@ function sqkSubmit(){
   $("#sqkMyAnswer").readOnly=true;
   $("#sqkReveal").classList.remove("hidden");
   $("#sqkSubmit").classList.add("hidden");
+  $("#sqkMark").classList.remove("hidden");
+  sqkShowMarkStatus(false);
   $("#sqkReveal").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function sqkShowMarkStatus(justMarked){
+  if(!sqkCurrent)return;
+  const id=sqkCurrent.id;
+  const wrong=ss.wrong.includes(id);
+  const known=ss.done[id]===true;
+  $("#sqkKnow").classList.toggle("mark-know",known&&!wrong);
+  $("#sqkWrong").classList.toggle("mark-wrong",wrong);
+  $("#sqkMarkStatus").textContent=wrong
+    ?(justMarked?"已加入第二套错题集，可从“错题重练”找到这道题。":"这道题已在第二套错题集中。")
+    :(known?"已标记会背；如之前加入过错题集，现已移除。":"请选择“会背”或“背错”，系统会保存到本机。");
+}
+function sqkSetMark(known){
+  if(!sqkCurrent||!sqkSubmitted)return;
+  const id=sqkCurrent.id;
+  if(known){
+    ss.done[id]=true;
+    ss.wrong=ss.wrong.filter(x=>x!==id);
+  }else{
+    ss.done[id]=false;
+    if(!ss.wrong.includes(id))ss.wrong.push(id);
+  }
+  saveS();sqkShowMarkStatus(true);
 }
 $("#startSecondPractical").onclick=()=>sqkStart("practical");
 $("#startSecondShort").onclick=()=>sqkStart("short");
 $("#sqkSubmit").onclick=sqkSubmit;
+$("#sqkKnow").onclick=()=>sqkSetMark(true);
+$("#sqkWrong").onclick=()=>sqkSetMark(false);
 $("#sqkNext").onclick=sqkDraw;
 $("#sqkBack").onclick=()=>show("secondHome");
+sUpdateWrongCount();
 
 // SECOND SET independent exams:
 // (A) 实作：5 × 20 = 100；(B) 理论综合：10选择、10填空、10判断、2计算、1论述、4简答 = 100。
