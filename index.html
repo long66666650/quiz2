@@ -3063,6 +3063,11 @@ function sRender(){
         renderMemo(q);
       }
     }else if(q.source==="填空题"){
+      // 第二套错题重练中的填空题与填空专项一致：点“会”/“不会”立即出原答案。
+      if(smode==="wrong"){
+        sRenderWrongFill(q);
+        return;
+      }
       const field=document.createElement("input");field.type="text";field.className="special-fill-field";field.placeholder="先独立填空，再提交核对";
       const btn=document.createElement("button");btn.className="primary start";btn.textContent="提交并核对";
       const grade=()=>{
@@ -3096,6 +3101,40 @@ function sRender(){
     l.append(inp,k,tx);$("#sOptions").append(l);inp.onchange=()=>sGrade(q);
   });
 }
+// 第二套错题集填空题：和填空专项保持相同的“会 / 不会”自评交互。
+// 不输入、不提交，任一按钮立即显示原题标准答案。会：移出错题；不会：保留错题。
+function sRenderWrongFill(q){
+  const container=$("#sOptions");
+  const hint=document.createElement("p");
+  hint.className="special-answer-label";
+  hint.textContent="先在心里答题，再选会或不会；两种选择都会立即显示原题标准答案。";
+  const actions=document.createElement("div");
+  actions.className="special-self-mark";
+  const know=document.createElement("button");
+  know.type="button";know.className="secondary";know.textContent="✓ 会";
+  const wrong=document.createElement("button");
+  wrong.type="button";wrong.className="secondary";wrong.textContent="✗ 不会";
+  function mark(known){
+    ss.done[q.id]=known;
+    if(known)ss.wrong=ss.wrong.filter(id=>id!==q.id);
+    else if(!ss.wrong.includes(q.id))ss.wrong.push(q.id);
+    saveS();
+    know.classList.toggle("mark-know",known);
+    wrong.classList.toggle("mark-wrong",!known);
+    const feedback=$("#sFeedback");
+    feedback.className="feedback "+(known?"ok":"bad");
+    feedback.textContent=known?"已标记为‘会’，从错题集中移出。":"已标记为‘不会’，继续保留在错题集中。";
+    const answer=$("#sQaAnswer");
+    answer.textContent="标准答案："+String(q.qa_answer||"");
+    answer.classList.remove("hidden");
+    sPalette();
+  }
+  know.onclick=()=>mark(true);
+  wrong.onclick=()=>mark(false);
+  actions.append(know,wrong);
+  container.append(hint,actions);
+}
+
 // 错题集中重新练实作/简答：仍只显示原题库标准答案，不提前显示讲解或口诀。
 function sRenderWrongBig(q){
   const container=$("#sOptions");
