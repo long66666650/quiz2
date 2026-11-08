@@ -392,9 +392,9 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     <div class="recall-home" id="recallHomeStats" aria-live="polite"><strong>背诵复习进度</strong><small>进入背诵后会自动统计；记录只保存在当前浏览器中。</small></div>
     <div class="special-home-heading">🎯 选择 / 填空 / 判断 · 按原题顺序专项练习</div>
     <div class="special-home-grid">
-      <button class="setbtn special-start" id="startSecondChoice">✅ 选择题专项<small>108道原题，按题号顺序练，可记住练习位置。</small></button>
-      <button class="setbtn special-start" id="startSecondFill">✍️ 填空题专项<small>126道原题，按题号顺序填空，提交核对标准答案。</small></button>
-      <button class="setbtn special-start" id="startSecondJudge">☑️ 判断题专项<small>109道原题，按题号顺序判断对错。</small></button>
+      <button class="setbtn special-start" id="startSecondChoice">✅ 选择题专项<small>108道原题，按题号顺序练；点选立即显示答案。</small></button>
+      <button class="setbtn special-start" id="startSecondFill">✍️ 填空题专项<small>126道原题，按题号顺序填空；每题提交立即显示答案。</small></button>
+      <button class="setbtn special-start" id="startSecondJudge">☑️ 判断题专项<small>109道原题，按题号顺序练；点选立即显示答案。</small></button>
     </div>
     <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
     <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
@@ -407,7 +407,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 
 
 <section id="secondSpecial" class="hidden">
-  <div class="hero"><h1 id="spHeading">第二套 · 顺序专项练习</h1><p>按原题库题号顺序练 · 支持上一题和下一题 · 进度自动保存 · 错题同步到第二套错题集</p></div>
+  <div class="hero"><h1 id="spHeading">第二套 · 顺序专项练习</h1><p>每道题答完立刻显示对错和标准答案 · 按原题顺序练 · 进度自动保存 · 错题同步</p></div>
   <div class="card">
     <div class="stats">
       <div class="stat"><b id="spDone">0</b><span>本次已答</span></div>
@@ -429,7 +429,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
       <button id="spRestart" class="secondary">从第1题重新开始</button>
       <button id="spBack" class="secondary">返回第二套</button>
     </div>
-    <div class="hint">按原题库顺序练习，离开后再次进入会继续上次题号。做错进入第二套错题集，重新答对即可移出；直接跳过不记错题。</div>
+    <div class="hint">选择题和判断题：点选选项后立即显示对错及标准答案。填空题：每题输入后点击“提交答案”立即核对。不必做完整套再看答案；按原题库顺序练习，位置自动保存，答错进入错题集。</div>
   </div>
 </section>
 
@@ -3190,13 +3190,14 @@ function spRenderQuestion(){
   $("#spQuestion").textContent=spCurrent.question;
   $("#spFeedback").className="feedback hidden";
   $("#spAnswer").classList.add("hidden");$("#spAnswer").textContent="";
-  $("#spSubmit").classList.remove("hidden");
+  // 选择/判断点选后直接交卷并显示本题答案；填空输入后逐题提交。
+  $("#spSubmit").classList.toggle("hidden",spKind!=="fill");
   $("#spPrev").disabled=spPos===0;
   $("#spNext").textContent=spPos===spPool.length-1?"完成本专项 ✓":"下一题 →";
   const area=$("#spInputs");area.innerHTML="";
   if(spKind==="fill"){
     const label=document.createElement("label");label.className="special-answer-label";
-    label.htmlFor="spFillInput";label.textContent="请填写括号内的答案（提交后才显示原标准答案）";
+    label.htmlFor="spFillInput";label.textContent="填写本题答案，点击提交立即核对标准答案";
     const input=document.createElement("input");input.id="spFillInput";input.className="special-fill-field";
     input.type="text";input.placeholder="在这里输入答案";input.autocomplete="off";input.spellcheck=false;
     input.onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();spSubmit()}};
@@ -3205,6 +3206,8 @@ function spRenderQuestion(){
     spCurrent.options.forEach(o=>{
       const lab=document.createElement("label");lab.className="opt";
       const inp=document.createElement("input");inp.type="radio";inp.name="spChoice";inp.value=o.key;
+      // 选择和判断均不需额外点击“提交”，选完立即判题并展示正确选项。
+      inp.addEventListener("change",()=>{if(inp.checked&&!spLocked)spSubmit()});
       const key=document.createElement("span");key.className="key";key.textContent=o.key+".";
       const txt=document.createElement("span");txt.textContent=o.text;
       lab.append(inp,key,txt);area.append(lab);
