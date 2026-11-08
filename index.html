@@ -210,6 +210,22 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .quick-mark-status{min-height:18px;color:#627c8e;font-size:12px;line-height:1.6;margin-top:9px}
 @media(max-width:450px){.quick-mark-actions{grid-template-columns:1fr 1fr}.quick-mark-actions button{font-size:13px;padding:9px 5px}}
 
+
+/* 第二套：选择/填空专项练习。 */
+.special-home-heading{font-size:14px;font-weight:900;color:#416fa1;margin:18px 0 4px}
+.special-home-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.special-home-grid .setbtn{margin:5px 0;font-size:16px;padding:13px;min-height:104px}
+.special-home-grid .setbtn small{font-size:12px;line-height:1.55}
+.special-reference{margin-top:10px;padding:12px 14px;border:1px solid #ead69e;border-radius:14px;background:#fff9e9;line-height:1.8;white-space:pre-wrap}
+.special-action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.special-action-row button{min-width:0}
+.special-fill-field{width:100%;min-height:51px;border:1px solid #d2e2ef;border-radius:14px;padding:10px 12px;font-size:17px;color:var(--text);background:#fff}
+.special-answer-label{display:block;font-size:13px;color:#64788d;margin:0 0 8px}
+#secondSpecial .opt{cursor:pointer}
+#secondSpecial .opt:has(input:checked){border-color:#5b8ff9;background:#f1f7ff}
+#secondSpecial .opt.correct{border-color:#8ee1c4;background:#edfff7}
+#secondSpecial .opt.wrong{border-color:#ffb1b1;background:#fff3f3}
+@media(max-width:390px){.special-home-grid{grid-template-columns:1fr}.special-home-grid .setbtn{min-height:0}}
 </style>
 </head>
 <body>
@@ -368,13 +384,18 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 <section id="secondHome" class="hidden">
   <div class="hero"><h1>第二套 · 高级工综合题库</h1><p>原题和标准答案不改。大题像一对一讲题：先看完整答案，再按发生情况、处理步骤和结果逐段理解；最后只看题目背，逐项查漏、间隔复习。</p></div>
   <div class="card">
-    <button class="setbtn sMode" data-mode="all">顺序练习<small>从上次位置继续。</small></button>
     <button class="setbtn sMode" data-mode="big">🧠 大题 · 逻辑背诵<small>先看完整答案 → 逐步提问、逐段理解 → 只看题目背 → 对照漏项。</small></button>
     <div class="recall-submodes"><span>按题型单独背：</span><div>
       <button class="sMode" data-mode="short">简答题</button><button class="sMode" data-mode="essay">论述题</button><button class="sMode" data-mode="practical">实作题</button><button class="sMode" data-mode="calculation">计算题</button>
     </div></div>
     <button class="setbtn sMode" data-mode="review">⏰ 到期复习<small>只练需要复习的大题：10分钟、次日、3天、7天等，优先补漏。</small></button>
     <div class="recall-home" id="recallHomeStats" aria-live="polite"><strong>背诵复习进度</strong><small>进入背诵后会自动统计；记录只保存在当前浏览器中。</small></div>
+    <div class="special-home-heading">🎯 选择 / 填空 / 判断 · 按原题顺序专项练习</div>
+    <div class="special-home-grid">
+      <button class="setbtn special-start" id="startSecondChoice">✅ 选择题专项<small>108道原题，按题号顺序练，可记住练习位置。</small></button>
+      <button class="setbtn special-start" id="startSecondFill">✍️ 填空题专项<small>126道原题，按题号顺序填空，提交核对标准答案。</small></button>
+      <button class="setbtn special-start" id="startSecondJudge">☑️ 判断题专项<small>109道原题，按题号顺序判断对错。</small></button>
+    </div>
     <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
     <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
     <button class="setbtn sMode" data-mode="wrong">错题重练 · <span id="secondWrongCount">0</span> 道<small>包括答错的选择、判断题，以及标记“背错”的实作题、简答题。</small></button>
@@ -384,6 +405,33 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
   </div>
 </section>
 
+
+<section id="secondSpecial" class="hidden">
+  <div class="hero"><h1 id="spHeading">第二套 · 顺序专项练习</h1><p>按原题库题号顺序练 · 支持上一题和下一题 · 进度自动保存 · 错题同步到第二套错题集</p></div>
+  <div class="card">
+    <div class="stats">
+      <div class="stat"><b id="spDone">0</b><span>本次已答</span></div>
+      <div class="stat"><b id="spRight">0</b><span>答对</span></div>
+      <div class="stat"><b id="spAcc">0%</b><span>正确率</span></div>
+    </div>
+    <div class="meta"><span id="spSerial">第 1 / 108 题</span><span id="spTag" class="badge">专项</span></div>
+    <div class="progress"><div id="spBar"></div></div>
+    <div id="spQuestion" class="q"></div>
+    <div id="spInputs"></div>
+    <button id="spSubmit" class="primary start">提交答案</button>
+    <div id="spFeedback" class="feedback hidden" aria-live="polite"></div>
+    <div id="spAnswer" class="special-reference hidden" aria-live="polite"></div>
+    <div class="special-action-row">
+      <button id="spPrev" class="secondary">← 上一题</button>
+      <button id="spNext" class="primary">下一题 →</button>
+    </div>
+    <div class="special-action-row">
+      <button id="spRestart" class="secondary">从第1题重新开始</button>
+      <button id="spBack" class="secondary">返回第二套</button>
+    </div>
+    <div class="hint">按原题库顺序练习，离开后再次进入会继续上次题号。做错进入第二套错题集，重新答对即可移出；直接跳过不记错题。</div>
+  </div>
+</section>
 
 <section id="secondQuick" class="hidden">
   <div class="hero"><h1 id="sqkHeading">第二套 · 随机实作题</h1></div>
@@ -561,7 +609,7 @@ const [ORIGINAL,HARD,SET2,SET3,RECALL_STORIES]=await Promise.all(
 const $=s=>document.querySelector(s), shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 // navigation
-function show(id){if(id==="secondHome")setTimeout(updateRecallHome,0);["home","firstSetup","firstQuiz","firstSequential","firstWrong","firstBatch100","firstExam","firstExamResult","secondHome","secondQuick","secondQuiz","secondExam","secondExamResult","thirdHome","thirdQuiz","thirdExam","thirdExamResult"].forEach(x=>$("#"+x).classList.add("hidden"));$("#"+id).classList.remove("hidden");window.scrollTo(0,0)}
+function show(id){if(id==="secondHome")setTimeout(updateRecallHome,0);["home","firstSetup","firstQuiz","firstSequential","firstWrong","firstBatch100","firstExam","firstExamResult","secondHome","secondSpecial","secondQuick","secondQuiz","secondExam","secondExamResult","thirdHome","thirdQuiz","thirdExam","thirdExamResult"].forEach(x=>$("#"+x).classList.add("hidden"));$("#"+id).classList.remove("hidden");window.scrollTo(0,0)}
 $("#goFirst").onclick=()=>show("firstSetup");$("#goSecond").onclick=()=>show("secondHome");$("#goThird").onclick=()=>show("thirdHome");$("#firstHome").onclick=()=>show("home");$("#secondBackHome").onclick=()=>show("home");$("#thirdBackHome").onclick=()=>show("home");
 
 // FIRST SET infinite engine — 最新重点知识题库 + 准确选项 + 详细判断解析 + 历史上一题
@@ -3011,6 +3059,25 @@ function sRender(){
       }else{
         renderMemo(q);
       }
+    }else if(q.source==="填空题"){
+      const field=document.createElement("input");field.type="text";field.className="special-fill-field";field.placeholder="先独立填空，再提交核对";
+      const btn=document.createElement("button");btn.className="primary start";btn.textContent="提交并核对";
+      const grade=()=>{
+        if(field.disabled)return;
+        const input=field.value.trim();if(!input){alert("请先填写答案。");return;}
+        const ok=seCleanFill(input)===seCleanFill(q.qa_answer||"");
+        ss.done[q.id]=ok;
+        if(ok)ss.wrong=ss.wrong.filter(id=>id!==q.id);
+        else if(!ss.wrong.includes(q.id))ss.wrong.push(q.id);
+        saveS();field.disabled=true;btn.classList.add("hidden");
+        const feed=$("#sFeedback");feed.className="feedback "+(ok?"ok":"bad");
+        feed.textContent=ok?"填空正确，已从错题集中移出。":"填空错误，已加入/保留在错题集中。";
+        $("#sQaAnswer").textContent="标准答案："+(q.qa_answer||"");$("#sQaAnswer").classList.remove("hidden");
+        sPalette();
+      };
+      btn.onclick=grade;
+      field.onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();grade()}};
+      $("#sOptions").append(field,btn);
     }else{
       let btn=document.createElement("button");btn.className="secondary";btn.style.width="100%";btn.type="button";btn.textContent="查看答案";
       btn.onclick=()=>{$("#sQaAnswer").textContent=q.qa_answer||"暂无答案";$("#sQaAnswer").classList.toggle("hidden");btn.textContent=$("#sQaAnswer").classList.contains("hidden")?"查看答案":"收起答案"};
@@ -3080,13 +3147,130 @@ function sNext(){if(sidx<squeue.length-1){sidx++;sRender()}else alert("已经到
 $("#sNext").onclick=sNext;$("#sPrev").onclick=sPrev;$("#sExit").onclick=()=>show("secondHome");$("#sPaletteBtn").onclick=()=>$("#sPaletteWrap").classList.toggle("hidden");
 function sPalette(){
   let p=$("#sPalette");p.innerHTML="";
-  squeue.forEach((q,i)=>{let b=document.createElement("button");b.className="qnum";b.textContent=i+1;if(q.type!=="qa"){if(ss.done[q.id]===true)b.classList.add("correct");else if(ss.done[q.id]===false)b.classList.add("wrong")}
+  squeue.forEach((q,i)=>{let b=document.createElement("button");b.className="qnum";b.textContent=i+1;if(q.type!=="qa"||q.source==="填空题"){if(ss.done[q.id]===true)b.classList.add("correct");else if(ss.done[q.id]===false)b.classList.add("wrong")}
     if(q.type==="qa"&&BIG_SOURCES.has(q.source)&&recallDB[q.id])b.classList.add(recallDB[q.id].rating===2?"recall-ready":"recall-weak");
     if(i===sidx)b.classList.add("current");b.onclick=()=>{sidx=i;$("#sPaletteWrap").classList.add("hidden");sRender()};p.append(b)})
 }
 
 
 
+
+
+// 第二套独立客观题顺序专项练习。按原题库自然顺序练习选择、填空、判断。
+// 不触碰其他题型练习、模拟考试、原始题目、参考答案、已有错题集。
+let spPool=[],spCurrent=null,spPos=0,spKind="choice",spLocked=false;
+let spAnswered=new Map();
+const spSources={choice:"选择题",fill:"填空题",judge:"判断题"};
+const spNames={choice:"选择题",fill:"填空题",judge:"判断题"};
+const SP_POS_KEY="rail_second_special_sequential_positions_v1";
+function spGetPositions(){try{return JSON.parse(localStorage.getItem(SP_POS_KEY)||"{}")||{}}catch(e){return {}}}
+function spSavePosition(){const positions=spGetPositions();positions[spKind]=spPos;localStorage.setItem(SP_POS_KEY,JSON.stringify(positions))}
+function spStart(kind){
+  spKind=kind;
+  spPool=SET2.filter(q=>q.source===spSources[kind] && (kind==="fill"?q.type==="qa":q.type==="single"));
+  if(!spPool.length){alert("当前题库中没有该题型。");return;}
+  spPos=Math.min(Math.max(0,Number(spGetPositions()[kind])||0),spPool.length-1);
+  spCurrent=null;spLocked=false;spAnswered=new Map();
+  $("#spHeading").textContent="第二套 · "+spNames[kind]+"顺序专项";
+  $("#spTag").textContent=spNames[kind]+" · "+spPool.length+"道原题";
+  spRenderStats();show("secondSpecial");spRenderQuestion();
+}
+function spRenderStats(){
+  const grades=[...spAnswered.values()];
+  const correct=grades.filter(g=>g).length;
+  $("#spDone").textContent=grades.length;
+  $("#spRight").textContent=correct;
+  $("#spAcc").textContent=grades.length?Math.round(correct/grades.length*100)+"%":"0%";
+}
+function spRenderQuestion(){
+  if(!spPool.length)return;
+  spCurrent=spPool[spPos];spLocked=false;
+  $("#spSerial").textContent=`第 ${spPos+1} / ${spPool.length} 题 · 按题号顺序`;
+  $("#spBar").style.width=((spPos+1)/spPool.length*100)+"%";
+  $("#spQuestion").textContent=spCurrent.question;
+  $("#spFeedback").className="feedback hidden";
+  $("#spAnswer").classList.add("hidden");$("#spAnswer").textContent="";
+  $("#spSubmit").classList.remove("hidden");
+  $("#spPrev").disabled=spPos===0;
+  $("#spNext").textContent=spPos===spPool.length-1?"完成本专项 ✓":"下一题 →";
+  const area=$("#spInputs");area.innerHTML="";
+  if(spKind==="fill"){
+    const label=document.createElement("label");label.className="special-answer-label";
+    label.htmlFor="spFillInput";label.textContent="请填写括号内的答案（提交后才显示原标准答案）";
+    const input=document.createElement("input");input.id="spFillInput";input.className="special-fill-field";
+    input.type="text";input.placeholder="在这里输入答案";input.autocomplete="off";input.spellcheck=false;
+    input.onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();spSubmit()}};
+    area.append(label,input);
+  }else{
+    spCurrent.options.forEach(o=>{
+      const lab=document.createElement("label");lab.className="opt";
+      const inp=document.createElement("input");inp.type="radio";inp.name="spChoice";inp.value=o.key;
+      const key=document.createElement("span");key.className="key";key.textContent=o.key+".";
+      const txt=document.createElement("span");txt.textContent=o.text;
+      lab.append(inp,key,txt);area.append(lab);
+    });
+  }
+  spSavePosition();
+  window.scrollTo(0,0);
+}
+function spGo(delta){
+  if(!spPool.length)return;
+  if(delta>0 && spPos===spPool.length-1){
+    if(confirm("这组"+spPool.length+"道"+spNames[spKind]+"已经练到最后一题了。是否从第1题重新开始？")){
+      spPos=0;spAnswered.clear();spRenderStats();spRenderQuestion();
+    }
+    return;
+  }
+  const p=spPos+delta;
+  if(p<0||p>=spPool.length)return;
+  spPos=p;spRenderQuestion();
+}
+function spRestart(){
+  if(!spPool.length)return;
+  if(spPos!==0&&!confirm("确定回到本专项第1题重新开始吗？"))return;
+  spPos=0;spAnswered.clear();spRenderStats();spRenderQuestion();
+}
+function spSubmit(){
+  if(spLocked||!spCurrent)return;
+  const q=spCurrent;
+  let entered="",correct="",ok=false;
+  if(spKind==="fill"){
+    const field=$("#spFillInput");entered=field.value.trim();
+    if(!entered){alert("请先填写答案；不确定时也可以直接点下一题跳过。");field.focus();return;}
+    correct=String(q.qa_answer||"");
+    ok=seCleanFill(entered)===seCleanFill(correct);
+    field.disabled=true;
+  }else{
+    const checked=document.querySelector('#spInputs input[name="spChoice"]:checked');
+    if(!checked){alert("请先选择一个答案；不确定时可以直接点下一题跳过。");return;}
+    entered=checked.value;
+    correct=q.options.filter(o=>q.answer.includes(o.key)).map(o=>o.key+". "+o.text).join("、");
+    ok=q.answer.includes(entered)&&q.answer.length===1;
+    [...document.querySelectorAll("#spInputs .opt")].forEach((lab,i)=>{
+      const o=q.options[i],inp=lab.querySelector("input");
+      if(q.answer.includes(o.key))lab.classList.add("correct");
+      if(inp.checked&&!q.answer.includes(o.key))lab.classList.add("wrong");
+      inp.disabled=true;
+    });
+  }
+  spLocked=true;spAnswered.set(q.id,ok);
+  ss.done[q.id]=ok;
+  if(ok)ss.wrong=ss.wrong.filter(id=>id!==q.id);
+  else if(!ss.wrong.includes(q.id))ss.wrong.push(q.id);
+  saveS();spRenderStats();
+  const feedback=$("#spFeedback");feedback.className="feedback "+(ok?"ok":"bad");
+  feedback.textContent=ok?"回答正确！已记录；如果此前在错题集中，已自动移出。":"回答错误，已加入第二套错题集。";
+  const answer=$("#spAnswer");answer.textContent="标准答案："+correct;answer.classList.remove("hidden");
+  $("#spSubmit").classList.add("hidden");
+}
+$("#startSecondChoice").onclick=()=>spStart("choice");
+$("#startSecondFill").onclick=()=>spStart("fill");
+$("#startSecondJudge").onclick=()=>spStart("judge");
+$("#spSubmit").onclick=spSubmit;
+$("#spPrev").onclick=()=>spGo(-1);
+$("#spNext").onclick=()=>spGo(1);
+$("#spRestart").onclick=spRestart;
+$("#spBack").onclick=()=>show("secondHome");
 
 // 第二套独立随机练习：只选实作或简答，显示用户提供的原文标准答案。
 const sqkIndex=new Map();
