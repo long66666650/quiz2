@@ -219,6 +219,10 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 .special-reference{margin-top:10px;padding:12px 14px;border:1px solid #ead69e;border-radius:14px;background:#fff9e9;line-height:1.8;white-space:pre-wrap}
 .special-action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .special-action-row button{min-width:0}
+.special-self-mark{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.special-self-mark button{min-height:51px;font-size:16px;font-weight:800}
+.special-self-mark button.mark-know{background:#e8f9ed;border-color:#58bf85;color:#167541}
+.special-self-mark button.mark-wrong{background:#fff0f0;border-color:#e88e8e;color:#b33131}
 .special-fill-field{width:100%;min-height:51px;border:1px solid #d2e2ef;border-radius:14px;padding:10px 12px;font-size:17px;color:var(--text);background:#fff}
 .special-answer-label{display:block;font-size:13px;color:#64788d;margin:0 0 8px}
 #secondSpecial .opt{cursor:pointer}
@@ -393,12 +397,12 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
     <div class="special-home-heading">🎯 选择 / 填空 / 判断 · 按原题顺序专项练习</div>
     <div class="special-home-grid">
       <button class="setbtn special-start" id="startSecondChoice">✅ 选择题专项<small>108道原题，按题号顺序练；点选立即显示答案。</small></button>
-      <button class="setbtn special-start" id="startSecondFill">✍️ 填空题专项<small>126道原题，按题号顺序填空；每题提交立即显示答案。</small></button>
+      <button class="setbtn special-start" id="startSecondFill">✍️ 填空题专项<small>126道原题，顺序自测；点“会”或“不会”，立即显示标准答案。</small></button>
       <button class="setbtn special-start" id="startSecondJudge">☑️ 判断题专项<small>109道原题，按题号顺序练；点选立即显示答案。</small></button>
     </div>
     <button class="setbtn" id="startSecondPractical">🎲 随机实作题<small>抽取实作原题，提交后查看原标准答案。</small></button>
     <button class="setbtn" id="startSecondShort">🎲 随机简答题<small>抽取简答原题，提交后查看原标准答案。</small></button>
-    <button class="setbtn sMode" data-mode="wrong">错题重练 · <span id="secondWrongCount">0</span> 道<small>包括答错的选择、判断题，以及标记“背错”的实作题、简答题。</small></button>
+    <button class="setbtn sMode" data-mode="wrong">错题重练 · <span id="secondWrongCount">0</span> 道<small>包括答错的选择、判断题，标记“不会”的填空题，以及标记“背错”的实作题、简答题。</small></button>
     <button class="setbtn" id="startSecondPracticalExam">🧰 实作模拟考试 · 单独一套 · 100分<small>随机5道实作题，每题20分。交卷后对照原版标准答案自评。</small></button>
     <button class="setbtn" id="startSecondExam">📝 理论综合模拟考试 · 单独一套 · 100分<small>10选择、10填空、10判断、2计算、1论述、4简答；共37道。客观题自动判分，大题交卷后自评。</small></button>
     <button class="secondary start" id="secondBackHome">返回题库首页</button>
@@ -407,18 +411,17 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
 
 
 <section id="secondSpecial" class="hidden">
-  <div class="hero"><h1 id="spHeading">第二套 · 顺序专项练习</h1><p>每道题答完立刻显示对错和标准答案 · 按原题顺序练 · 进度自动保存 · 错题同步</p></div>
+  <div class="hero"><h1 id="spHeading">第二套 · 顺序专项练习</h1><p id="spSubtitle">每题立即显示标准答案 · 按原题顺序练 · 进度自动保存 · 错题同步</p></div>
   <div class="card">
     <div class="stats">
-      <div class="stat"><b id="spDone">0</b><span>本次已答</span></div>
-      <div class="stat"><b id="spRight">0</b><span>答对</span></div>
-      <div class="stat"><b id="spAcc">0%</b><span>正确率</span></div>
+      <div class="stat"><b id="spDone">0</b><span id="spDoneLabel">本次已答</span></div>
+      <div class="stat"><b id="spRight">0</b><span id="spRightLabel">答对</span></div>
+      <div class="stat"><b id="spAcc">0%</b><span id="spAccLabel">正确率</span></div>
     </div>
     <div class="meta"><span id="spSerial">第 1 / 108 题</span><span id="spTag" class="badge">专项</span></div>
     <div class="progress"><div id="spBar"></div></div>
     <div id="spQuestion" class="q"></div>
     <div id="spInputs"></div>
-    <button id="spSubmit" class="primary start">提交答案</button>
     <div id="spFeedback" class="feedback hidden" aria-live="polite"></div>
     <div id="spAnswer" class="special-reference hidden" aria-live="polite"></div>
     <div class="special-action-row">
@@ -429,7 +432,7 @@ button{min-height:46px;border:0;border-radius:14px;padding:12px 14px;font-size:1
       <button id="spRestart" class="secondary">从第1题重新开始</button>
       <button id="spBack" class="secondary">返回第二套</button>
     </div>
-    <div class="hint">选择题和判断题：点选选项后立即显示对错及标准答案。填空题：每题输入后点击“提交答案”立即核对。不必做完整套再看答案；按原题库顺序练习，位置自动保存，答错进入错题集。</div>
+    <div class="hint" id="spHint">选择题和判断题：点选选项后立即显示对错及标准答案。填空题：不用输入，先自己回想，点“会”或“不会”后立即看标准答案；不会加入错题集，会则从错题集中移出。练习位置自动保存。</div>
   </div>
 </section>
 
@@ -3173,6 +3176,11 @@ function spStart(kind){
   spCurrent=null;spLocked=false;spAnswered=new Map();
   $("#spHeading").textContent="第二套 · "+spNames[kind]+"顺序专项";
   $("#spTag").textContent=spNames[kind]+" · "+spPool.length+"道原题";
+  const isFill=kind==="fill";
+  $("#spSubtitle").textContent=isFill?"先自己想答案，点‘会’或‘不会’立即显示标准答案 · 顺序练题 · 错题同步":"每题选择后立即显示对错和标准答案 · 按原题顺序练 · 错题同步";
+  $("#spDoneLabel").textContent=isFill?"本次已看":"本次已答";
+  $("#spRightLabel").textContent=isFill?"标记会":"答对";
+  $("#spAccLabel").textContent=isFill?"会的比例":"正确率";
   spRenderStats();show("secondSpecial");spRenderQuestion();
 }
 function spRenderStats(){
@@ -3190,18 +3198,19 @@ function spRenderQuestion(){
   $("#spQuestion").textContent=spCurrent.question;
   $("#spFeedback").className="feedback hidden";
   $("#spAnswer").classList.add("hidden");$("#spAnswer").textContent="";
-  // 选择/判断点选后直接交卷并显示本题答案；填空输入后逐题提交。
-  $("#spSubmit").classList.toggle("hidden",spKind!=="fill");
+  // 选择/判断点选直接显示答案；填空不用填写，只用“会”/“不会”自评。
   $("#spPrev").disabled=spPos===0;
   $("#spNext").textContent=spPos===spPool.length-1?"完成本专项 ✓":"下一题 →";
   const area=$("#spInputs");area.innerHTML="";
   if(spKind==="fill"){
-    const label=document.createElement("label");label.className="special-answer-label";
-    label.htmlFor="spFillInput";label.textContent="填写本题答案，点击提交立即核对标准答案";
-    const input=document.createElement("input");input.id="spFillInput";input.className="special-fill-field";
-    input.type="text";input.placeholder="在这里输入答案";input.autocomplete="off";input.spellcheck=false;
-    input.onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();spSubmit()}};
-    area.append(label,input);
+    const hint=document.createElement("p");hint.className="special-answer-label";
+    hint.textContent="先在心里答题，再选会或不会；两种选择都会立即显示原题标准答案。";
+    const buttons=document.createElement("div");buttons.className="special-self-mark";
+    const know=document.createElement("button");know.type="button";know.id="spFillKnow";know.className="secondary";know.textContent="✓ 会";
+    const wrong=document.createElement("button");wrong.type="button";wrong.id="spFillWrong";wrong.className="secondary";wrong.textContent="✗ 不会 · 加入错题集";
+    know.onclick=()=>spMarkFill(true);
+    wrong.onclick=()=>spMarkFill(false);
+    buttons.append(know,wrong);area.append(hint,buttons);
   }else{
     spCurrent.options.forEach(o=>{
       const lab=document.createElement("label");lab.className="opt";
@@ -3233,29 +3242,36 @@ function spRestart(){
   if(spPos!==0&&!confirm("确定回到本专项第1题重新开始吗？"))return;
   spPos=0;spAnswered.clear();spRenderStats();spRenderQuestion();
 }
-function spSubmit(){
-  if(spLocked||!spCurrent)return;
+// 填空专项仅做自评：不需要输入/提交，两种标记都会立即显示原标准答案。
+function spMarkFill(known){
+  if(spKind!=="fill"||!spCurrent)return;
   const q=spCurrent;
-  let entered="",correct="",ok=false;
-  if(spKind==="fill"){
-    const field=$("#spFillInput");entered=field.value.trim();
-    if(!entered){alert("请先填写答案；不确定时也可以直接点下一题跳过。");field.focus();return;}
-    correct=String(q.qa_answer||"");
-    ok=seCleanFill(entered)===seCleanFill(correct);
-    field.disabled=true;
-  }else{
-    const checked=document.querySelector('#spInputs input[name="spChoice"]:checked');
-    if(!checked){alert("请先选择一个答案；不确定时可以直接点下一题跳过。");return;}
-    entered=checked.value;
-    correct=q.options.filter(o=>q.answer.includes(o.key)).map(o=>o.key+". "+o.text).join("、");
-    ok=q.answer.includes(entered)&&q.answer.length===1;
-    [...document.querySelectorAll("#spInputs .opt")].forEach((lab,i)=>{
-      const o=q.options[i],inp=lab.querySelector("input");
-      if(q.answer.includes(o.key))lab.classList.add("correct");
-      if(inp.checked&&!q.answer.includes(o.key))lab.classList.add("wrong");
-      inp.disabled=true;
-    });
-  }
+  spLocked=true;
+  spAnswered.set(q.id,known);
+  ss.done[q.id]=known;
+  if(known)ss.wrong=ss.wrong.filter(id=>id!==q.id);
+  else if(!ss.wrong.includes(q.id))ss.wrong.push(q.id);
+  saveS();spRenderStats();
+  $("#spFillKnow").classList.toggle("mark-know",known);
+  $("#spFillWrong").classList.toggle("mark-wrong",!known);
+  const feedback=$("#spFeedback");feedback.className="feedback "+(known?"ok":"bad");
+  feedback.textContent=known?"已标记为‘会’；如果原来在错题集中，已移出。":"已标记为‘不会’，已加入第二套错题集。";
+  const answer=$("#spAnswer");answer.textContent="标准答案："+String(q.qa_answer||"");answer.classList.remove("hidden");
+}
+function spSubmit(){
+  if(spLocked||!spCurrent||spKind==="fill")return;
+  const q=spCurrent;
+  const checked=document.querySelector('#spInputs input[name="spChoice"]:checked');
+  if(!checked)return;
+  const entered=checked.value;
+  const correct=q.options.filter(o=>q.answer.includes(o.key)).map(o=>o.key+". "+o.text).join("、");
+  const ok=q.answer.includes(entered)&&q.answer.length===1;
+  [...document.querySelectorAll("#spInputs .opt")].forEach((lab,i)=>{
+    const o=q.options[i],inp=lab.querySelector("input");
+    if(q.answer.includes(o.key))lab.classList.add("correct");
+    if(inp.checked&&!q.answer.includes(o.key))lab.classList.add("wrong");
+    inp.disabled=true;
+  });
   spLocked=true;spAnswered.set(q.id,ok);
   ss.done[q.id]=ok;
   if(ok)ss.wrong=ss.wrong.filter(id=>id!==q.id);
@@ -3264,12 +3280,10 @@ function spSubmit(){
   const feedback=$("#spFeedback");feedback.className="feedback "+(ok?"ok":"bad");
   feedback.textContent=ok?"回答正确！已记录；如果此前在错题集中，已自动移出。":"回答错误，已加入第二套错题集。";
   const answer=$("#spAnswer");answer.textContent="标准答案："+correct;answer.classList.remove("hidden");
-  $("#spSubmit").classList.add("hidden");
 }
 $("#startSecondChoice").onclick=()=>spStart("choice");
 $("#startSecondFill").onclick=()=>spStart("fill");
 $("#startSecondJudge").onclick=()=>spStart("judge");
-$("#spSubmit").onclick=spSubmit;
 $("#spPrev").onclick=()=>spGo(-1);
 $("#spNext").onclick=()=>spGo(1);
 $("#spRestart").onclick=spRestart;
